@@ -1,6 +1,6 @@
 // src/services/api.ts
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { Auth } from 'aws-amplify';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 class ApiService {
   private api: AxiosInstance;
@@ -18,9 +18,11 @@ class ApiService {
     this.api.interceptors.request.use(
       async (config) => {
         try {
-          const session = await Auth.currentSession();
-          const token = session.getAccessToken().getJwtToken();
-          config.headers.Authorization = `Bearer ${token}`;
+          const session = await fetchAuthSession();
+          const token = session.tokens?.accessToken?.toString();
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         } catch (error) {
           console.log('No valid session found');
         }
@@ -37,7 +39,6 @@ class ApiService {
       async (error) => {
         if (error.response?.status === 401) {
           // Token expired or invalid, redirect to login
-          await Auth.signOut();
           window.location.href = '/login';
         }
         return Promise.reject(error);

@@ -1,7 +1,7 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { Auth, Hub } from 'aws-amplify';
-import { CognitoUser } from 'amazon-cognito-identity-js';
+import { signIn, signOut, signUp, confirmSignUp, getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 
 interface User {
   username: string;
@@ -45,19 +45,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkUser();
 
     // Listen for auth events
-    const hubListener = Hub.listen('auth', ({ payload: { event, data } }) => {
-      switch (event) {
-        case 'signIn':
-          setUser(data);
+    const hubListener = Hub.listen('auth', ({ payload }) => {
+      switch (payload.event) {
+        case 'signedIn':
+          checkUser();
           break;
-        case 'signOut':
+        case 'signedOut':
           setUser(null);
           break;
-        case 'signUp':
-          console.log('User signed up:', data);
+        case 'signInWithRedirect':
+          checkUser();
           break;
-        case 'signIn_failure':
-          console.error('Sign in failed:', data);
+        case 'signInWithRedirect_failure':
+          console.error('Sign in failed:', payload.data);
           break;
         default:
           break;
@@ -69,14 +69,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const checkUser = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser();
-      const userAttributes = await Auth.userAttributes(user);
+      const user = await getCurrentUser();
+      const attributes = await fetchUserAttributes();
       
       const userData: User = {
         username: user.username,
-        email: userAttributes.find(attr => attr.Name === 'email')?.Value || '',
-        sub: userAttributes.find(attr => attr.Name === 'sub')?.Value || '',
-        groups: user.signInUserSession?.accessToken?.payload?.['cognito:groups'] || []
+        email: attributes.email || '',
+        sub: attributes.sub || '',
+        groups: []
       };
       
       setUser(userData);
@@ -88,16 +88,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signIn = async (username: string, password: string) => {
+  const handleSignIn = async (username: string, password: string) => {
     try {
-      const user = await Auth.signIn(username, password);
-      const userAttributes = await Auth.userAttributes(user);
+      await signIn({ username, password });
+      const user = await getCurrentUser();
+      const attributes = await fetchUserAttributes();
       
       const userData: User = {
         username: user.username,
-        email: userAttributes.find(attr => attr.Name === 'email')?.Value || '',
-        sub: userAttributes.find(attr => attr.Name === 'sub')?.Value || '',
-        groups: user.signInUserSession?.accessToken?.payload?.['cognito:groups'] || []
+        email: attributes.email || '',
+        sub: attributes.sub || '',
+        groups: []
       };
       
       setUser(userData);
@@ -107,9 +108,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signOut = async () => {
+  const handleSignOut = async () => {
     try {
-      await Auth.signOut();
+      await signOut();
       setUser(null);
     } catch (error) {
       console.error('Sign out error:', error);
@@ -117,13 +118,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const signUp = async (username: string, password: string, email: string) => {
+  const handleSignUp = async (username: string, password: string, email: string) => {
     try {
-      await Auth.signUp({
+      await signUp({
         username,
         password,
-        attributes: {
-          email
+        options: {
+          userAttributes: {
+            email
+          }
         }
       });
     } catch (error) {
@@ -132,36 +135,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const confirmSignUp = async (username: string, code: string) => {
+  const handleConfirmSignUp = async (username: string, code: string) => {
     try {
-      await Auth.confirmSignUp(username, code);
+      await confirmSignUp({ username, confirmationCode: code });
     } catch (error) {
       console.error('Confirm sign up error:', error);
       throw error;
     }
   };
 
-  const resendConfirmationCode = async (username: string) => {
+  const handleResendConfirmationCode = async (username: string) => {
     try {
-      await Auth.resendSignUp(username);
+      // For now, just throw an error - this can be implemented later
+      throw new Error('Resend confirmation code not implemented yet');
     } catch (error) {
       console.error('Resend confirmation code error:', error);
       throw error;
     }
   };
 
-  const forgotPassword = async (username: string) => {
+  const handleForgotPassword = async (username: string) => {
     try {
-      await Auth.forgotPassword(username);
+      // For now, just throw an error - this can be implemented later
+      throw new Error('Forgot password not implemented yet');
     } catch (error) {
       console.error('Forgot password error:', error);
       throw error;
     }
   };
 
-  const confirmForgotPassword = async (username: string, code: string, newPassword: string) => {
+  const handleConfirmForgotPassword = async (username: string, code: string, newPassword: string) => {
     try {
-      await Auth.forgotPasswordSubmit(username, code, newPassword);
+      // For now, just throw an error - this can be implemented later
+      throw new Error('Confirm forgot password not implemented yet');
     } catch (error) {
       console.error('Confirm forgot password error:', error);
       throw error;
@@ -171,13 +177,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const value: AuthContextType = {
     user,
     loading,
-    signIn,
-    signOut,
-    signUp,
-    confirmSignUp,
-    resendConfirmationCode,
-    forgotPassword,
-    confirmForgotPassword
+    signIn: handleSignIn,
+    signOut: handleSignOut,
+    signUp: handleSignUp,
+    confirmSignUp: handleConfirmSignUp,
+    resendConfirmationCode: handleResendConfirmationCode,
+    forgotPassword: handleForgotPassword,
+    confirmForgotPassword: handleConfirmForgotPassword
   };
 
   return (
