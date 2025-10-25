@@ -24,7 +24,7 @@ ECS_TASK_DEFINITION="${PROJECT_NAME}-${ENVIRONMENT}-frontend"
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FRONTEND_DIR="${SCRIPT_DIR}/camelot-frontend"
+FRONTEND_DIR="${SCRIPT_DIR}"
 
 # Function to print colored output
 print_status() {
