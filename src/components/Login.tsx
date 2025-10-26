@@ -18,8 +18,15 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { signIn, signUp, confirmSignUp, resendConfirmationCode, forgotPassword, confirmForgotPassword } = useAuth();
+  const { user, signIn, signUp, confirmSignUp, resendConfirmationCode, forgotPassword, confirmForgotPassword, signOut } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,11 +38,18 @@ const Login: React.FC = () => {
         await signUp(username, password, email);
         setIsConfirming(true);
       } else {
+        // Don't sign out if already signed in - just try to sign in with new credentials
         await signIn(username, password);
         navigate('/');
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      // Handle already authenticated error gracefully
+      if (err.name === 'UserAlreadyAuthenticatedException' || err.message?.includes('already a signed in')) {
+        // User is already signed in, just navigate to home
+        navigate('/');
+      } else {
+        setError(err.message || 'An error occurred');
+      }
     } finally {
       setLoading(false);
     }

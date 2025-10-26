@@ -12,11 +12,14 @@ const awsConfig = {
         oauth: {
           domain: process.env.REACT_APP_COGNITO_DOMAIN || '',
           scopes: ['email', 'openid', 'profile'],
-          redirectSignIn: [process.env.REACT_APP_REDIRECT_SIGN_IN || 'http://localhost:3000/'],
-          redirectSignOut: [process.env.REACT_APP_REDIRECT_SIGN_OUT || 'http://localhost:3000/'],
+          redirectSignIn: [process.env.REACT_APP_REDIRECT_SIGN_IN || 'https://security.ironknight6.com/'],
+          redirectSignOut: [process.env.REACT_APP_REDIRECT_SIGN_OUT || 'https://security.ironknight6.com/'],
           responseType: 'code' as const
         }
-      }
+      },
+      // Request groups in the token
+      allowedOAuthFlows: ['code'],
+      allowedOAuthScopes: ['email', 'openid', 'profile']
     }
   }
 };

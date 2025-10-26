@@ -154,9 +154,45 @@ build_docker_image() {
     
     cd "$FRONTEND_DIR"
     
+    # Get Cognito configuration from Secrets Manager
+    COGNITO_USER_POOL_ID=$(aws secretsmanager get-secret-value \
+        --secret-id "${PROJECT_NAME}-${ENVIRONMENT}-cognito-user-pool-id" \
+        --query 'SecretString' \
+        --output text --region $AWS_REGION 2>/dev/null || echo "us-east-1_v5vWtap1R")
+    
+    COGNITO_CLIENT_ID=$(aws secretsmanager get-secret-value \
+        --secret-id "${PROJECT_NAME}-${ENVIRONMENT}-cognito-client-id" \
+        --query 'SecretString' \
+        --output text --region $AWS_REGION 2>/dev/null || echo "1i3euls7ljtesoi0il87qu5rjj")
+    
+    # Get API Gateway URL
+    API_GATEWAY_URL=$(aws apigateway get-rest-apis \
+        --query "items[?name=='${PROJECT_NAME}-${ENVIRONMENT}-api'].id" \
+        --output text --region $AWS_REGION 2>/dev/null | head -1 || echo "x0q0fkiuj9")
+    
+    # Clean any whitespace from the API Gateway URL
+    API_GATEWAY_URL=$(echo "$API_GATEWAY_URL" | tr -d '[:space:]')
+    
+    if [ -n "$API_GATEWAY_URL" ]; then
+        API_URL="https://${API_GATEWAY_URL}.execute-api.${AWS_REGION}.amazonaws.com/${ENVIRONMENT}"
+    else
+        API_URL="https://x0q0fkiuj9.execute-api.us-east-1.amazonaws.com/dev"
+    fi
+    
+    COGNITO_DOMAIN="security-orchestration-dev-auth.auth.us-east-1.amazoncognito.com"
+    
     # Build the image for linux/amd64 platform (required for ECS Fargate)
     print_status "Building for linux/amd64 platform..."
-    docker build --platform linux/amd64 -t ${ECR_REPOSITORY}:latest .
+    docker build --platform linux/amd64 \
+        --build-arg REACT_APP_AWS_REGION=$AWS_REGION \
+        --build-arg REACT_APP_COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+        --build-arg REACT_APP_COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
+        --build-arg REACT_APP_COGNITO_DOMAIN=$COGNITO_DOMAIN \
+        --build-arg REACT_APP_REDIRECT_SIGN_IN="https://security.ironknight6.com/" \
+        --build-arg REACT_APP_REDIRECT_SIGN_OUT="https://security.ironknight6.com/" \
+        --build-arg REACT_APP_API_URL=$API_URL \
+        -t ${ECR_REPOSITORY}:latest \
+        .
     
     # Tag the image for ECR
     docker tag ${ECR_REPOSITORY}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:latest
@@ -187,17 +223,20 @@ get_environment_variables() {
     COGNITO_USER_POOL_ID=$(aws secretsmanager get-secret-value \
         --secret-id "${PROJECT_NAME}-${ENVIRONMENT}-cognito-user-pool-id" \
         --query 'SecretString' \
-        --output text --region $AWS_REGION 2>/dev/null || echo "")
+        --output text --region $AWS_REGION 2>/dev/null || echo "us-east-1_v5vWtap1R")
     
     COGNITO_CLIENT_ID=$(aws secretsmanager get-secret-value \
         --secret-id "${PROJECT_NAME}-${ENVIRONMENT}-cognito-client-id" \
         --query 'SecretString' \
-        --output text --region $AWS_REGION 2>/dev/null || echo "")
+        --output text --region $AWS_REGION 2>/dev/null || echo "1i3euls7ljtesoi0il87qu5rjj")
     
     # Get API Gateway URL
     API_GATEWAY_URL=$(aws apigateway get-rest-apis \
         --query "items[?name=='${PROJECT_NAME}-${ENVIRONMENT}-api'].id" \
-        --output text --region $AWS_REGION 2>/dev/null || echo "")
+        --output text --region $AWS_REGION 2>/dev/null | head -1 || echo "x0q0fkiuj9")
+    
+    # Clean any whitespace from the API Gateway URL
+    API_GATEWAY_URL=$(echo "$API_GATEWAY_URL" | tr -d '[:space:]')
     
     if [ -n "$API_GATEWAY_URL" ]; then
         API_URL="https://${API_GATEWAY_URL}.execute-api.${AWS_REGION}.amazonaws.com/${ENVIRONMENT}"
@@ -206,10 +245,7 @@ get_environment_variables() {
     fi
     
     # Get Cognito domain
-    COGNITO_DOMAIN=$(aws cognito-idp describe-user-pool \
-        --user-pool-id $COGNITO_USER_POOL_ID \
-        --query 'UserPool.Domain' \
-        --output text --region $AWS_REGION 2>/dev/null || echo "security-orchestration-dev-auth.auth.us-east-1.amazoncognito.com")
+    COGNITO_DOMAIN="security-orchestration-dev-auth.auth.us-east-1.amazoncognito.com"
     
     print_success "Environment variables retrieved"
 }
@@ -274,16 +310,6 @@ create_task_definition() {
         {
           "name": "REACT_APP_COGNITO_DOMAIN",
           "value": "${COGNITO_DOMAIN}"
-        }
-      ],
-      "secrets": [
-        {
-          "name": "REACT_APP_COGNITO_USER_POOL_ID",
-          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:${PROJECT_NAME}-${ENVIRONMENT}-cognito-user-pool-id"
-        },
-        {
-          "name": "REACT_APP_COGNITO_CLIENT_ID",
-          "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${AWS_ACCOUNT_ID}:secret:${PROJECT_NAME}-${ENVIRONMENT}-cognito-client-id"
         }
       ]
     }

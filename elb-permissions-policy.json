@@ -1,0 +1,26 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "MinimumELBPermissionsForHTTPSConfig",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:DescribeListeners",
+        "elasticloadbalancing:ModifyListener"
+      ],
+      "Resource": [
+        "arn:aws:elasticloadbalancing:us-east-1:535002872918:listener/app/security-orchestration-dev-alb/*",
+        "arn:aws:elasticloadbalancing:us-east-1:535002872918:loadbalancer/app/security-orchestration-dev-alb/*"
+      ]
+    },
+    {
+      "Sid": "DescribeLoadBalancers",
+      "Effect": "Allow",
+      "Action": [
+        "elasticloadbalancing:DescribeLoadBalancers"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+

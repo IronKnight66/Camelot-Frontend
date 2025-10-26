@@ -1,61 +1,11 @@
 /* src/components/Home.css */
 .home-container {
-  min-height: 100vh;
-  background-color: #f8f9fa;
-}
-
-.header {
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 0 20px;
-}
-
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-}
-
-.header h1 {
-  color: #333;
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.user-info span {
-  color: #666;
-  font-size: 14px;
-}
-
-.sign-out-btn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.sign-out-btn:hover {
-  background: #c82333;
+  padding: 30px 20px;
 }
 
 .main-content {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 30px 20px;
 }
 
 .error-banner {
@@ -209,17 +159,6 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    gap: 15px;
-    text-align: center;
-  }
-
-  .user-info {
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .main-content {
     padding: 20px 15px;
   }
@@ -253,9 +192,5 @@
 @media (max-width: 480px) {
   .overview-cards {
     grid-template-columns: 1fr;
-  }
-
-  .header h1 {
-    font-size: 24px;
   }
 }

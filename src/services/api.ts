@@ -6,8 +6,11 @@ class ApiService {
   private api: AxiosInstance;
 
   constructor() {
+    // In development, use relative path to leverage setupProxy.js
+    // In production, use the API gateway URL from environment
+    const baseURL = process.env.NODE_ENV === 'development' ? '/' : (process.env.REACT_APP_API_URL || '/');
     this.api = axios.create({
-      baseURL: process.env.REACT_APP_API_URL || 'https://x0q0fkiuj9.execute-api.us-east-1.amazonaws.com/dev',
+      baseURL: baseURL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
@@ -18,13 +21,48 @@ class ApiService {
     this.api.interceptors.request.use(
       async (config) => {
         try {
-          const session = await fetchAuthSession();
-          const token = session.tokens?.accessToken?.toString();
-          if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+          const session = await fetchAuthSession({ forceRefresh: false });
+          
+          // Try to get the access token first (preferred for API calls)
+          let token = session.tokens?.accessToken;
+          let tokenType = 'Access';
+          
+          // Fall back to ID token if access token is not available
+          if (!token) {
+            token = session.tokens?.idToken;
+            tokenType = 'ID';
           }
-        } catch (error) {
-          console.log('No valid session found');
+          
+          if (token) {
+            // In AWS Amplify v6, tokens are JWT objects with a toString() method
+            // that returns the actual JWT string
+            let tokenString: string;
+            
+            if (typeof token === 'string') {
+              tokenString = token;
+            } else {
+              tokenString = token.toString();
+            }
+            
+            // Verify the token is a valid JWT format (starts with eyJ)
+            if (!tokenString.startsWith('eyJ')) {
+              console.error('Token does not look like a valid JWT:', tokenString.substring(0, 50));
+            }
+            
+            config.headers.Authorization = `Bearer ${tokenString}`;
+            console.log(`✓ Added ${tokenType} token to request:`, {
+              url: config.url,
+              tokenLength: tokenString.length,
+              tokenStart: tokenString.substring(0, 20),
+              tokenEnd: tokenString.substring(tokenString.length - 20)
+            });
+          } else {
+            console.warn('⚠️ No token found in session');
+            console.warn('Session tokens:', session.tokens ? Object.keys(session.tokens) : 'no tokens');
+          }
+        } catch (error: any) {
+          console.error('Error fetching session:', error?.message || error);
+          // Don't block the request if session fetch fails - let backend handle auth
         }
         return config;
       },
@@ -38,8 +76,11 @@ class ApiService {
       (response: AxiosResponse) => response,
       async (error) => {
         if (error.response?.status === 401) {
-          // Token expired or invalid, redirect to login
-          window.location.href = '/login';
+          console.error('401 Unauthorized error:', error.response?.data);
+          console.warn('Token may be expired or user may not have required permissions');
+          // Don't redirect to login automatically - let the app handle it
+        } else if (error.response?.status === 403) {
+          console.error('403 Forbidden error:', error.response?.data);
         }
         return Promise.reject(error);
       }
@@ -82,6 +123,82 @@ class ApiService {
   // Health check
   async healthCheck() {
     const response = await this.api.get('/health');
+    return response.data;
+  }
+
+  // Scanner Tools API - Super Admin
+  async getScannerTools(params?: any) {
+    const response = await this.api.get('/api/v1/admin/scanner-tools', { params });
+    return response.data;
+  }
+
+  async createScannerTool(toolData: any) {
+    const response = await this.api.post('/api/v1/admin/scanner-tools', toolData);
+    return response.data;
+  }
+
+  async getScannerTool(toolId: string) {
+    const response = await this.api.get(`/api/v1/admin/scanner-tools/${toolId}`);
+    return response.data;
+  }
+
+  async updateScannerTool(toolId: string, toolData: any) {
+    const response = await this.api.put(`/api/v1/admin/scanner-tools/${toolId}`, toolData);
+    return response.data;
+  }
+
+  async deleteScannerTool(toolId: string) {
+    const response = await this.api.delete(`/api/v1/admin/scanner-tools/${toolId}`);
+    return response.data;
+  }
+
+  // Scanner Tools API - Tenant Admin
+  async getTenantScannerTools(isEnabled?: boolean) {
+    const response = await this.api.get('/api/v1/scanner-tools', { 
+      params: { is_enabled: isEnabled } 
+    });
+    return response.data;
+  }
+
+  async enableTenantTool(toolId: string, limits?: any) {
+    const response = await this.api.post(`/api/v1/scanner-tools/${toolId}/enable`, limits);
+    return response.data;
+  }
+
+  async disableTenantTool(toolId: string) {
+    const response = await this.api.post(`/api/v1/scanner-tools/${toolId}/disable`);
+    return response.data;
+  }
+
+  async updateTenantToolLimits(toolId: string, limits: any) {
+    const response = await this.api.put(`/api/v1/scanner-tools/${toolId}/limits`, limits);
+    return response.data;
+  }
+
+  // Scanner Tools API - Regular Users
+  async getMyScannerTools() {
+    const response = await this.api.get('/api/v1/scanner-tools/my-tools');
+    return response.data;
+  }
+
+  async activateScannerTool(toolId: string, preferences?: any) {
+    const response = await this.api.post(`/api/v1/scanner-tools/${toolId}/activate`, preferences);
+    return response.data;
+  }
+
+  async deactivateScannerTool(toolId: string) {
+    const response = await this.api.post(`/api/v1/scanner-tools/${toolId}/deactivate`);
+    return response.data;
+  }
+
+  // User Profile API
+  async getCurrentUser() {
+    const response = await this.api.get('/auth/me');
+    return response.data;
+  }
+
+  async updateProfile(profileData: any) {
+    const response = await this.api.put('/api/v1/auth/profile', profileData);
     return response.data;
   }
 }

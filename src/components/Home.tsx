@@ -1,7 +1,7 @@
 // src/components/Home.tsx
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import apiService from '../services/api';
+import Layout from './Layout';
 import './Home.css';
 
 interface Scan {
@@ -20,7 +20,6 @@ interface Finding {
 }
 
 const Home: React.FC = () => {
-  const { user, signOut } = useAuth();
   const [scans, setScans] = useState<Scan[]>([]);
   const [findings, setFindings] = useState<Finding[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,12 +36,13 @@ const Home: React.FC = () => {
 
       // Load scans and findings in parallel
       const [scansData, findingsData] = await Promise.all([
-        apiService.getScans().catch(() => []),
-        apiService.getFindings().catch(() => [])
+        apiService.getScans().catch(() => ({ scans: [] })),
+        apiService.getFindings().catch(() => ({ findings: [] }))
       ]);
 
-      setScans(scansData);
-      setFindings(findingsData);
+      // Extract arrays from response objects
+      setScans(scansData?.scans || scansData || []);
+      setFindings(findingsData?.findings || findingsData || []);
     } catch (err: any) {
       setError(err.message || 'Failed to load dashboard data');
     } finally {
@@ -50,13 +50,6 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (err) {
-      console.error('Sign out error:', err);
-    }
-  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
@@ -100,19 +93,8 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="home-container">
-      <header className="header">
-        <div className="header-content">
-          <h1>Camelot Security Platform</h1>
-          <div className="user-info">
-            <span>Welcome, {user?.email || user?.username}</span>
-            <button onClick={handleSignOut} className="sign-out-btn">
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
-
+    <Layout title="Dashboard">
+      <div className="home-container">
       <main className="main-content">
         {error && (
           <div className="error-banner">
@@ -233,6 +215,7 @@ const Home: React.FC = () => {
         </div>
       </main>
     </div>
+    </Layout>
   );
 };
 

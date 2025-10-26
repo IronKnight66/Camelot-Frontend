@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { signIn, signOut, signUp, confirmSignUp, getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
+import { signIn, signOut, signUp, confirmSignUp, getCurrentUser, fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 
 interface User {
@@ -39,6 +39,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const checkingUserRef = React.useRef(false);
 
   useEffect(() => {
     // Check if user is already signed in
@@ -68,15 +69,59 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const checkUser = async () => {
+    // Prevent multiple concurrent calls
+    if (checkingUserRef.current) {
+      console.log('checkUser already in progress, skipping...');
+      return;
+    }
+    
+    checkingUserRef.current = true;
+    
     try {
       const user = await getCurrentUser();
-      const attributes = await fetchUserAttributes();
+      
+      // Get the session first to check if it's valid
+      let attributes: any = {};
+      try {
+        const session = await fetchAuthSession();
+        if (!session.tokens || !session.tokens.accessToken) {
+          throw new Error('No valid session');
+        }
+        
+        // Only fetch attributes if we have a valid session
+        attributes = await fetchUserAttributes();
+      } catch (sessionError: any) {
+        console.log('Could not fetch user attributes, continuing with minimal user info:', sessionError);
+        // Don't set user to null - just continue with empty attributes
+      }
+      
+      // Fetch groups from the ID token
+      const groups: string[] = [];
+      try {
+        const session = await fetchAuthSession();
+        // Try to decode the ID token to get groups
+        const idToken = session.tokens?.idToken;
+        if (idToken) {
+          // Get groups from token payload
+          const payload = idToken.payload as any;
+          if (payload['cognito:groups']) {
+            const groupsData = payload['cognito:groups'];
+            if (typeof groupsData === 'string') {
+              groups.push(groupsData);
+            } else if (Array.isArray(groupsData)) {
+              groups.push(...groupsData);
+            }
+          }
+        }
+      } catch (tokenError) {
+        console.log('Could not fetch groups from token:', tokenError);
+      }
       
       const userData: User = {
         username: user.username,
         email: attributes.email || '',
-        sub: attributes.sub || '',
-        groups: []
+        sub: attributes.sub || user.username,
+        groups
       };
       
       setUser(userData);
@@ -85,26 +130,77 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
     } finally {
       setLoading(false);
+      checkingUserRef.current = false;
     }
   };
 
   const handleSignIn = async (username: string, password: string) => {
     try {
+      // Check if already signed in and refresh user data if so
+      try {
+        const currentUser = await getCurrentUser();
+        if (currentUser) {
+          // User already signed in, just refresh the user data
+          checkUser();
+          return;
+        }
+      } catch {
+        // Not signed in, proceed with sign in
+      }
+
       await signIn({ username, password });
+      
+      // Get user data after sign in
       const user = await getCurrentUser();
-      const attributes = await fetchUserAttributes();
+      
+      // Get attributes with proper session validation
+      let attributes: any = {};
+      try {
+        const session = await fetchAuthSession();
+        if (session.tokens && session.tokens.accessToken) {
+          attributes = await fetchUserAttributes();
+        }
+      } catch (sessionError: any) {
+        console.log('Could not fetch user attributes after sign in:', sessionError);
+      }
+      
+      // Fetch groups from the ID token
+      const groups: string[] = [];
+      try {
+        const session = await fetchAuthSession();
+        // Get groups from token payload
+        const idToken = session.tokens?.idToken;
+        if (idToken) {
+          const payload = idToken.payload as any;
+          if (payload['cognito:groups']) {
+            const groupsData = payload['cognito:groups'];
+            if (typeof groupsData === 'string') {
+              groups.push(groupsData);
+            } else if (Array.isArray(groupsData)) {
+              groups.push(...groupsData);
+            }
+          }
+        }
+      } catch (tokenError) {
+        console.log('Could not fetch groups from token:', tokenError);
+      }
       
       const userData: User = {
         username: user.username,
         email: attributes.email || '',
         sub: attributes.sub || '',
-        groups: []
+        groups
       };
       
       setUser(userData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign in error:', error);
-      throw error;
+      // If already authenticated, just refresh user data
+      if (error.name === 'UserAlreadyAuthenticatedException' || error.message?.includes('already a signed in')) {
+        checkUser();
+      } else {
+        throw error;
+      }
     }
   };
 
