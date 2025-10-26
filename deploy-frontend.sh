@@ -381,7 +381,7 @@ update_ecs_service() {
             --output text --region $AWS_REGION | tr '\t' ',')
         
         SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-            --filters "Name=group-name,Values=security-orchestration-dev-frontend-*" \
+            --filters "Name=group-name,Values=${PROJECT_NAME}-${ENVIRONMENT}-frontend-*" \
             --query 'SecurityGroups[0].GroupId' \
             --output text --region $AWS_REGION)
         

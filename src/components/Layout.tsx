@@ -38,20 +38,20 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             >
               Dashboard
             </Link>
-            {(userRole === 'super-admin' || userRole === 'tenant-admin') && (
-              <Link 
-                to="/tenant-tools" 
-                className={`nav-link ${location.pathname === '/tenant-tools' ? 'active' : ''}`}
-              >
-                Scanner Tools
-              </Link>
-            )}
             {userRole === 'super-admin' && (
               <Link 
                 to="/admin/scanner-tools" 
                 className={`nav-link ${location.pathname === '/admin/scanner-tools' ? 'active' : ''}`}
               >
                 Admin Tools
+              </Link>
+            )}
+            {(userRole === 'super-admin' || userRole === 'tenant-admin') && (
+              <Link 
+                to="/tenant-tools" 
+                className={`nav-link ${location.pathname === '/tenant-tools' ? 'active' : ''}`}
+              >
+                Scanner Tools
               </Link>
             )}
             <Link 
