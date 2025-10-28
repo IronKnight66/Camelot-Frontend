@@ -13,6 +13,7 @@ import UserManagement from './components/admin/UserManagement';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
 import APIKeys from './components/settings/APIKeys';
+import TenantScanners from './components/settings/TenantScanners';
 import './aws-config';
 import './App.css';
 
@@ -66,9 +67,27 @@ function App() {
               } 
             />
 
-            {/* Super-Admin Scanner Tools Management */}
+            {/* Tenant Scanners - Super Admin Only */}
+            <Route 
+              path="/settings/tenant-scanners" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <TenantScanners />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Old Admin Scanner Tools Route - Redirect to new location */}
             <Route 
               path="/admin/scanner-tools" 
+              element={<Navigate to="/settings/admin/scanner-tools" replace />} 
+            />
+
+            {/* Super-Admin Scanner Tools Management - Moved to Settings */}
+            <Route 
+              path="/settings/admin/scanner-tools" 
               element={
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="super-admin">

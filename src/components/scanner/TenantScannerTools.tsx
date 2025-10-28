@@ -45,7 +45,8 @@ const TenantScannerTools: React.FC = () => {
         if (item.scanner_tool) {
           return {
             ...item.scanner_tool,
-            id: item.id.toString(), // Use tenant_tool.id, not scanner_tool.id
+            id: item.id.toString(), // Use tenant_tool.id for tenant operations
+            scannerToolId: item.scanner_tool_id?.toString() || item.scanner_tool?.id?.toString(), // Keep scanner_tool.id for enable operations
             tenantSettings: {
               isEnabled: item.is_enabled,
               currentUsage: item.current_usage_count || 0,
@@ -72,9 +73,12 @@ const TenantScannerTools: React.FC = () => {
       if (!tool) return;
       
       if (tool.tenantSettings?.isEnabled) {
+        // Disable uses tenant_scanner_tool.id (which is toolId)
         await apiService.disableTenantTool(toolId);
       } else {
-        await apiService.enableTenantTool(toolId);
+        // Enable uses scanner_tool.id (which is scannerToolId)
+        const scannerToolId = (tool as any).scannerToolId || tool.id;
+        await apiService.enableTenantTool(scannerToolId);
       }
       loadTools();
     } catch (err: any) {

@@ -170,6 +170,11 @@ class ApiService {
     return response.data;
   }
 
+  async deleteTenantTool(toolId: string) {
+    const response = await this.api.delete(`/api/v1/scanner-tools/${toolId}`);
+    return response.data;
+  }
+
   async updateTenantToolLimits(toolId: string, limits: any) {
     const response = await this.api.put(`/api/v1/scanner-tools/${toolId}/limits`, limits);
     return response.data;
@@ -227,6 +232,17 @@ class ApiService {
 
   async deleteTenantAPIKey(provider: string) {
     const response = await this.api.delete(`/api/v1/tenant/api-keys/${provider}`);
+    return response.data;
+  }
+
+  // Tenant Management API (Super Admin Only)
+  async getTenants() {
+    const response = await this.api.get('/api/v1/tenants');
+    return response.data;
+  }
+
+  async enableTenantToolForSpecificTenant(toolId: string, tenantId: number, limits?: any) {
+    const response = await this.api.post(`/api/v1/tenants/${tenantId}/scanner-tools/${toolId}/enable`, limits);
     return response.data;
   }
 

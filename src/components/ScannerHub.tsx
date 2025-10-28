@@ -43,18 +43,6 @@ const ScannerHub: React.FC = () => {
               </Link>
             </div>
           )}
-
-          {/* Admin Tools - Available to super-admin only */}
-          {hasAccess('super-admin') && (
-            <div className="scanner-hub-card">
-              <div className="scanner-hub-card-icon">⚙️</div>
-              <h2>Admin Tools</h2>
-              <p>Manage the global scanner tool registry and system configuration</p>
-              <Link to="/admin/scanner-tools" className="scanner-hub-btn scanner-hub-btn-admin">
-                Open Admin Tools
-              </Link>
-            </div>
-          )}
         </div>
 
         {/* Info box */}
@@ -67,11 +55,9 @@ const ScannerHub: React.FC = () => {
             <div className="info-item">
               <strong>Tenant Tools:</strong> Manage which scanner tools are available to your organization.
             </div>
-            {hasAccess('super-admin') && (
-              <div className="info-item">
-                <strong>Admin Tools:</strong> Manage the global scanner tool registry (super-admin only).
-              </div>
-            )}
+            <div className="info-item">
+              <strong>Settings:</strong> Access global scanner registry and super-admin settings from the Settings page.
+            </div>
           </div>
         </div>
       </div>

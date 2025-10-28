@@ -45,29 +45,64 @@ const TenantSettingsHub: React.FC = () => {
               </Link>
             </div>
           )}
+
+          {/* Super Admin Only Section */}
+          {hasAccess('super-admin') && (
+            <div className="tenant-settings-hub-divider" style={{ width: '100%', marginTop: '2rem', paddingTop: '2rem', borderTop: '2px solid #e0e0e0' }}>
+              <h3 style={{ marginBottom: '1.5rem', color: '#666' }}>Super Admin Settings</h3>
+              <div className="tenant-settings-hub-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                <div className="tenant-settings-hub-card">
+                  <div className="tenant-settings-hub-card-icon">🛠️</div>
+                  <h2>Tenant Scanners</h2>
+                  <p>Add scanner tools to tenants from the global registry</p>
+                  <Link to="/settings/tenant-scanners" className="tenant-settings-hub-btn">
+                    Manage Tenant Scanners
+                  </Link>
+                </div>
+                <div className="tenant-settings-hub-card">
+                  <div className="tenant-settings-hub-card-icon">⚙️</div>
+                  <h2>Global Scanner Registry</h2>
+                  <p>Manage the global scanner tool registry and system configuration</p>
+                  <Link to="/settings/admin/scanner-tools" className="tenant-settings-hub-btn" style={{ background: '#dc3545', color: 'white' }}>
+                    Open Global Registry
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Info box */}
-        <div className="tenant-settings-hub-info">
-          <h3>About Tenant Settings</h3>
-          <div className="tenant-settings-hub-info-content">
-            {hasAccess('admin') && (
-              <>
+          <div className="tenant-settings-hub-info">
+            <h3>About Tenant Settings</h3>
+            <div className="tenant-settings-hub-info-content">
+              {hasAccess('admin') && (
+                <>
+                  <div className="info-item">
+                    <strong>User Management:</strong> Add, remove, enable/disable users, manage roles, and force password resets.
+                  </div>
+                  <div className="info-item">
+                    <strong>API Keys:</strong> Manage API keys for AI providers (OpenAI, Bedrock) and external services.
+                  </div>
+                  {hasAccess('super-admin') && (
+                    <div className="info-item">
+                      <strong>Tenant Scanners:</strong> Add and manage scanner tools for specific tenants from the global registry.
+                    </div>
+                  )}
+                </>
+              )}
+              {hasAccess('super-admin') && (
                 <div className="info-item">
-                  <strong>User Management:</strong> Add, remove, enable/disable users, manage roles, and force password resets.
+                  <strong>Super Admin Settings:</strong> Manage the global scanner tool registry and system-wide configuration.
                 </div>
+              )}
+              {!hasAccess('admin') && (
                 <div className="info-item">
-                  <strong>API Keys:</strong> Manage API keys for AI providers (OpenAI, Bedrock) and external services.
+                  You need admin privileges to access tenant settings.
                 </div>
-              </>
-            )}
-            {!hasAccess('admin') && (
-              <div className="info-item">
-                You need admin privileges to access tenant settings.
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
       </div>
     </Layout>
   );
