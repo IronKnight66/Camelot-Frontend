@@ -1,6 +1,6 @@
 // src/utils/roleHelpers.ts
 
-export type UserRole = 'super-admin' | 'tenant-admin' | 'user';
+export type UserRole = 'super-admin' | 'tenant-admin' | 'admin' | 'user';
 
 export interface User {
   username: string;
@@ -33,6 +33,7 @@ export const hasRole = (user: User | null, requiredRole: UserRole): boolean => {
   
   const roleHierarchy: Record<UserRole, number> = {
     'user': 1,
+    'admin': 2,
     'tenant-admin': 2,
     'super-admin': 3
   };

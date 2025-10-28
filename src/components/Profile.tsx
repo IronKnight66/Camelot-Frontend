@@ -1,7 +1,49 @@
 // src/components/Profile.tsx
+/**
+ * User Profile Component with Tab Navigation
+ * 
+ * This component provides the main user profile page with two tabs:
+ * 1. Profile - User information display and editing
+ * 2. API Keys - Tenant API key management (admin only)
+ * 
+ * KEY FEATURES:
+ * ------------
+ * 1. Tab-Based Navigation
+ *    - Profile tab: Display and edit user information
+ *    - API Keys tab: Manage tenant AI provider keys (accessible only to admins)
+ * 
+ * 2. API Keys Management (Admin Only)
+ *    - Add, view, update, delete API keys for OpenAI, Anthropic, Ollama
+ *    - Test connection before saving
+ *    - Secure storage via AWS Secrets Manager (handled by backend)
+ *    - Never displays raw key values (backend security)
+ * 
+ * 3. Role-Based Access
+ *    - API Keys tab only visible to super-admin and admin roles
+ *    - Uses roleHelpers to check user permissions
+ *    - Conditional rendering based on user groups
+ * 
+ * 4. Profile Management
+ *    - Display user information from AWS Cognito
+ *    - Edit profile information
+ *    - Shows tenant information and membership
+ * 
+ * IMPLEMENTATION DETAILS:
+ * ----------------------
+ * - Uses React Hooks (useState, useEffect)
+ * - Integrates with AuthContext for user data
+ * - Uses apiService for backend communication
+ * - Professional styling with tab-based UI
+ * - Error handling and loading states
+ * 
+ * Integration Date: October 2025
+ * Last Updated: October 2025
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import apiService from '../services/api';
+import APIKeysSettings from './settings/APIKeysSettings';
 import Layout from './Layout';
 import './Profile.css';
 
@@ -25,6 +67,7 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'profile' | 'api-keys'>('profile');
   const [formData, setFormData] = useState({
     name: '',
     email: ''
@@ -32,6 +75,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     loadProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadProfile = async () => {
@@ -113,6 +157,8 @@ const Profile: React.FC = () => {
     );
   }
 
+  const isAdmin = profile?.groups?.some(g => g === 'admin' || g === 'super-admin') || user?.groups?.some(g => g === 'admin' || g === 'super-admin');
+
   return (
     <Layout title="Profile">
       <div className="profile-container">
@@ -133,9 +179,28 @@ const Profile: React.FC = () => {
             </div>
           )}
 
+          <div className="profile-tabs">
+            <button 
+              className={`tab ${activeTab === 'profile' ? 'active' : ''}`}
+              onClick={() => setActiveTab('profile')}
+            >
+              Profile
+            </button>
+            {isAdmin && (
+              <button 
+                className={`tab ${activeTab === 'api-keys' ? 'active' : ''}`}
+                onClick={() => setActiveTab('api-keys')}
+              >
+                API Keys
+              </button>
+            )}
+          </div>
+
           <div className="profile-content">
-            <div className="profile-section">
-              <h3>Account Information</h3>
+            {activeTab === 'profile' && (
+              <>
+              <div className="profile-section">
+                <h3>Account Information</h3>
               {editing ? (
                 <div className="profile-form">
                   <div className="form-group">
@@ -177,7 +242,7 @@ const Profile: React.FC = () => {
                   </div>
                   <div className="info-row">
                     <span className="info-label">Name</span>
-                    <span className="info-value">{profile?.name || profile?.first_name || profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : 'Not set'}</span>
+                    <span className="info-value">{profile?.name || profile?.first_name || (profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : 'Not set')}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">User ID</span>
@@ -190,9 +255,9 @@ const Profile: React.FC = () => {
                   </div>
                 </>
               )}
-            </div>
+              </div>
 
-            {profile?.groups && profile.groups.length > 0 && (
+              {profile?.groups && profile.groups.length > 0 && (
               <div className="profile-section">
                 <h3>Roles & Permissions</h3>
                 <div className="groups">
@@ -203,9 +268,9 @@ const Profile: React.FC = () => {
                   ))}
                 </div>
               </div>
-            )}
+              )}
 
-            {profile?.tenant_id && (
+              {profile?.tenant_id && (
               <div className="profile-section">
                 <h3>Organization</h3>
                 <div className="info-row">
@@ -213,10 +278,10 @@ const Profile: React.FC = () => {
                   <span className="info-value">{profile.tenant_id}</span>
                 </div>
               </div>
-            )}
+              )}
 
-            <div className="profile-section">
-              <h3>Security Settings</h3>
+              <div className="profile-section">
+                <h3>Security Settings</h3>
               <div className="info-row">
                 <span className="info-label">Two-Factor Authentication</span>
                 <span className="info-value">Not enabled</span>
@@ -230,17 +295,23 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
-            <div className="profile-section">
-              <h3>Preferences</h3>
-              <div className="info-row">
-                <span className="info-label">Language</span>
-                <span className="info-value">English (US)</span>
+              <div className="profile-section">
+                <h3>Preferences</h3>
+                <div className="info-row">
+                  <span className="info-label">Language</span>
+                  <span className="info-value">English (US)</span>
+                </div>
+                <div className="info-row">
+                  <span className="info-label">Timezone</span>
+                  <span className="info-value">UTC</span>
+                </div>
               </div>
-              <div className="info-row">
-                <span className="info-label">Timezone</span>
-                <span className="info-value">UTC</span>
-              </div>
-            </div>
+              </>
+            )}
+            
+            {activeTab === 'api-keys' && (
+              <APIKeysSettings />
+            )}
           </div>
         </div>
       </div>

@@ -201,6 +201,80 @@ class ApiService {
     const response = await this.api.put('/api/v1/auth/profile', profileData);
     return response.data;
   }
+
+  // Tenant API Keys API
+  async getTenantAPIKeys() {
+    const response = await this.api.get('/api/v1/tenant/api-keys');
+    return response.data;
+  }
+
+  async addTenantAPIKey(provider: string, apiKey: string, description?: string) {
+    const response = await this.api.post('/api/v1/tenant/api-keys', {
+      provider,
+      api_key: apiKey,
+      description
+    });
+    return response.data;
+  }
+
+  async updateTenantAPIKey(provider: string, apiKey: string, description?: string) {
+    const response = await this.api.put(`/api/v1/tenant/api-keys/${provider}`, {
+      api_key: apiKey,
+      description
+    });
+    return response.data;
+  }
+
+  async deleteTenantAPIKey(provider: string) {
+    const response = await this.api.delete(`/api/v1/tenant/api-keys/${provider}`);
+    return response.data;
+  }
+
+  async testAPIKey(provider: string) {
+    const response = await this.api.post(`/api/v1/tenant/api-keys/${provider}/test`);
+    return response.data;
+  }
+
+  // User Management API
+  async getUsers() {
+    const response = await this.api.get('/api/v1/users');
+    return response.data;
+  }
+
+  async createUser(userData: {
+    email: string;
+    role: 'admin' | 'user' | 'viewer';
+    first_name?: string;
+    last_name?: string;
+  }) {
+    const response = await this.api.post('/api/v1/users', userData);
+    return response.data;
+  }
+
+  async getUser(userId: string) {
+    const response = await this.api.get(`/api/v1/users/${userId}`);
+    return response.data;
+  }
+
+  async updateUserRole(userId: string, role: 'admin' | 'user' | 'viewer') {
+    const response = await this.api.put(`/api/v1/users/${userId}/role`, { role });
+    return response.data;
+  }
+
+  async updateUserStatus(userId: string, isActive: boolean) {
+    const response = await this.api.put(`/api/v1/users/${userId}/status`, { is_active: isActive });
+    return response.data;
+  }
+
+  async forcePasswordReset(userId: string) {
+    const response = await this.api.post(`/api/v1/users/${userId}/reset-password`);
+    return response.data;
+  }
+
+  async deleteUser(userId: string) {
+    const response = await this.api.delete(`/api/v1/users/${userId}`);
+    return response.data;
+  }
 }
 
 export default new ApiService();

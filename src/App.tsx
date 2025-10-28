@@ -9,6 +9,10 @@ import Profile from './components/Profile';
 import AdminScannerTools from './components/scanner/AdminScannerTools';
 import TenantScannerTools from './components/scanner/TenantScannerTools';
 import MyScanners from './components/scanner/MyScanners';
+import UserManagement from './components/admin/UserManagement';
+import ScannerHub from './components/ScannerHub';
+import TenantSettingsHub from './components/TenantSettingsHub';
+import APIKeys from './components/settings/APIKeys';
 import './aws-config';
 import './App.css';
 
@@ -26,6 +30,38 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Scanner Hub */}
+            <Route 
+              path="/scanners" 
+              element={
+                <ProtectedRoute>
+                  <ScannerHub />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Tenant Settings Hub */}
+            <Route 
+              path="/settings" 
+              element={
+                <ProtectedRoute>
+                  <TenantSettingsHub />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* API Keys - Admin Only */}
+            <Route 
+              path="/settings/api-keys" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <APIKeys />
+                  </RoleBasedRoute>
                 </ProtectedRoute>
               } 
             />
@@ -70,6 +106,18 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* User Management - Admin Only */}
+            <Route 
+              path="/admin/users" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <UserManagement />
+                  </RoleBasedRoute>
                 </ProtectedRoute>
               } 
             />

@@ -38,28 +38,20 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             >
               Dashboard
             </Link>
-            {userRole === 'super-admin' && (
-              <Link 
-                to="/admin/scanner-tools" 
-                className={`nav-link ${location.pathname === '/admin/scanner-tools' ? 'active' : ''}`}
-              >
-                Admin Tools
-              </Link>
-            )}
-            {(userRole === 'super-admin' || userRole === 'tenant-admin') && (
-              <Link 
-                to="/tenant-tools" 
-                className={`nav-link ${location.pathname === '/tenant-tools' ? 'active' : ''}`}
-              >
-                Scanner Tools
-              </Link>
-            )}
             <Link 
-              to="/my-scanners" 
-              className={`nav-link ${location.pathname === '/my-scanners' ? 'active' : ''}`}
+              to="/scanners" 
+              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/tenant-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
             >
-              My Scanners
+              Scanners
             </Link>
+            {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
+              <Link 
+                to="/settings" 
+                className={`nav-link ${location.pathname.startsWith('/settings') || location.pathname.startsWith('/admin/users') || location.pathname.startsWith('/profile') ? 'active' : ''}`}
+              >
+                Settings
+              </Link>
+            )}
           </nav>
           <div className="user-info">
             <Link 
