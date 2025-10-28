@@ -6,12 +6,16 @@ import Layout from './Layout';
 import './Profile.css';
 
 interface UserProfile {
-  username: string;
+  id?: string;
+  username?: string;
   email: string;
   name?: string;
+  first_name?: string;
+  last_name?: string;
   tenant_id?: string;
   groups?: string[];
   created_at?: string;
+  updated_at?: string;
   last_login_at?: string;
 }
 
@@ -40,7 +44,7 @@ const Profile: React.FC = () => {
         const userInfo = await apiService.getCurrentUser();
         setProfile(userInfo);
         setFormData({
-          name: userInfo.name || userInfo.username || '',
+          name: userInfo.name || userInfo.first_name || userInfo.username || '',
           email: userInfo.email || ''
         });
       } catch (err) {
@@ -81,7 +85,7 @@ const Profile: React.FC = () => {
     setEditing(false);
     if (profile) {
       setFormData({
-        name: profile.name || profile.username || '',
+        name: profile.name || profile.first_name || profile.username || '',
         email: profile.email || ''
       });
     }
@@ -115,11 +119,11 @@ const Profile: React.FC = () => {
         <div className="profile-card">
           <div className="profile-header">
             <div className="profile-avatar">
-              <span>{((profile?.username || user?.email || 'U').charAt(0) || 'U').toUpperCase()}</span>
+              <span>{((profile?.email || user?.email || 'U').charAt(0) || 'U').toUpperCase()}</span>
             </div>
             <div>
-              <h2>{profile?.name || profile?.username || user?.email || 'User'}</h2>
-              <p className="profile-email">{profile?.email || user?.email || 'No email'}</p>
+              <h2>{profile?.email || user?.email || 'User'}</h2>
+              <p className="profile-email">{profile?.id || profile?.username || user?.username || 'No ID'}</p>
             </div>
           </div>
 
@@ -165,7 +169,7 @@ const Profile: React.FC = () => {
                 <>
                   <div className="info-row">
                     <span className="info-label">Username</span>
-                    <span className="info-value">{profile?.username || user?.username || 'N/A'}</span>
+                    <span className="info-value">{profile?.username || profile?.id || user?.username || 'N/A'}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Email</span>
@@ -173,11 +177,11 @@ const Profile: React.FC = () => {
                   </div>
                   <div className="info-row">
                     <span className="info-label">Name</span>
-                    <span className="info-value">{profile?.name || 'Not set'}</span>
+                    <span className="info-value">{profile?.name || profile?.first_name || profile?.first_name && profile?.last_name ? `${profile.first_name} ${profile.last_name}` : 'Not set'}</span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">User ID</span>
-                    <span className="info-value">{user?.sub || profile?.username || 'N/A'}</span>
+                    <span className="info-value">{profile?.id || user?.sub || profile?.username || 'N/A'}</span>
                   </div>
                   <div className="profile-actions">
                     <button className="btn-primary" onClick={() => setEditing(true)}>
