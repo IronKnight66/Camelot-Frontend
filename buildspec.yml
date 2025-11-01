@@ -112,8 +112,8 @@ phases:
         printf '[{"name":"frontend","imageUri":"%s"}]' "${FRONTEND_ECR_REPO}:${TAG_NAME}" > imagedefinitions.json
 
       - echo "Frontend build complete!"
-      - echo "Tag: $TAG_NAME"
-      - echo "Image: ${FRONTEND_ECR_REPO}:${TAG_NAME}"
+      - echo "Tag is $TAG_NAME"
+      - echo "Image is ${FRONTEND_ECR_REPO}:${TAG_NAME}"
 
 artifacts:
   files:
