@@ -1,0 +1,1375 @@
+
+> camelot-frontend@0.1.0 test
+> react-scripts test --watchAll=false --passWithNoTests
+
+FAIL src/components/__tests__/Login.test.tsx
+  ● Login Component › UI-LOGIN-001: Click Sign In button with valid credentials
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:59:5)
+
+  ● Login Component › UI-LOGIN-002: Toggle to sign up mode
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:80:5)
+
+  ● Login Component › UI-LOGIN-003: Toggle back to sign in mode from sign up
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:92:5)
+
+  ● Login Component › UI-LOGIN-004: Click Sign Up button creates account
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:109:5)
+
+  ● Login Component › UI-LOGIN-005: Click Forgot Password link
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:135:5)
+
+  ● Login Component › UI-LOGIN-006: Display error for empty username
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:148:5)
+
+  ● Login Component › UI-LOGIN-007: Display error for empty password
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:160:5)
+
+  ● Login Component › UI-LOGIN-008: Display error for invalid email format
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:175:5)
+
+  ● Login Component › UI-LOGIN-009: Display loading state during sign in
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:198:5)
+
+  ● Login Component › UI-LOGIN-010: Display error message on sign in failure
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:217:5)
+
+  ● Login Component › UI-LOGIN-011: Toggle password visibility
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:236:5)
+
+  ● Login Component › UI-LOGIN-012: Submit form with Enter key
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      40 |   return render(
+      41 |     <BrowserRouter>
+    > 42 |       <AuthContext.Provider value={defaultAuthValue}>
+         |                    ^
+      43 |         {ui}
+      44 |       </AuthContext.Provider>
+      45 |     </BrowserRouter>
+
+      at renderWithContext (src/components/__tests__/Login.test.tsx:42:20)
+      at Object.<anonymous> (src/components/__tests__/Login.test.tsx:258:5)
+
+FAIL src/components/__tests__/Layout.test.tsx
+  ● Layout/Navigation - UI Button Tests › UI-NAV-001: Navigates to home when Home link clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:54:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-002: Navigates to scans when Scans link clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:68:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-003: Navigates to findings when Findings link clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:82:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-004: Navigates to scanner hub when Scanner Hub link clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:96:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-005: Navigates to user management when link clicked (admin)
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      115 |     render(
+      116 |       <BrowserRouter>
+    > 117 |         <AuthContext.Provider value={adminContext}>
+          |                      ^
+      118 |           <Layout>Content</Layout>
+      119 |         </AuthContext.Provider>
+      120 |       </BrowserRouter>
+
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:117:22)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-006: Navigates to settings when Settings link clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:135:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-007: Opens dropdown when user avatar clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:149:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-008: Navigates to profile when Profile clicked in dropdown
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:164:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-009: Logs out when Logout clicked in dropdown
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:185:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-010: Opens mobile menu when hamburger clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:210:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-011: Closes mobile menu when X clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:228:5)
+
+  ● Layout/Navigation - UI Button Tests › UI-NAV-012: Opens notifications when bell icon clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:251:5)
+
+  ● Layout/Navigation - UI Button Tests › Navigates to home when logo clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:265:5)
+
+  ● Layout/Navigation - UI Button Tests › Highlights active navigation link
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:283:5)
+
+  ● Layout/Navigation - UI Button Tests › Supports keyboard navigation (Tab key)
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      36 |   return render(
+      37 |     <BrowserRouter>
+    > 38 |       <AuthContext.Provider value={mockAuthContext}>
+         |                    ^
+      39 |         <Layout>{children}</Layout>
+      40 |       </AuthContext.Provider>
+      41 |     </BrowserRouter>
+
+      at renderLayout (src/components/__tests__/Layout.test.tsx:38:20)
+      at Object.<anonymous> (src/components/__tests__/Layout.test.tsx:295:5)
+
+FAIL src/components/scanner/__tests__/TenantScannerTools.test.tsx
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-001: should show all tools when All tab clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:99:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-002: should show only enabled tools when Enabled tab clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:124:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-003: should show only disabled tools when Disabled tab clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:145:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-004: should enable tool when enable button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:164:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-005: should disable tool when disable button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:186:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-006: should open settings modal when settings button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:206:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-007: should save settings when save button clicked in modal
+
+    TypeError: Cannot read properties of undefined (reading 'mockResolvedValue')
+
+      225 |    */
+      226 |   test('UI-TENANTSCAN-007: should save settings when save button clicked in modal', async () => {
+    > 227 |     mockedApiService.updateTenantToolSettings.mockResolvedValue({});
+          |                                               ^
+      228 |     
+      229 |     renderWithContext(<TenantScannerTools />);
+      230 |
+
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:227:47)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-008: should close modal when cancel button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:262:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-009: should retry loading when retry button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:297:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-010: should display usage statistics for enabled tool
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:322:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-011: should redirect when user lacks tenant-admin role
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:337:5)
+
+  ● TenantScannerTools Component - Button Interactions › UI-TENANTSCAN-012: should filter tools by search term
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      79 |   return render(
+      80 |     <BrowserRouter>
+    > 81 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      82 |         {ui}
+      83 |       </AuthContext.Provider>
+      84 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/TenantScannerTools.test.tsx:81:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/TenantScannerTools.test.tsx:350:5)
+
+FAIL src/components/scanner/__tests__/MyScanners.test.tsx
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-001: should reload data when retry button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:101:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-002: should activate scanner when activate button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:130:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-003: should deactivate scanner when deactivate button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:154:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-004: should show details when view details button clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:176:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-005: should filter scanners by category
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:196:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-006: should filter scanners by search term
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:221:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-007: should show all scanners when all category clicked
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:244:5)
+
+  ● MyScanners Component - Button Interactions › UI-MYSCAN-008: should display correct scanner statistics
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      78 |   return render(
+      79 |     <BrowserRouter>
+    > 80 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      81 |         {ui}
+      82 |       </AuthContext.Provider>
+      83 |     </BrowserRouter>
+
+      at renderWithContext (src/components/scanner/__tests__/MyScanners.test.tsx:80:20)
+      at Object.<anonymous> (src/components/scanner/__tests__/MyScanners.test.tsx:272:5)
+
+FAIL src/components/scanner/__tests__/AdminScannerTools.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/components/__tests__/TenantSettingsHub.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/components/__tests__/ScannerHub.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/components/__tests__/Profile.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/components/__tests__/Home.test.tsx
+  ● Home Dashboard Component › UI-HOME-001: Display dashboard statistics
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:71:5)
+
+  ● Home Dashboard Component › UI-HOME-002: Display welcome message with user name
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:81:5)
+
+  ● Home Dashboard Component › UI-HOME-003: Click "View All Scans" navigates to scans page
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:89:5)
+
+  ● Home Dashboard Component › UI-HOME-004: Click "View All Findings" navigates to findings page
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:100:5)
+
+  ● Home Dashboard Component › UI-HOME-005: Click "Scanner Hub" navigates to scanner hub
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:111:5)
+
+  ● Home Dashboard Component › UI-HOME-006: Click on Total Scans stat card
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:124:5)
+
+  ● Home Dashboard Component › UI-HOME-007: Click on Critical Findings stat card
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:135:5)
+
+  ● Home Dashboard Component › UI-HOME-008: Click "New Scan" button opens scan creation
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:150:5)
+
+  ● Home Dashboard Component › UI-HOME-009: Display loading state while fetching stats
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:167:5)
+
+  ● Home Dashboard Component › UI-HOME-010: Display error message on API failure
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:178:5)
+
+  ● Home Dashboard Component › UI-HOME-011: Admin sees admin-specific actions
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:188:5)
+
+  ● Home Dashboard Component › UI-HOME-012: Viewer does not see admin actions
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:195:5)
+
+  ● Home Dashboard Component › UI-HOME-013: Display recent scans
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:209:5)
+
+  ● Home Dashboard Component › UI-HOME-014: Display recent findings
+
+    TypeError: Cannot read properties of undefined (reading 'Provider')
+
+      44 |   return render(
+      45 |     <BrowserRouter>
+    > 46 |       <AuthContext.Provider value={authValue}>
+         |                    ^
+      47 |         <Home />
+      48 |       </AuthContext.Provider>
+      49 |     </BrowserRouter>
+
+      at renderWithAuth (src/components/__tests__/Home.test.tsx:46:20)
+      at Object.<anonymous> (src/components/__tests__/Home.test.tsx:223:5)
+
+FAIL src/components/admin/__tests__/UserManagement.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/components/settings/__tests__/APIKeysSettings.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+FAIL src/App.test.tsx
+  ● Test suite failed to run
+
+    SyntaxError: /Users/ironknight/Documents/Code/Camelot/camelot-frontend/src/__mocks__/react-router-dom.ts: Unexpected token, expected "," (42:12)
+
+      40 |
+      41 | export const Link = ({ to, children, ...props }: any) => {
+    > 42 |   return <a href={to} {...props}>{children}</a>;
+         |             ^
+      43 | };
+      44 |
+      45 | export const NavLink = ({ to, children, ...props }: any) => {
+
+      at toParseError (node_modules/@babel/parser/src/parse-error.ts:95:45)
+      at TypeScriptParserMixin.raise (node_modules/@babel/parser/src/tokenizer/index.ts:1507:19)
+      at TypeScriptParserMixin.unexpected (node_modules/@babel/parser/src/tokenizer/index.ts:1547:16)
+      at TypeScriptParserMixin.expect (node_modules/@babel/parser/src/parser/util.ts:157:12)
+      at TypeScriptParserMixin.tsParseDelimitedListWorker (node_modules/@babel/parser/src/plugins/typescript/index.ts:548:16)
+      at TypeScriptParserMixin.tsParseDelimitedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:501:14)
+      at TypeScriptParserMixin.tsParseBracketedList (node_modules/@babel/parser/src/plugins/typescript/index.ts:577:27)
+      at TypeScriptParserMixin.tsParseTypeParameters (node_modules/@babel/parser/src/plugins/typescript/index.ts:830:26)
+      at fn (node_modules/@babel/parser/src/plugins/typescript/index.ts:3761:31)
+      at TypeScriptParserMixin.tryParse (node_modules/@babel/parser/src/parser/util.ts:174:20)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3759:26)
+      at TypeScriptParserMixin.parseExpressionBase (node_modules/@babel/parser/src/parser/expression.ts:226:23)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:217:39)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseExpression (node_modules/@babel/parser/src/parser/expression.ts:217:17)
+      at TypeScriptParserMixin.parseReturnStatement (node_modules/@babel/parser/src/parser/statement.ts:1115:28)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:543:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1444:16)
+      at TypeScriptParserMixin.parseBlockBody (node_modules/@babel/parser/src/parser/statement.ts:1417:10)
+      at TypeScriptParserMixin.parseBlock (node_modules/@babel/parser/src/parser/statement.ts:1385:10)
+      at TypeScriptParserMixin.parseFunctionBody (node_modules/@babel/parser/src/parser/expression.ts:2626:24)
+      at TypeScriptParserMixin.parseArrowExpression (node_modules/@babel/parser/src/parser/expression.ts:2563:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (node_modules/@babel/parser/src/parser/expression.ts:1847:12)
+      at TypeScriptParserMixin.parseExprAtom (node_modules/@babel/parser/src/parser/expression.ts:1170:21)
+      at TypeScriptParserMixin.parseExprSubscripts (node_modules/@babel/parser/src/parser/expression.ts:742:23)
+      at TypeScriptParserMixin.parseUpdate (node_modules/@babel/parser/src/parser/expression.ts:721:21)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/parser/expression.ts:683:23)
+      at TypeScriptParserMixin.parseMaybeUnary (node_modules/@babel/parser/src/plugins/typescript/index.ts:3876:20)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (node_modules/@babel/parser/src/parser/expression.ts:417:14)
+      at TypeScriptParserMixin.parseExprOps (node_modules/@babel/parser/src/parser/expression.ts:429:23)
+      at TypeScriptParserMixin.parseMaybeConditional (node_modules/@babel/parser/src/parser/expression.ts:384:23)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/parser/expression.ts:301:21)
+      at TypeScriptParserMixin.parseMaybeAssign (node_modules/@babel/parser/src/plugins/typescript/index.ts:3747:22)
+      at callback (node_modules/@babel/parser/src/parser/expression.ts:257:12)
+      at TypeScriptParserMixin.allowInAnd (node_modules/@babel/parser/src/parser/expression.ts:3197:16)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (node_modules/@babel/parser/src/parser/expression.ts:256:17)
+      at TypeScriptParserMixin.parseVar (node_modules/@babel/parser/src/parser/statement.ts:1587:18)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/parser/statement.ts:1251:10)
+      at TypeScriptParserMixin.parseVarStatement (node_modules/@babel/parser/src/plugins/typescript/index.ts:3088:33)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/parser/statement.ts:612:21)
+      at TypeScriptParserMixin.parseStatementContent (node_modules/@babel/parser/src/plugins/typescript/index.ts:3223:20)
+      at TypeScriptParserMixin.parseStatementLike (node_modules/@babel/parser/src/parser/statement.ts:482:17)
+      at TypeScriptParserMixin.parseStatementListItem (node_modules/@babel/parser/src/parser/statement.ts:431:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2635:17)
+      at TypeScriptParserMixin.parseExportDeclaration (node_modules/@babel/parser/src/plugins/typescript/index.ts:3450:15)
+      at TypeScriptParserMixin.maybeParseExportDeclaration (node_modules/@babel/parser/src/parser/statement.ts:2551:31)
+      at TypeScriptParserMixin.parseExport (node_modules/@babel/parser/src/parser/statement.ts:2432:29)
+
+Test Suites: 12 failed, 12 total
+Tests:       61 failed, 61 total
+Snapshots:   0 total
+Time:        1.65 s
+Ran all test suites.

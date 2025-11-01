@@ -14,13 +14,15 @@ RUN npm install --omit=dev
 COPY . .
 
 # Accept build arguments
+# These should be passed from Terraform outputs during Docker build
+# Defaults are for local development only
 ARG REACT_APP_AWS_REGION=us-east-1
-ARG REACT_APP_COGNITO_USER_POOL_ID=us-east-1_v5vWtap1R
-ARG REACT_APP_COGNITO_CLIENT_ID=1i3euls7ljtesoi0il87qu5rjj
-ARG REACT_APP_COGNITO_DOMAIN=security-orchestration-dev-auth.auth.us-east-1.amazoncognito.com
-ARG REACT_APP_REDIRECT_SIGN_IN=https://security.ironknight6.com/
-ARG REACT_APP_REDIRECT_SIGN_OUT=https://security.ironknight6.com/
-ARG REACT_APP_API_URL=https://x0q0fkiuj9.execute-api.us-east-1.amazonaws.com/dev
+ARG REACT_APP_COGNITO_USER_POOL_ID=""
+ARG REACT_APP_COGNITO_CLIENT_ID=""
+ARG REACT_APP_COGNITO_DOMAIN=""
+ARG REACT_APP_REDIRECT_SIGN_IN="http://localhost:3000/"
+ARG REACT_APP_REDIRECT_SIGN_OUT="http://localhost:3000/"
+ARG REACT_APP_API_URL=""
 
 # Set environment variables for build
 ENV REACT_APP_AWS_REGION=$REACT_APP_AWS_REGION

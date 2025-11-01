@@ -23,15 +23,11 @@ class ApiService {
         try {
           const session = await fetchAuthSession({ forceRefresh: false });
           
-          // Try to get the access token first (preferred for API calls)
-          let token = session.tokens?.accessToken;
-          let tokenType = 'Access';
-          
-          // Fall back to ID token if access token is not available
-          if (!token) {
-            token = session.tokens?.idToken;
-            tokenType = 'ID';
-          }
+          // In production behind API Gateway Cognito authorizer, prefer ID token.
+          // In development, prefer Access token.
+          const preferIdToken = process.env.NODE_ENV === 'production';
+          let token = preferIdToken ? (session.tokens?.idToken || session.tokens?.accessToken) : (session.tokens?.accessToken || session.tokens?.idToken);
+          let tokenType = preferIdToken ? (session.tokens?.idToken ? 'ID' : 'Access') : (session.tokens?.accessToken ? 'Access' : 'ID');
           
           if (token) {
             // In AWS Amplify v6, tokens are JWT objects with a toString() method
