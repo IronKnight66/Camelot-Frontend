@@ -52,13 +52,16 @@ phases:
       
       # Determine redirect URL
       - |
-        if [[ "$FRONTEND_DOMAIN" == *"localhost"* ]] || [[ "$FRONTEND_DOMAIN" == *"elb.amazonaws.com"* ]]; then
-          REDIRECT_SIGN_IN="http://${FRONTEND_DOMAIN}/"
-          REDIRECT_SIGN_OUT="http://${FRONTEND_DOMAIN}/"
-        else
-          REDIRECT_SIGN_IN="https://${FRONTEND_DOMAIN}/"
-          REDIRECT_SIGN_OUT="https://${FRONTEND_DOMAIN}/"
-        fi
+        case "$FRONTEND_DOMAIN" in
+          *localhost*|*elb.amazonaws.com*)
+            REDIRECT_SIGN_IN="http://${FRONTEND_DOMAIN}/"
+            REDIRECT_SIGN_OUT="http://${FRONTEND_DOMAIN}/"
+            ;;
+          *)
+            REDIRECT_SIGN_IN="https://${FRONTEND_DOMAIN}/"
+            REDIRECT_SIGN_OUT="https://${FRONTEND_DOMAIN}/"
+            ;;
+        esac
         echo "Frontend redirect URLs: $REDIRECT_SIGN_IN / $REDIRECT_SIGN_OUT"
       
       # Login to ECR
@@ -70,17 +73,19 @@ phases:
     commands:
       # Extract tag from CODEBUILD_SOURCE_VERSION if present
       - |
-        if [[ "$CODEBUILD_SOURCE_VERSION" =~ refs/tags/(.*) ]]; then
-          export TAG_NAME="${BASH_REMATCH[1]}"
-          echo "Building from tag: $TAG_NAME"
-        else
-          export TAG_NAME="latest"
-          echo "Building from branch, using latest tag"
-        fi
+        case "$CODEBUILD_SOURCE_VERSION" in
+          refs/tags/*)
+            export TAG_NAME="${CODEBUILD_SOURCE_VERSION#refs/tags/}"
+            echo "Building from tag: $TAG_NAME"
+            ;;
+          *)
+            export TAG_NAME="latest"
+            echo "Building from branch, using latest tag"
+            ;;
+        esac
 
       # Build frontend Docker image for linux/amd64
       - echo "Building frontend Docker image for linux/amd64..."
-      - cd ../camelot-frontend
 
       - |
         docker build --platform linux/amd64 \
