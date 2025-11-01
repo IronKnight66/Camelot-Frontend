@@ -5,51 +5,23 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      # Install Terraform
-      - wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-      - unzip terraform_1.6.0_linux_amd64.zip
-      - chmod +x terraform
-      - mv terraform /usr/local/bin/
-      
-      # Install AWS CLI (usually pre-installed in CodeBuild)
-      - aws --version
-      
       # Install Docker
       - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
 
   pre_build:
     commands:
-      # Initialize Terraform to get outputs (infrastructure already deployed in Apply stage)
-      - echo "Getting Terraform outputs for frontend build..."
-      - cd ${TERRAFORM_DIR}
-      - terraform init \
-          -backend-config="bucket=${TERRAFORM_STATE_BUCKET}" \
-          -backend-config="key=${TERRAFORM_STATE_KEY}" \
-          -backend-config="region=${AWS_REGION}" \
-          -backend-config="encrypt=true" \
-          -backend-config="dynamodb_table=${TERRAFORM_STATE_LOCK_TABLE}" \
-          -input=false
-      
-      # Get Terraform outputs
-      - echo "Retrieving Terraform outputs..."
-      - COGNITO_USER_POOL_ID=$(terraform output -raw cognito_user_pool_id 2>/dev/null || echo "")
-      - COGNITO_CLIENT_ID=$(terraform output -raw cognito_client_id 2>/dev/null || echo "")
-      - COGNITO_DOMAIN=$(terraform output -raw cognito_domain 2>/dev/null || echo "")
-      - API_GATEWAY_ENDPOINT=$(terraform output -raw api_gateway_endpoint 2>/dev/null || echo "")
-      - FRONTEND_DOMAIN=$(terraform output -raw frontend_domain_dns 2>/dev/null || terraform output -raw alb_dns_name 2>/dev/null || echo "")
-      
-      # Validate we have required values
+      # Validate we have required environment variables
+      - echo "Validating environment variables..."
       - |
         if [ -z "$COGNITO_USER_POOL_ID" ] || [ -z "$COGNITO_CLIENT_ID" ] || [ -z "$API_GATEWAY_ENDPOINT" ]; then
-          echo "ERROR: Required Terraform outputs not found"
+          echo "ERROR: Required environment variables not set"
           echo "Cognito User Pool ID: ${COGNITO_USER_POOL_ID:-empty}"
           echo "Cognito Client ID: ${COGNITO_CLIENT_ID:-empty}"
           echo "API Gateway Endpoint: ${API_GATEWAY_ENDPOINT:-empty}"
-          terraform output
           exit 1
         fi
-      
+
       # Determine redirect URL
       - |
         case "$FRONTEND_DOMAIN" in
@@ -63,7 +35,7 @@ phases:
             ;;
         esac
         echo "Frontend redirect URLs: $REDIRECT_SIGN_IN / $REDIRECT_SIGN_OUT"
-      
+
       # Login to ECR
       - echo "Logging in to ECR..."
       - REPO_REGION=$(echo "$FRONTEND_ECR_REPO" | sed -n 's/.*\.dkr\.ecr\.\([^.]*\)\..*/\1/p' || echo "$AWS_REGION")
