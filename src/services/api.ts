@@ -24,10 +24,10 @@ class ApiService {
           const session = await fetchAuthSession({ forceRefresh: false });
           
           // In production behind API Gateway Cognito authorizer, prefer ID token.
-          // In development, prefer Access token.
-          const preferIdToken = process.env.NODE_ENV === 'production';
-          let token = preferIdToken ? (session.tokens?.idToken || session.tokens?.accessToken) : (session.tokens?.accessToken || session.tokens?.idToken);
-          let tokenType = preferIdToken ? (session.tokens?.idToken ? 'ID' : 'Access') : (session.tokens?.accessToken ? 'Access' : 'ID');
+          // API Gateway Cognito authorizer validates ID tokens by default.
+          // Always use ID token for API Gateway
+          let token = session.tokens?.idToken || session.tokens?.accessToken;
+          let tokenType = session.tokens?.idToken ? 'ID' : 'Access';
           
           if (token) {
             // In AWS Amplify v6, tokens are JWT objects with a toString() method
