@@ -1,0 +1,68 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - generic [ref=e6]:
+      - link "Camelot Security Platform" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - heading "Camelot Security Platform" [level=1] [ref=e8]
+      - navigation [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Scanners" [ref=e11] [cursor=pointer]:
+          - /url: /scanners
+        - link "Settings" [ref=e12] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e13]:
+        - link "Welcome, superadmin@techstart.com" [ref=e14] [cursor=pointer]:
+          - /url: /profile
+        - button "Sign Out" [ref=e15] [cursor=pointer]
+  - main [ref=e16]:
+    - heading "Profile" [level=2] [ref=e18]
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e23]: "7"
+        - generic [ref=e24]:
+          - heading "7478f418-b091-704e-3b82-a86978ab6ef2" [level=2] [ref=e25]
+          - paragraph [ref=e26]: superadmin@techstart.com
+      - generic [ref=e27]:
+        - button "Profile" [ref=e28] [cursor=pointer]
+        - button "API Keys" [ref=e29] [cursor=pointer]
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - heading "Account Information" [level=3] [ref=e32]
+          - generic [ref=e33]:
+            - generic [ref=e34]: Username
+            - generic [ref=e35]: superadmin@techstart.com
+          - generic [ref=e36]:
+            - generic [ref=e37]: Email
+            - generic [ref=e38]: 7478f418-b091-704e-3b82-a86978ab6ef2
+          - generic [ref=e39]:
+            - generic [ref=e40]: Name
+            - generic [ref=e41]: Not set
+          - generic [ref=e42]:
+            - generic [ref=e43]: User ID
+            - generic [ref=e44]: 7478f418-b091-704e-3b82-a86978ab6ef2
+          - button "Edit Profile" [ref=e46] [cursor=pointer]
+        - generic [ref=e47]:
+          - heading "Roles & Permissions" [level=3] [ref=e48]
+          - generic [ref=e50]: super-admin
+        - generic [ref=e51]:
+          - heading "Security Settings" [level=3] [ref=e52]
+          - generic [ref=e53]:
+            - generic [ref=e54]: Two-Factor Authentication
+            - generic [ref=e55]: Not enabled
+          - generic [ref=e56]:
+            - generic [ref=e57]: Account Status
+            - generic [ref=e58]: Active
+          - button "Change Password" [ref=e60] [cursor=pointer]
+        - generic [ref=e61]:
+          - heading "Preferences" [level=3] [ref=e62]
+          - generic [ref=e63]:
+            - generic [ref=e64]: Language
+            - generic [ref=e65]: English (US)
+          - generic [ref=e66]:
+            - generic [ref=e67]: Timezone
+            - generic [ref=e68]: UTC
+```

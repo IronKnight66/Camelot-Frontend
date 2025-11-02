@@ -51,9 +51,12 @@ const TenantScanners: React.FC = () => {
       // Load tenant's current tools
       const tenantToolsData = await apiService.getTenantScannerTools();
       const toolsData = tenantToolsData?.tools || tenantToolsData || [];
-      
+
+      // Ensure toolsData is always an array
+      const toolsArray = Array.isArray(toolsData) ? toolsData : [];
+
       // Handle both nested and flat structures
-      const tools = toolsData.map((item: any) => {
+      const tools = toolsArray.map((item: any) => {
         if (item.scanner_tool) {
           return {
             id: item.id.toString(),
@@ -80,10 +83,12 @@ const TenantScanners: React.FC = () => {
   const loadTenants = async () => {
     try {
       const tenantsData = await apiService.getTenants();
-      setTenants(tenantsData || []);
+      // Ensure tenantsData is always an array
+      const tenantsArray = Array.isArray(tenantsData) ? tenantsData : [];
+      setTenants(tenantsArray);
       // Set first tenant as default if available
-      if (tenantsData && tenantsData.length > 0 && !selectedTenant) {
-        setSelectedTenant(tenantsData[0].id);
+      if (tenantsArray.length > 0 && !selectedTenant) {
+        setSelectedTenant(tenantsArray[0].id);
       }
     } catch (err: any) {
       console.error('Failed to load tenants:', err);

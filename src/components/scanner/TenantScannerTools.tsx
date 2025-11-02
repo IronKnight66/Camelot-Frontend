@@ -35,12 +35,15 @@ const TenantScannerTools: React.FC = () => {
       // Get all tools enabled for tenant
       const isEnabled = activeTab === 'enabled' ? true : activeTab === 'disabled' ? false : undefined;
       const data = await apiService.getTenantScannerTools(isEnabled);
-      
+
       // Handle both direct array and object with tools property
       const toolsFromApi = data?.tools || data || [];
-      
+
+      // Ensure toolsFromApi is always an array
+      const toolsArray = Array.isArray(toolsFromApi) ? toolsFromApi : [];
+
       // Flatten the nested structure: tenant tools have a nested scanner_tool property
-      const flattenedTools = toolsFromApi.map((item: any) => {
+      const flattenedTools = toolsArray.map((item: any) => {
         // Check if this is the nested structure (from API)
         if (item.scanner_tool) {
           return {
