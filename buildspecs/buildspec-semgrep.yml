@@ -40,15 +40,13 @@ phases:
           echo "Info issues: $INFO_COUNT"
 
           # Create summary
-          cat > scan-summary.txt <<EOF
-=== Semgrep Security Scan Summary ===
-Scan Date: $(date)
-Critical/Error Issues: $CRITICAL_COUNT
-Warning Issues: $WARNING_COUNT
-Info Issues: $INFO_COUNT
-
-=== Detailed Report ===
-EOF
+          echo "=== Semgrep Security Scan Summary ===" > scan-summary.txt
+          echo "Scan Date: $(date)" >> scan-summary.txt
+          echo "Critical/Error Issues: $CRITICAL_COUNT" >> scan-summary.txt
+          echo "Warning Issues: $WARNING_COUNT" >> scan-summary.txt
+          echo "Info Issues: $INFO_COUNT" >> scan-summary.txt
+          echo "" >> scan-summary.txt
+          echo "=== Detailed Report ===" >> scan-summary.txt
           cat semgrep-report.txt >> scan-summary.txt
 
           # Fail pipeline if critical issues found
