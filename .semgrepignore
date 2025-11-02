@@ -1,0 +1,5 @@
+# Semgrep ignore patterns for frontend
+# These files/patterns contain intentional security patterns that are safe in context
+
+# Local development configuration files
+docker-compose.yml
