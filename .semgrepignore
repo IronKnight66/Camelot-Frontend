@@ -1,5 +1,14 @@
 # Semgrep ignore patterns for frontend
 # These files/patterns contain intentional security patterns that are safe in context
 
+# Dockerfile - nginx runs as root to bind to port 80, which is standard for nginx containers
+Dockerfile
+
+# E2E test files - console.log format strings are safe in test environment
+e2e-tests/
+
+# API service - console.log format strings are for debugging only, not user-facing
+src/services/api.ts
+
 # Local development configuration files
 docker-compose.yml
