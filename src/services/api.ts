@@ -201,7 +201,7 @@ class ApiService {
 
   // User Profile API
   async getCurrentUser() {
-    const response = await this.api.get('/auth/me');
+    const response = await this.api.get('/api/v1/auth/me');
     return response.data;
   }
 

@@ -80,7 +80,8 @@ const AdminScannerTools: React.FC = () => {
       
       const data = await apiService.getScannerTools(params);
       // Handle both direct array and object with tools property
-      setAllTools(data?.tools || data || []);
+      const tools = Array.isArray(data) ? data : (Array.isArray(data?.tools) ? data.tools : []);
+      setAllTools(tools);
     } catch (err: any) {
       setError(err.message || 'Failed to load scanner tools');
     } finally {
