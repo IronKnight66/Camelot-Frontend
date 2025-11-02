@@ -1,5 +1,5 @@
 # Multi-stage build for React frontend
-FROM node:18-alpine AS build
+FROM public.ecr.aws/docker/library/node:18-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -37,7 +37,7 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL
 RUN npm run build
 
 # Production stage with nginx
-FROM nginx:alpine
+FROM public.ecr.aws/nginx/nginx:alpine
 
 # Copy built app to nginx
 COPY --from=build /app/build /usr/share/nginx/html
