@@ -11,7 +11,7 @@ class ApiService {
     const baseURL = process.env.NODE_ENV === 'development' ? '/' : (process.env.REACT_APP_API_URL || '/');
     this.api = axios.create({
       baseURL: baseURL,
-      timeout: 10000,
+      timeout: 30000, // Increased from 10000ms to 30000ms (30 seconds)
       headers: {
         'Content-Type': 'application/json',
       },
@@ -71,7 +71,14 @@ class ApiService {
     this.api.interceptors.response.use(
       (response: AxiosResponse) => response,
       async (error) => {
-        if (error.response?.status === 401) {
+        // Handle timeout errors specifically
+        if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+          console.error('Request timeout:', {
+            url: error.config?.url,
+            timeout: error.config?.timeout,
+            message: 'The request took too long to complete. The server may be slow or unavailable.'
+          });
+        } else if (error.response?.status === 401) {
           console.error('401 Unauthorized error:', error.response?.data);
           console.warn('Token may be expired or user may not have required permissions');
           // Don't redirect to login automatically - let the app handle it
