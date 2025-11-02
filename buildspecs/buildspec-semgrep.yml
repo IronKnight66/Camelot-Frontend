@@ -70,9 +70,3 @@ artifacts:
     - semgrep-report.txt
     - scan-summary.txt
   name: semgrep-scan-$(date +%Y%m%d-%H%M%S)
-
-reports:
-  semgrep-security-report:
-    files:
-      - semgrep-results.sarif
-    file-format: SARIFSCA
