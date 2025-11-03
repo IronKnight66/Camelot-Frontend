@@ -33,8 +33,8 @@ The `.env.local` file contains configuration for local development:
 
 ```
 REACT_APP_AWS_REGION=us-east-1
-REACT_APP_COGNITO_USER_POOL_ID=us-east-1_wEfMZVfy3
-REACT_APP_COGNITO_CLIENT_ID=ud8656v59gbt7avd6slhf76qk
+REACT_APP_COGNITO_USER_POOL_ID=us-east-1_dKkd0TIko
+REACT_APP_COGNITO_CLIENT_ID=5jvbdg433l8t5efvp9v0c07qon
 REACT_APP_API_URL=https://z88575vggf.execute-api.us-east-1.amazonaws.com/dev
 REACT_APP_REDIRECT_SIGN_IN=http://localhost:3000/
 REACT_APP_REDIRECT_SIGN_OUT=http://localhost:3000/
@@ -70,8 +70,8 @@ REACT_APP_API_URL=http://localhost:8000
 The local development environment uses the **AWS Cognito Dev User Pool** for authentication.
 
 ### Cognito Configuration
-- **User Pool ID**: `us-east-1_wEfMZVfy3`
-- **Client ID**: `ud8656v59gbt7avd6slhf76qk`
+- **User Pool ID**: `us-east-1_dKkd0TIko`
+- **Client ID**: `5jvbdg433l8t5efvp9v0c07qon`
 - **Callback URLs**: Configured to accept `http://localhost:3000/`
 
 ### Creating Test Users
@@ -81,7 +81,7 @@ To create test users in the Cognito User Pool:
 ```bash
 # Create a new user
 aws cognito-idp admin-create-user \
-  --user-pool-id us-east-1_wEfMZVfy3 \
+  --user-pool-id us-east-1_dKkd0TIko \
   --username testuser@example.com \
   --user-attributes Name=email,Value=testuser@example.com Name=email_verified,Value=true \
   --temporary-password TempPassword123! \
@@ -89,7 +89,7 @@ aws cognito-idp admin-create-user \
 
 # Set permanent password (optional)
 aws cognito-idp admin-set-user-password \
-  --user-pool-id us-east-1_wEfMZVfy3 \
+  --user-pool-id us-east-1_dKkd0TIko \
   --username testuser@example.com \
   --password YourPassword123! \
   --permanent \

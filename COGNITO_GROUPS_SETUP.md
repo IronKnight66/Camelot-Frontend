@@ -8,7 +8,7 @@ The ID token doesn't include `cognito:groups`, which means users can't be proper
 ### Step 1: Add User to Cognito Groups
 
 1. Go to AWS Console → Cognito → User Pools
-2. Select your User Pool: `us-east-1_v5vWtap1R`
+2. Select your User Pool: `us-east-1_dKkd0TIko`
 3. Go to "Users" tab
 4. Find your user: `admin@acme.com` (username: 94f824d8-b091-70e8-2716-56ae2b1842fc)
 5. Click on the user → "Groups" tab → "Add to group"
@@ -25,7 +25,7 @@ The App Client needs to be configured to read group information.
 
 1. Go to your User Pool
 2. Click on "App integration" tab
-3. Find App client: `1i3euls7ljtesoi0il87qu5rjj`
+3. Find App client: `5jvbdg433l8t5efvp9v0c07qon`
 4. Click "Edit"
 5. Under "Attribute read and write permissions", ensure:
    - Users can read and write own attributes
@@ -37,8 +37,8 @@ The App Client needs to be configured to read group information.
 ```bash
 # Update the App Client to read group information
 aws cognito-idp update-user-pool-client \
-  --user-pool-id us-east-1_v5vWtap1R \
-  --client-id 1i3euls7ljtesoi0il87qu5rjj \
+  --user-pool-id us-east-1_dKkd0TIko \
+  --client-id 5jvbdg433l8t5efvp9v0c07qon \
   --read-attributes email openid profile \
   --write-attributes email
 ```
@@ -64,13 +64,13 @@ If groups don't exist yet:
 ```bash
 # Create super-admin group
 aws cognito-idp create-group \
-  --user-pool-id us-east-1_v5vWtap1R \
+  --user-pool-id us-east-1_dKkd0TIko \
   --group-name super-admin \
   --description "Super administrators with full access"
 
 # Create tenant-admin group
 aws cognito-idp create-group \
-  --user-pool-id us-east-1_v5vWtap1R \
+  --user-pool-id us-east-1_dKkd0TIko \
   --group-name tenant-admin \
   --description "Tenant administrators"
 ```
