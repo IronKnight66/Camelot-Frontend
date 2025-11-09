@@ -14,6 +14,9 @@ import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
 import APIKeys from './components/settings/APIKeys';
 import TenantScanners from './components/settings/TenantScanners';
+import Billing from './components/settings/Billing';
+import StripeSettings from './components/admin/StripeSettings';
+import SubscriptionPlans from './components/admin/SubscriptionPlans';
 import './aws-config';
 import './App.css';
 
@@ -130,15 +133,51 @@ function App() {
             />
 
             {/* User Management - Admin Only */}
-            <Route 
-              path="/admin/users" 
+            <Route
+              path="/admin/users"
               element={
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="admin">
                     <UserManagement />
                   </RoleBasedRoute>
                 </ProtectedRoute>
-              } 
+              }
+            />
+
+            {/* Billing - Admin Only */}
+            <Route
+              path="/settings/billing"
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <Billing />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Stripe Configuration - Super Admin Only */}
+            <Route
+              path="/settings/stripe"
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <StripeSettings />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Subscription Plans Management - Super Admin Only */}
+            <Route
+              path="/settings/subscription-plans"
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <SubscriptionPlans />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              }
             />
 
             <Route path="*" element={<Navigate to="/" replace />} />

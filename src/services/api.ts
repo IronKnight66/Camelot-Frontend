@@ -294,6 +294,67 @@ class ApiService {
     const response = await this.api.delete(`/api/v1/users/${userId}`);
     return response.data;
   }
+
+  // Billing API (Admin)
+  async getBillingSubscription() {
+    const response = await this.api.get('/api/v1/billing/subscription');
+    return response.data;
+  }
+
+  async createCheckoutSession(plan: string) {
+    const response = await this.api.post('/api/v1/billing/checkout', { plan });
+    return response.data;
+  }
+
+  async createPortalSession() {
+    const response = await this.api.post('/api/v1/billing/portal');
+    return response.data;
+  }
+
+  async getBillingPaymentMethods() {
+    const response = await this.api.get('/api/v1/billing/payment-methods');
+    return response.data;
+  }
+
+  async getBillingInvoices(limit: number = 10) {
+    const response = await this.api.get(`/api/v1/billing/invoices?limit=${limit}`);
+    return response.data;
+  }
+
+  async cancelSubscription(atPeriodEnd: boolean = true) {
+    const response = await this.api.post('/api/v1/billing/subscription/cancel', {
+      at_period_end: atPeriodEnd
+    });
+    return response.data;
+  }
+
+  // Stripe Configuration API (Super-admin)
+  async getStripeConfig() {
+    const response = await this.api.get('/api/v1/admin/stripe-config');
+    return response.data;
+  }
+
+  async updateStripeConfig(config: {
+    secret_key?: string;
+    publishable_key?: string;
+    webhook_secret?: string;
+    price_id_basic?: string;
+    price_id_professional?: string;
+    price_id_enterprise?: string;
+  }) {
+    const response = await this.api.put('/api/v1/admin/stripe-config', config);
+    return response.data;
+  }
+
+  async testStripeConnection() {
+    const response = await this.api.post('/api/v1/admin/stripe-config/test');
+    return response.data;
+  }
+
+  async deleteStripeConfigKey(configKey: string) {
+    const response = await this.api.delete(`/api/v1/admin/stripe-config/${configKey}`);
+    return response.data;
+  }
 }
 
 export default new ApiService();

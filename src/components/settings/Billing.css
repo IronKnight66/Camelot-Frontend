@@ -1,0 +1,293 @@
+.billing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.billing-container h2 {
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.billing-section {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.billing-section h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+}
+
+/* Subscription Card */
+.subscription-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.subscription-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.plan-name {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  color: #667eea;
+}
+
+.subscription-price {
+  text-align: right;
+}
+
+.subscription-price .amount {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.subscription-price .interval {
+  color: #666;
+  font-size: 1rem;
+}
+
+.subscription-info {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge-warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge-neutral {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+/* Actions */
+.subscription-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.plan-selection {
+  width: 100%;
+}
+
+.plan-selection p {
+  margin-bottom: 16px;
+  color: #666;
+}
+
+.plan-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #667eea;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #5568d3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+/* Payment Methods */
+.payment-methods-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.payment-method-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.card-icon {
+  font-size: 2rem;
+}
+
+.card-details {
+  flex: 1;
+}
+
+.card-brand {
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #333;
+}
+
+.card-number {
+  margin: 0 0 4px 0;
+  color: #666;
+  font-family: monospace;
+}
+
+.card-expiry {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #999;
+}
+
+/* Invoices Table */
+.invoices-table {
+  overflow-x: auto;
+}
+
+.invoices-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoices-table th,
+.invoices-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.invoices-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.invoices-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.invoice-link {
+  color: #667eea;
+  text-decoration: none;
+  margin-right: 12px;
+  font-weight: 500;
+}
+
+.invoice-link:hover {
+  text-decoration: underline;
+}
+
+/* Loading and Error States */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subscription-header {
+    flex-direction: column;
+  }
+
+  .subscription-price {
+    text-align: left;
+    margin-top: 12px;
+  }
+
+  .subscription-actions {
+    flex-direction: column;
+  }
+
+  .subscription-actions button {
+    width: 100%;
+  }
+
+  .plan-buttons {
+    flex-direction: column;
+  }
+
+  .plan-buttons button {
+    width: 100%;
+  }
+
+  .payment-methods-list {
+    grid-template-columns: 1fr;
+  }
+}
