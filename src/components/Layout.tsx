@@ -44,13 +44,63 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             >
               Scanners
             </Link>
+            <Link 
+              to="/chat" 
+              className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
+            >
+              Chat
+            </Link>
+            <Link 
+              to="/assessment" 
+              className={`nav-link ${location.pathname === '/assessment' ? 'active' : ''}`}
+            >
+              Assessment
+            </Link>
+            <Link 
+              to="/metrics" 
+              className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
+            >
+              Metrics
+            </Link>
+            <Link 
+              to="/reports" 
+              className={`nav-link ${location.pathname === '/reports' ? 'active' : ''}`}
+            >
+              Reports
+            </Link>
             {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
-              <Link 
-                to="/settings" 
-                className={`nav-link ${location.pathname.startsWith('/settings') || location.pathname.startsWith('/admin/users') || location.pathname.startsWith('/profile') ? 'active' : ''}`}
-              >
-                Settings
-              </Link>
+              <>
+                <Link 
+                  to="/settings/tenant" 
+                  className={`nav-link ${
+                    location.pathname === '/settings' || 
+                    location.pathname === '/settings/tenant' ||
+                    location.pathname.startsWith('/settings/api-keys') ||
+                    location.pathname.startsWith('/settings/billing') ||
+                    location.pathname.startsWith('/admin/users')
+                      ? 'active' 
+                      : ''
+                  }`}
+                >
+                  Settings
+                </Link>
+                {userRole === 'super-admin' && (
+                  <Link 
+                    to="/settings/admin" 
+                    className={`nav-link ${
+                      location.pathname === '/settings/admin' ||
+                      location.pathname.startsWith('/settings/admin/scanner-tools') ||
+                      location.pathname.startsWith('/settings/tenant-scanners') ||
+                      location.pathname.startsWith('/settings/stripe') ||
+                      location.pathname.startsWith('/settings/subscription-plans')
+                        ? 'active' 
+                        : ''
+                    }`}
+                  >
+                    Super Admin
+                  </Link>
+                )}
+              </>
             )}
           </nav>
           <div className="user-info">

@@ -355,6 +355,100 @@ class ApiService {
     const response = await this.api.delete(`/api/v1/admin/stripe-config/${configKey}`);
     return response.data;
   }
+
+  // Chatbot API
+  async sendChatMessage(message: string, sessionId?: string) {
+    const response = await this.api.post('/api/v1/chatbot/chat', {
+      message,
+      session_id: sessionId
+    });
+    return response.data;
+  }
+
+  async createChatSession(provider?: string) {
+    const response = await this.api.post('/api/v1/chatbot/session', 
+      provider ? { provider } : {}
+    );
+    return response.data;
+  }
+
+  async getChatSession(sessionId: string) {
+    const response = await this.api.get(`/api/v1/chatbot/session/${sessionId}`);
+    return response.data;
+  }
+
+  async clearChatSession(sessionId: string) {
+    const response = await this.api.delete(`/api/v1/chatbot/session/${sessionId}`);
+    return response.data;
+  }
+
+  async listChatSessions() {
+    const response = await this.api.get('/api/v1/chatbot/sessions');
+    return response.data;
+  }
+
+  // Chatbot Provider Settings
+  async getChatbotProvider() {
+    const response = await this.api.get('/api/v1/tenant/chatbot-provider');
+    return response.data;
+  }
+
+  async updateChatbotProvider(provider: string) {
+    const response = await this.api.put('/api/v1/tenant/chatbot-provider', {
+      provider
+    });
+    return response.data;
+  }
+
+  // Chat Logs API
+  async getChatLogs(filters?: {
+    provider?: string;
+    model_name?: string;
+    status?: string;
+    session_id?: string;
+    user_id?: string;
+    start_date?: string;
+    end_date?: string;
+    limit?: number;
+  }) {
+    const params = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          params.append(key, value.toString());
+        }
+      });
+    }
+    const queryString = params.toString();
+    const url = `/api/v1/chatbot/logs${queryString ? `?${queryString}` : ''}`;
+    const response = await this.api.get(url);
+    return response.data;
+  }
+
+  async getChatLogsSummary() {
+    const response = await this.api.get('/api/v1/chatbot/logs/summary');
+    return response.data;
+  }
+
+  async getChatLogsCosts(startDate?: string, endDate?: string) {
+    const params = new URLSearchParams();
+    if (startDate) params.append('start_date', startDate);
+    if (endDate) params.append('end_date', endDate);
+    const queryString = params.toString();
+    const url = `/api/v1/chatbot/logs/costs${queryString ? `?${queryString}` : ''}`;
+    const response = await this.api.get(url);
+    return response.data;
+  }
+
+  async getChatLog(logId: number) {
+    const response = await this.api.get(`/api/v1/chatbot/logs/${logId}`);
+    return response.data;
+  }
+
+  async searchChatLogs(query: string, limit: number = 50) {
+    const response = await this.api.get(`/api/v1/chatbot/logs/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+    return response.data;
+  }
 }
 
 export default new ApiService();

@@ -12,11 +12,17 @@ import MyScanners from './components/scanner/MyScanners';
 import UserManagement from './components/admin/UserManagement';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
+import TenantAdminSettings from './components/TenantAdminSettings';
+import SuperAdminSettings from './components/SuperAdminSettings';
 import APIKeys from './components/settings/APIKeys';
 import TenantScanners from './components/settings/TenantScanners';
 import Billing from './components/settings/Billing';
 import StripeSettings from './components/admin/StripeSettings';
 import SubscriptionPlans from './components/admin/SubscriptionPlans';
+import ChatInterface from './components/chatbot/ChatInterface';
+import Assessment from './components/Assessment';
+import Metrics from './components/Metrics';
+import Reports from './components/Reports';
 import './aws-config';
 import './App.css';
 
@@ -48,12 +54,36 @@ function App() {
               } 
             />
 
-            {/* Tenant Settings Hub */}
+            {/* Tenant Settings Hub - Legacy route, redirects to tenant admin settings */}
             <Route 
               path="/settings" 
               element={
                 <ProtectedRoute>
-                  <TenantSettingsHub />
+                  <TenantAdminSettings />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Tenant Admin Settings */}
+            <Route 
+              path="/settings/tenant" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <TenantAdminSettings />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Super Admin Settings */}
+            <Route 
+              path="/settings/admin" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <SuperAdminSettings />
+                  </RoleBasedRoute>
                 </ProtectedRoute>
               } 
             />
@@ -178,6 +208,46 @@ function App() {
                   </RoleBasedRoute>
                 </ProtectedRoute>
               }
+            />
+
+            {/* Chat Interface */}
+            <Route 
+              path="/chat" 
+              element={
+                <ProtectedRoute>
+                  <ChatInterface />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Assessment Page */}
+            <Route 
+              path="/assessment" 
+              element={
+                <ProtectedRoute>
+                  <Assessment />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Metrics & Dashboards Page */}
+            <Route 
+              path="/metrics" 
+              element={
+                <ProtectedRoute>
+                  <Metrics />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Reports Page */}
+            <Route 
+              path="/reports" 
+              element={
+                <ProtectedRoute>
+                  <Reports />
+                </ProtectedRoute>
+              } 
             />
 
             <Route path="*" element={<Navigate to="/" replace />} />

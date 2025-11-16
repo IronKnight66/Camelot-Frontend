@@ -1,0 +1,77 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e4]:
+  - banner [ref=e5]:
+    - generic [ref=e6]:
+      - link "Camelot Security Platform" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - heading "Camelot Security Platform" [level=1] [ref=e8]
+      - navigation [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /
+        - link "Scanners" [ref=e11] [cursor=pointer]:
+          - /url: /scanners
+        - link "Chat" [ref=e12] [cursor=pointer]:
+          - /url: /chat
+        - link "Reports" [ref=e13] [cursor=pointer]:
+          - /url: /reports
+        - link "Settings" [ref=e14] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e15]:
+        - link "Welcome, superadmin@techstart.com" [ref=e16] [cursor=pointer]:
+          - /url: /profile
+        - button "Sign Out" [ref=e17] [cursor=pointer]
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - heading "Reports & Analytics" [level=1] [ref=e21]
+        - paragraph [ref=e22]: View chat logs, usage statistics, and cost breakdowns
+      - generic [ref=e23]:
+        - button "Chat Logs" [ref=e24] [cursor=pointer]
+        - button "Summary" [ref=e25] [cursor=pointer]
+        - button "Cost Analysis" [ref=e26] [cursor=pointer]
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - heading "Filters" [level=3] [ref=e29]
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - generic [ref=e32]: Provider
+              - combobox [ref=e33]:
+                - option "All Providers" [selected]
+                - option "OpenAI"
+                - option "Anthropic"
+                - option "Bedrock"
+            - generic [ref=e34]:
+              - generic [ref=e35]: Status
+              - combobox [ref=e36]:
+                - option "All Statuses" [selected]
+                - option "Success"
+                - option "Error"
+                - option "Timeout"
+            - generic [ref=e37]:
+              - generic [ref=e38]: Start Date
+              - textbox [ref=e39]
+            - generic [ref=e40]:
+              - generic [ref=e41]: End Date
+              - textbox [ref=e42]
+            - generic [ref=e43]:
+              - generic [ref=e44]: Limit
+              - spinbutton [ref=e45]: "100"
+            - button "Clear Filters" [ref=e47] [cursor=pointer]
+        - table [ref=e49]:
+          - rowgroup [ref=e50]:
+            - row "Time Provider Model Status Tokens Cost Latency User Message Actions" [ref=e51]:
+              - cell "Time" [ref=e52]
+              - cell "Provider" [ref=e53]
+              - cell "Model" [ref=e54]
+              - cell "Status" [ref=e55]
+              - cell "Tokens" [ref=e56]
+              - cell "Cost" [ref=e57]
+              - cell "Latency" [ref=e58]
+              - cell "User Message" [ref=e59]
+              - cell "Actions" [ref=e60]
+          - rowgroup [ref=e61]:
+            - row "No logs found" [ref=e62]:
+              - cell "No logs found" [ref=e63]
+```

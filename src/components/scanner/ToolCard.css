@@ -168,6 +168,12 @@ input:checked + .slider:before {
   color: #333;
 }
 
+.tool-info-row .value .scan-count {
+  color: #666;
+  font-size: 12px;
+  font-weight: normal;
+}
+
 .tool-card-footer {
   display: flex;
   flex-direction: column;
