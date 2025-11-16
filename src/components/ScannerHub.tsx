@@ -1,18 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { getUserRole, hasRole } from '../utils/roleHelpers';
 import Layout from './Layout';
 import './ScannerHub.css';
 
 const ScannerHub: React.FC = () => {
-  const { user } = useAuth();
-  const userRole = getUserRole(user);
-
-  const hasAccess = (requiredRole: 'super-admin' | 'tenant-admin' | 'admin' | 'user') => {
-    return hasRole(user, requiredRole);
-  };
-
   return (
     <Layout>
       <div className="scanner-hub-container">
@@ -31,18 +22,6 @@ const ScannerHub: React.FC = () => {
               Open My Scanners
             </Link>
           </div>
-
-          {/* Tenant Scanner Tools - Available to tenant-admin */}
-          {hasAccess('tenant-admin') && (
-            <div className="scanner-hub-card">
-              <div className="scanner-hub-card-icon">🏢</div>
-              <h2>Tenant Scanner Tools</h2>
-              <p>Enable and manage scanner tools available to your tenant</p>
-              <Link to="/tenant-tools" className="scanner-hub-btn">
-                Open Tenant Tools
-              </Link>
-            </div>
-          )}
         </div>
 
         {/* Info box */}
@@ -53,10 +32,7 @@ const ScannerHub: React.FC = () => {
               <strong>My Scanners:</strong> Personal scanner preferences where you activate tools available to your tenant.
             </div>
             <div className="info-item">
-              <strong>Tenant Tools:</strong> Manage which scanner tools are available to your organization.
-            </div>
-            <div className="info-item">
-              <strong>Settings:</strong> Access global scanner registry and super-admin settings from the Settings page.
+              <strong>Settings:</strong> Access global scanner registry, super-admin settings, and tenant scanner tools from the Settings page.
             </div>
           </div>
         </div>

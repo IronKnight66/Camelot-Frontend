@@ -61,7 +61,7 @@ const ChatInterface: React.FC = () => {
       // Add welcome message
       setMessages([{
         role: 'assistant',
-        content: 'Hello! I\'m your security orchestration assistant. I can help you with scans, findings, scanner tools, and navigate you to different parts of the platform. How can I help you today?'
+        content: 'Hello! I\'m Arthur, your security orchestration assistant. I can help you with scans, findings, scanner tools, and navigate you to different parts of the platform. How can I help you today?'
       }]);
     } catch (err: any) {
       console.error('Failed to create session:', err);
@@ -157,7 +157,7 @@ const ChatInterface: React.FC = () => {
     <Layout>
       <div className="chat-interface-container">
         <div className="chat-header">
-          <h1>Security Assistant</h1>
+          <h1>Arthur</h1>
           <button 
             onClick={handleClearSession} 
             className="clear-session-btn"

@@ -37,6 +37,15 @@ const SuperAdminSettings: React.FC = () => {
 
         <div className="tenant-settings-hub-grid">
           <div className="tenant-settings-hub-card">
+            <div className="tenant-settings-hub-card-icon">🏢</div>
+            <h2>Tenant Management</h2>
+            <p>View and manage all tenants in the system</p>
+            <Link to="/settings/admin/tenants" className="tenant-settings-hub-btn" style={{ background: '#6f42c1', color: 'white' }}>
+              Manage Tenants
+            </Link>
+          </div>
+          
+          <div className="tenant-settings-hub-card">
             <div className="tenant-settings-hub-card-icon">🛠️</div>
             <h2>Tenant Scanners</h2>
             <p>Add scanner tools to tenants from the global registry</p>
@@ -71,6 +80,15 @@ const SuperAdminSettings: React.FC = () => {
               Manage Plans
             </Link>
           </div>
+          
+          <div className="tenant-settings-hub-card">
+            <div className="tenant-settings-hub-card-icon">💬</div>
+            <h2>System Prompts</h2>
+            <p>Configure global and tenant-specific chatbot system prompts</p>
+            <Link to="/settings/admin/system-prompts" className="tenant-settings-hub-btn" style={{ background: '#17a2b8', color: 'white' }}>
+              Manage Prompts
+            </Link>
+          </div>
         </div>
 
         {/* Info box */}
@@ -78,6 +96,9 @@ const SuperAdminSettings: React.FC = () => {
           <h3>About Super Admin Settings</h3>
           <div className="tenant-settings-hub-info-content">
             <div>
+              <div className="info-item">
+                <strong>Tenant Management:</strong> View and manage all tenants in the system, including their settings, subscription status, and contact information.
+              </div>
               <div className="info-item">
                 <strong>Tenant Scanners:</strong> Add and manage scanner tools for specific tenants from the global registry.
               </div>
@@ -89,6 +110,9 @@ const SuperAdminSettings: React.FC = () => {
               </div>
               <div className="info-item">
                 <strong>Subscription Plans:</strong> Create and manage subscription plans with pricing, features, limits, and Stripe price IDs.
+              </div>
+              <div className="info-item">
+                <strong>System Prompts:</strong> Configure global and tenant-specific system prompts for the chatbot assistant. Track history of all prompt changes.
               </div>
             </div>
           </div>

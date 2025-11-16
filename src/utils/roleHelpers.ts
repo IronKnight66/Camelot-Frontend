@@ -49,10 +49,10 @@ export const getAccessibleRoutes = (user: User | null): string[] => {
   
   if (role === 'super-admin') {
     routes.push('/admin/scanner-tools');
-    routes.push('/tenant-tools');
+    routes.push('/settings/tenant-tools');
     routes.push('/my-scanners');
   } else if (role === 'tenant-admin') {
-    routes.push('/tenant-tools');
+    routes.push('/settings/tenant-tools');
     routes.push('/my-scanners');
   } else {
     routes.push('/my-scanners');

@@ -65,6 +65,18 @@ const TenantAdminSettings: React.FC = () => {
               Open Billing
             </Link>
           </div>
+
+          {/* Tenant Scanner Tools - Available to tenant-admin */}
+          {hasAccess('tenant-admin') && (
+            <div className="tenant-settings-hub-card">
+              <div className="tenant-settings-hub-card-icon">🔧</div>
+              <h2>Scanner Tools</h2>
+              <p>Enable and manage scanner tools available to your tenant</p>
+              <Link to="/settings/tenant-tools" className="tenant-settings-hub-btn">
+                Open Scanner Tools
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Info box */}
@@ -81,6 +93,11 @@ const TenantAdminSettings: React.FC = () => {
               <div className="info-item">
                 <strong>Billing & Subscriptions:</strong> Manage subscription plans, payment methods, view invoices, and upgrade/downgrade plans.
               </div>
+              {hasAccess('tenant-admin') && (
+                <div className="info-item">
+                  <strong>Scanner Tools:</strong> Enable and manage scanner tools available to your tenant, set usage limits, and monitor tool usage.
+                </div>
+              )}
             </div>
           </div>
         </div>

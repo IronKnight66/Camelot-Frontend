@@ -244,6 +244,36 @@ class ApiService {
     return response.data;
   }
 
+  async createTenant(tenantData: {
+    name: string;
+    slug: string;
+    description?: string;
+    contact_email?: string;
+    contact_name?: string;
+    subscription_plan?: string;
+    subscription_status?: string;
+    is_active?: boolean;
+    max_scans_per_month?: number;
+    max_storage_gb?: number;
+  }) {
+    const response = await this.api.post('/api/v1/tenants', tenantData);
+    return response.data;
+  }
+
+  async updateTenant(tenantId: number, tenantData: {
+    name?: string;
+    slug?: string;
+    description?: string;
+    is_active?: boolean;
+    subscription_plan?: string;
+    subscription_status?: string;
+    contact_email?: string;
+    contact_name?: string;
+  }) {
+    const response = await this.api.put(`/api/v1/tenants/${tenantId}`, tenantData);
+    return response.data;
+  }
+
   async enableTenantToolForSpecificTenant(toolId: string, tenantId: number, limits?: any) {
     const response = await this.api.post(`/api/v1/tenants/${tenantId}/scanner-tools/${toolId}/enable`, limits);
     return response.data;
@@ -447,6 +477,66 @@ class ApiService {
 
   async searchChatLogs(query: string, limit: number = 50) {
     const response = await this.api.get(`/api/v1/chatbot/logs/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+    return response.data;
+  }
+
+  // System Prompts API (Super Admin Only)
+  async getSystemPrompts() {
+    const response = await this.api.get('/api/v1/admin/system-prompts');
+    return response.data;
+  }
+
+  async getActiveSystemPrompt() {
+    const response = await this.api.get('/api/v1/admin/system-prompts/active');
+    return response.data;
+  }
+
+  async createSystemPrompt(promptData: {
+    prompt_text: string;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.post('/api/v1/admin/system-prompts', promptData);
+    return response.data;
+  }
+
+  async updateSystemPrompt(promptId: number, promptData: {
+    prompt_text?: string;
+    is_active?: boolean;
+    change_reason?: string;
+  }) {
+    const response = await this.api.put(`/api/v1/admin/system-prompts/${promptId}`, promptData);
+    return response.data;
+  }
+
+  async getSystemPromptHistory(promptId: number, promptType: string = 'global') {
+    const response = await this.api.get(`/api/v1/admin/system-prompts/${promptId}/history?prompt_type=${promptType}`);
+    return response.data;
+  }
+
+  async getTenantSystemPrompt(tenantId: number) {
+    const response = await this.api.get(`/api/v1/admin/system-prompts/tenants/${tenantId}`);
+    return response.data;
+  }
+
+  async listTenantSystemPrompts(tenantId: number) {
+    const response = await this.api.get(`/api/v1/admin/system-prompts/tenants/${tenantId}/all`);
+    return response.data;
+  }
+
+  async createTenantSystemPrompt(tenantId: number, promptData: {
+    prompt_text: string;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.post(`/api/v1/admin/system-prompts/tenants/${tenantId}`, promptData);
+    return response.data;
+  }
+
+  async updateTenantSystemPrompt(tenantId: number, promptData: {
+    prompt_text?: string;
+    is_active?: boolean;
+    change_reason?: string;
+  }) {
+    const response = await this.api.put(`/api/v1/admin/system-prompts/tenants/${tenantId}`, promptData);
     return response.data;
   }
 }

@@ -10,6 +10,8 @@ import AdminScannerTools from './components/scanner/AdminScannerTools';
 import TenantScannerTools from './components/scanner/TenantScannerTools';
 import MyScanners from './components/scanner/MyScanners';
 import UserManagement from './components/admin/UserManagement';
+import TenantManagement from './components/admin/TenantManagement';
+import SystemPrompts from './components/admin/SystemPrompts';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
 import TenantAdminSettings from './components/TenantAdminSettings';
@@ -88,6 +90,30 @@ function App() {
               } 
             />
 
+            {/* Tenant Management - Super Admin Only */}
+            <Route 
+              path="/settings/admin/tenants" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <TenantManagement />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* System Prompts - Super Admin Only */}
+            <Route 
+              path="/settings/admin/system-prompts" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <SystemPrompts />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
             {/* API Keys - Admin Only */}
             <Route 
               path="/settings/api-keys" 
@@ -130,9 +156,9 @@ function App() {
               } 
             />
 
-            {/* Tenant Admin Scanner Tools Management */}
+            {/* Tenant Admin Scanner Tools Management - Moved to Settings */}
             <Route 
-              path="/tenant-tools" 
+              path="/settings/tenant-tools" 
               element={
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="tenant-admin">
@@ -140,6 +166,12 @@ function App() {
                   </RoleBasedRoute>
                 </ProtectedRoute>
               } 
+            />
+
+            {/* Old Tenant Tools Route - Redirect to new location */}
+            <Route 
+              path="/tenant-tools" 
+              element={<Navigate to="/settings/tenant-tools" replace />} 
             />
 
             {/* Regular Users - My Scanners */}

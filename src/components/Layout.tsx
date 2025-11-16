@@ -40,7 +40,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             </Link>
             <Link 
               to="/scanners" 
-              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/tenant-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
+              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
             >
               Scanners
             </Link>
@@ -77,6 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                     location.pathname === '/settings/tenant' ||
                     location.pathname.startsWith('/settings/api-keys') ||
                     location.pathname.startsWith('/settings/billing') ||
+                    location.pathname.startsWith('/settings/tenant-tools') ||
                     location.pathname.startsWith('/admin/users')
                       ? 'active' 
                       : ''
