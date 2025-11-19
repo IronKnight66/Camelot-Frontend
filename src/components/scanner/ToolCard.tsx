@@ -134,6 +134,38 @@ const ToolCard: React.FC<ToolCardProps> = ({
             <span className="label">Docker:</span>
             <span className="value">{tool.dockerImage}:{tool.dockerTag}</span>
           </div>
+          {tool.awsEcrRepository && (
+            <div className="tool-info-row">
+              <span className="label">AWS ECR:</span>
+              <span className="value" title={tool.awsEcrRepository}>
+                {tool.awsEcrRepository.length > 50 
+                  ? `${tool.awsEcrRepository.substring(0, 50)}...` 
+                  : tool.awsEcrRepository}
+              </span>
+            </div>
+          )}
+          {tool.executionMethod && (
+            <div className="tool-info-row">
+              <span className="label">Execution:</span>
+              <span className="value">
+                {tool.executionMethod === 'mcp' && 'MCP'}
+                {tool.executionMethod === 'orchestration' && 'Orchestration Layer'}
+                {tool.executionMethod === 'both' && 'MCP & Orchestration'}
+                {!['mcp', 'orchestration', 'both'].includes(tool.executionMethod) && tool.executionMethod}
+              </span>
+            </div>
+          )}
+          {tool.recentScanId !== undefined && (
+            <div className="tool-info-row">
+              <span className="label">Scan ID:</span>
+              <span className="value">
+                {tool.recentScanId !== null ? `#${tool.recentScanId}` : 'None'}
+                {tool.scanCount !== undefined && tool.scanCount > 0 && (
+                  <span className="scan-count"> ({tool.scanCount} total)</span>
+                )}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

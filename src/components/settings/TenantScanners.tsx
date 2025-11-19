@@ -268,7 +268,7 @@ const TenantScanners: React.FC = () => {
                       )}
                     </div>
                     <div className="tool-actions">
-                      <Link to="/tenant-tools" className="btn-secondary">
+                      <Link to="/settings/tenant-tools" className="btn-secondary">
                         Manage Settings
                       </Link>
                       <button

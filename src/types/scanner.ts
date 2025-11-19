@@ -34,6 +34,8 @@ export interface ScannerTool {
   category: ScannerCategory;
   dockerImage: string;
   dockerTag: string;
+  awsEcrRepository?: string;
+  executionMethod?: string; // 'mcp', 'orchestration', or 'both'
   version: string;
   latestVersion: string;
   configSchema: Record<string, any>;
@@ -44,6 +46,8 @@ export interface ScannerTool {
   requiredPermissions: RequiredPermission[];
   documentationUrl: string;
   helpText: string;
+  scanCount?: number;
+  recentScanId?: number;
   createdAt: string;
   updatedAt: string;
 }

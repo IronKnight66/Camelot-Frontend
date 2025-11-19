@@ -3,6 +3,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserRole } from '../utils/roleHelpers';
+import { useChatbot } from '../contexts/ChatbotContext';
+import ChatbotSidebar from './chatbot/ChatbotSidebar';
 import './Layout.css';
 
 interface LayoutProps {
@@ -14,6 +16,10 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const userRole = getUserRole(user);
+  
+  // Get chatbot state - ChatbotProvider wraps Router, so this should always be available
+  const chatbot = useChatbot();
+  const isOpen = chatbot.isOpen;
 
 
   const handleSignOut = async () => {
@@ -40,17 +46,68 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
             </Link>
             <Link 
               to="/scanners" 
-              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/tenant-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
+              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
             >
               Scanners
             </Link>
+            <Link 
+              to="/chat" 
+              className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
+            >
+              Chat
+            </Link>
+            <Link 
+              to="/assessment" 
+              className={`nav-link ${location.pathname === '/assessment' ? 'active' : ''}`}
+            >
+              Assessment
+            </Link>
+            <Link 
+              to="/metrics" 
+              className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
+            >
+              Metrics
+            </Link>
+            <Link 
+              to="/reports" 
+              className={`nav-link ${location.pathname === '/reports' ? 'active' : ''}`}
+            >
+              Reports
+            </Link>
             {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
-              <Link 
-                to="/settings" 
-                className={`nav-link ${location.pathname.startsWith('/settings') || location.pathname.startsWith('/admin/users') || location.pathname.startsWith('/profile') ? 'active' : ''}`}
-              >
-                Settings
-              </Link>
+              <>
+                <Link 
+                  to="/settings/tenant" 
+                  className={`nav-link ${
+                    location.pathname === '/settings' || 
+                    location.pathname === '/settings/tenant' ||
+                    location.pathname.startsWith('/settings/api-keys') ||
+                    location.pathname.startsWith('/settings/billing') ||
+                    location.pathname.startsWith('/settings/tenant-tools') ||
+                    location.pathname.startsWith('/admin/users')
+                      ? 'active' 
+                      : ''
+                  }`}
+                >
+                  Settings
+                </Link>
+                {userRole === 'super-admin' && (
+                  <Link 
+                    to="/settings/admin" 
+                    className={`nav-link ${
+                      location.pathname === '/settings/admin' ||
+                      location.pathname.startsWith('/settings/admin/scanner-tools') ||
+                      location.pathname.startsWith('/settings/tenant-scanners') ||
+                      location.pathname.startsWith('/settings/stripe') ||
+                      location.pathname.startsWith('/settings/subscription-plans')
+                        ? 'active' 
+                        : ''
+                    }`}
+                  >
+                    Super Admin
+                  </Link>
+                )}
+              </>
             )}
           </nav>
           <div className="user-info">
@@ -67,7 +124,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         </div>
       </header>
 
-      <main className="layout-main">
+      <main className={`layout-main ${isOpen ? 'with-sidebar' : ''}`}>
         {title && (
           <div className="page-title">
             <h2>{title}</h2>
@@ -75,6 +132,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         )}
         {children}
       </main>
+      
+      {/* Persistent Chatbot Sidebar */}
+      <ChatbotSidebar />
     </div>
   );
 };

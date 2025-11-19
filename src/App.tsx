@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ChatbotProvider } from './contexts/ChatbotContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleBasedRoute from './components/RoleBasedRoute';
 import Login from './components/Login';
@@ -10,21 +11,30 @@ import AdminScannerTools from './components/scanner/AdminScannerTools';
 import TenantScannerTools from './components/scanner/TenantScannerTools';
 import MyScanners from './components/scanner/MyScanners';
 import UserManagement from './components/admin/UserManagement';
+import TenantManagement from './components/admin/TenantManagement';
+import SystemPrompts from './components/admin/SystemPrompts';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
+import TenantAdminSettings from './components/TenantAdminSettings';
+import SuperAdminSettings from './components/SuperAdminSettings';
 import APIKeys from './components/settings/APIKeys';
 import TenantScanners from './components/settings/TenantScanners';
 import Billing from './components/settings/Billing';
 import StripeSettings from './components/admin/StripeSettings';
 import SubscriptionPlans from './components/admin/SubscriptionPlans';
+import ChatInterface from './components/chatbot/ChatInterface';
+import Assessment from './components/Assessment';
+import Metrics from './components/Metrics';
+import Reports from './components/Reports';
 import './aws-config';
 import './App.css';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="App">
+      <ChatbotProvider>
+        <Router>
+          <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
             
@@ -48,12 +58,60 @@ function App() {
               } 
             />
 
-            {/* Tenant Settings Hub */}
+            {/* Tenant Settings Hub - Legacy route, redirects to tenant admin settings */}
             <Route 
               path="/settings" 
               element={
                 <ProtectedRoute>
-                  <TenantSettingsHub />
+                  <TenantAdminSettings />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Tenant Admin Settings */}
+            <Route 
+              path="/settings/tenant" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <TenantAdminSettings />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Super Admin Settings */}
+            <Route 
+              path="/settings/admin" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <SuperAdminSettings />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Tenant Management - Super Admin Only */}
+            <Route 
+              path="/settings/admin/tenants" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <TenantManagement />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* System Prompts - Super Admin Only */}
+            <Route 
+              path="/settings/admin/system-prompts" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <SystemPrompts />
+                  </RoleBasedRoute>
                 </ProtectedRoute>
               } 
             />
@@ -100,9 +158,9 @@ function App() {
               } 
             />
 
-            {/* Tenant Admin Scanner Tools Management */}
+            {/* Tenant Admin Scanner Tools Management - Moved to Settings */}
             <Route 
-              path="/tenant-tools" 
+              path="/settings/tenant-tools" 
               element={
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="tenant-admin">
@@ -110,6 +168,12 @@ function App() {
                   </RoleBasedRoute>
                 </ProtectedRoute>
               } 
+            />
+
+            {/* Old Tenant Tools Route - Redirect to new location */}
+            <Route 
+              path="/tenant-tools" 
+              element={<Navigate to="/settings/tenant-tools" replace />} 
             />
 
             {/* Regular Users - My Scanners */}
@@ -180,10 +244,51 @@ function App() {
               }
             />
 
+            {/* Chat Interface */}
+            <Route 
+              path="/chat" 
+              element={
+                <ProtectedRoute>
+                  <ChatInterface />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Assessment Page */}
+            <Route 
+              path="/assessment" 
+              element={
+                <ProtectedRoute>
+                  <Assessment />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Metrics & Dashboards Page */}
+            <Route 
+              path="/metrics" 
+              element={
+                <ProtectedRoute>
+                  <Metrics />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Reports Page */}
+            <Route 
+              path="/reports" 
+              element={
+                <ProtectedRoute>
+                  <Reports />
+                </ProtectedRoute>
+              } 
+            />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>
+      </ChatbotProvider>
     </AuthProvider>
   );
 }
