@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { ChatbotProvider } from './contexts/ChatbotContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleBasedRoute from './components/RoleBasedRoute';
 import Login from './components/Login';
@@ -31,8 +32,9 @@ import './App.css';
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="App">
+      <ChatbotProvider>
+        <Router>
+          <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
             
@@ -286,6 +288,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      </ChatbotProvider>
     </AuthProvider>
   );
 }

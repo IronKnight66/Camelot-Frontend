@@ -3,6 +3,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserRole } from '../utils/roleHelpers';
+import { useChatbot } from '../contexts/ChatbotContext';
+import ChatbotSidebar from './chatbot/ChatbotSidebar';
 import './Layout.css';
 
 interface LayoutProps {
@@ -14,6 +16,10 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const userRole = getUserRole(user);
+  
+  // Get chatbot state - ChatbotProvider wraps Router, so this should always be available
+  const chatbot = useChatbot();
+  const isOpen = chatbot.isOpen;
 
 
   const handleSignOut = async () => {
@@ -118,7 +124,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         </div>
       </header>
 
-      <main className="layout-main">
+      <main className={`layout-main ${isOpen ? 'with-sidebar' : ''}`}>
         {title && (
           <div className="page-title">
             <h2>{title}</h2>
@@ -126,6 +132,9 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         )}
         {children}
       </main>
+      
+      {/* Persistent Chatbot Sidebar */}
+      <ChatbotSidebar />
     </div>
   );
 };
