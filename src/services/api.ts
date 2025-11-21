@@ -199,6 +199,12 @@ class ApiService {
     return response.data;
   }
 
+  // Scan Types API (Public)
+  async getScanTypes() {
+    const response = await this.api.get('/api/v1/scan-types');
+    return response.data;
+  }
+
   // User Profile API
   async getCurrentUser() {
     const response = await this.api.get('/api/v1/auth/me');

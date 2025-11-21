@@ -1,6 +1,14 @@
 // src/types/assessment.ts
 
-export type TestType = 'network' | 'dast' | 'web' | 'server';
+export type TestType = string;
+
+export interface ScanType {
+  id: number;
+  name: string;
+  display_name: string;
+  description: string | null;
+  is_active: boolean;
+}
 
 export interface Endpoint {
   url: string;
