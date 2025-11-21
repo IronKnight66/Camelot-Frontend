@@ -18,13 +18,12 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
   const [errors, setErrors] = useState<{ websiteUrl?: string; testType?: string }>({});
   const [scanTypes, setScanTypes] = useState<ScanType[]>([]);
   const [loadingScanTypes, setLoadingScanTypes] = useState<boolean>(true);
-  const apiService = new ApiService();
 
   useEffect(() => {
     const fetchScanTypes = async () => {
       try {
         setLoadingScanTypes(true);
-        const response = await apiService.getScanTypes();
+        const response = await ApiService.getScanTypes();
         setScanTypes(response.scan_types || []);
       } catch (error) {
         console.error('Error fetching scan types:', error);
