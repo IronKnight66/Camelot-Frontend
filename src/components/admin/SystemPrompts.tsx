@@ -3,8 +3,11 @@ import apiService from '../../services/api';
 import Layout from '../Layout';
 import './SystemPrompts.css';
 
+type PromptType = 'chatbot' | 'scanner_selection' | 'start_scan' | 'recon';
+
 interface SystemPrompt {
   id: number;
+  prompt_type: PromptType;
   prompt_text: string;
   is_active: boolean;
   created_at: string;
@@ -16,6 +19,33 @@ interface SystemPrompt {
 interface TenantSystemPrompt extends SystemPrompt {
   tenant_id: number;
 }
+
+const PROMPT_TYPE_INFO: Record<PromptType, { label: string; description: string; color: string; placeholders: string[] }> = {
+  chatbot: {
+    label: 'Chatbot',
+    description: 'AI chatbot conversation prompts for Arthur assistant',
+    color: '#007bff',
+    placeholders: ['{context_text}']
+  },
+  scanner_selection: {
+    label: 'Scanner Selection',
+    description: 'AI prompt for selecting appropriate security scanners',
+    color: '#28a745',
+    placeholders: ['{scan_type}', '{target}']
+  },
+  start_scan: {
+    label: 'Start Scan',
+    description: 'Prompt for scan initiation messages',
+    color: '#fd7e14',
+    placeholders: ['{scan_type}', '{target}', '{scanners}']
+  },
+  recon: {
+    label: 'Reconnaissance',
+    description: 'Prompt for reconnaissance planning and tool recommendations',
+    color: '#6f42c1',
+    placeholders: ['{target}']
+  }
+};
 
 interface PromptHistory {
   id: number;
@@ -58,6 +88,7 @@ interface HistoryModalProps {
 }
 
 const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, onPromptCreated, tenantId }) => {
+  const [promptType, setPromptType] = useState<PromptType>('chatbot');
   const [promptText, setPromptText] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -65,6 +96,7 @@ const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, 
 
   useEffect(() => {
     if (!isOpen) {
+      setPromptType('chatbot');
       setPromptText('');
       setIsActive(true);
       setError(null);
@@ -81,11 +113,13 @@ const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, 
     try {
       if (tenantId) {
         await apiService.createTenantSystemPrompt(tenantId, {
+          prompt_type: promptType,
           prompt_text: promptText,
           is_active: isActive,
         });
       } else {
         await apiService.createSystemPrompt({
+          prompt_type: promptType,
           prompt_text: promptText,
           is_active: isActive,
         });
@@ -109,7 +143,26 @@ const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, 
         
         <form className="modal-body" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
-          
+
+          <div className="form-group">
+            <label htmlFor="prompt-type">Prompt Type *</label>
+            <select
+              id="prompt-type"
+              value={promptType}
+              onChange={(e) => setPromptType(e.target.value as PromptType)}
+              className="prompt-type-selector"
+            >
+              {Object.entries(PROMPT_TYPE_INFO).map(([type, info]) => (
+                <option key={type} value={type}>
+                  {info.label}
+                </option>
+              ))}
+            </select>
+            <small className="prompt-type-description">
+              {PROMPT_TYPE_INFO[promptType].description}
+            </small>
+          </div>
+
           <div className="form-group">
             <label htmlFor="prompt-text">Prompt Text *</label>
             <textarea
@@ -117,11 +170,13 @@ const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, 
               value={promptText}
               onChange={(e) => setPromptText(e.target.value)}
               required
-              placeholder="Enter system prompt text. Use {context_text} as a placeholder for tenant context."
+              placeholder={`Enter system prompt text for ${PROMPT_TYPE_INFO[promptType].label}...`}
               rows={15}
               className="prompt-textarea"
             />
-            <small>Use {'{context_text}'} as a placeholder for tenant context injection</small>
+            <small>
+              Available placeholders: {PROMPT_TYPE_INFO[promptType].placeholders.join(', ')}
+            </small>
           </div>
 
           <div className="form-group">
@@ -150,6 +205,7 @@ const CreatePromptModal: React.FC<CreatePromptModalProps> = ({ isOpen, onClose, 
 };
 
 const EditPromptModal: React.FC<EditPromptModalProps> = ({ prompt, isOpen, onClose, onPromptUpdated, tenantId }) => {
+  const [promptType, setPromptType] = useState<PromptType>('chatbot');
   const [promptText, setPromptText] = useState('');
   const [isActive, setIsActive] = useState(true);
   const [changeReason, setChangeReason] = useState('');
@@ -158,6 +214,7 @@ const EditPromptModal: React.FC<EditPromptModalProps> = ({ prompt, isOpen, onClo
 
   useEffect(() => {
     if (prompt) {
+      setPromptType(prompt.prompt_type || 'chatbot');
       setPromptText(prompt.prompt_text || '');
       setIsActive(prompt.is_active);
       setChangeReason('');
@@ -174,12 +231,14 @@ const EditPromptModal: React.FC<EditPromptModalProps> = ({ prompt, isOpen, onClo
     try {
       if (tenantId) {
         await apiService.updateTenantSystemPrompt(tenantId, {
+          prompt_type: promptType,
           prompt_text: promptText,
           is_active: isActive,
           change_reason: changeReason || undefined,
         });
       } else {
         await apiService.updateSystemPrompt(prompt.id, {
+          prompt_type: promptType,
           prompt_text: promptText,
           is_active: isActive,
           change_reason: changeReason || undefined,
@@ -204,7 +263,26 @@ const EditPromptModal: React.FC<EditPromptModalProps> = ({ prompt, isOpen, onClo
         
         <form className="modal-body" onSubmit={handleSubmit}>
           {error && <div className="error-message">{error}</div>}
-          
+
+          <div className="form-group">
+            <label htmlFor="edit-prompt-type">Prompt Type *</label>
+            <select
+              id="edit-prompt-type"
+              value={promptType}
+              onChange={(e) => setPromptType(e.target.value as PromptType)}
+              className="prompt-type-selector"
+            >
+              {Object.entries(PROMPT_TYPE_INFO).map(([type, info]) => (
+                <option key={type} value={type}>
+                  {info.label}
+                </option>
+              ))}
+            </select>
+            <small className="prompt-type-description">
+              {PROMPT_TYPE_INFO[promptType].description}
+            </small>
+          </div>
+
           <div className="form-group">
             <label htmlFor="edit-prompt-text">Prompt Text *</label>
             <textarea
@@ -215,6 +293,9 @@ const EditPromptModal: React.FC<EditPromptModalProps> = ({ prompt, isOpen, onClo
               rows={15}
               className="prompt-textarea"
             />
+            <small>
+              Available placeholders: {PROMPT_TYPE_INFO[promptType].placeholders.join(', ')}
+            </small>
           </div>
 
           <div className="form-group">
@@ -329,6 +410,7 @@ const SystemPrompts: React.FC = () => {
   const [tenantPrompts, setTenantPrompts] = useState<TenantSystemPrompt[]>([]);
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<number | null>(null);
+  const [promptTypeFilter, setPromptTypeFilter] = useState<PromptType | 'all'>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingPrompt, setEditingPrompt] = useState<SystemPrompt | TenantSystemPrompt | null>(null);
@@ -401,6 +483,16 @@ const SystemPrompts: React.FC = () => {
     return text.substring(0, maxLength) + '...';
   };
 
+  const filterPrompts = <T extends SystemPrompt | TenantSystemPrompt>(prompts: T[]): T[] => {
+    if (promptTypeFilter === 'all') {
+      return prompts;
+    }
+    return prompts.filter(prompt => prompt.prompt_type === promptTypeFilter);
+  };
+
+  const filteredGlobalPrompts = filterPrompts(globalPrompts);
+  const filteredTenantPrompts = filterPrompts(tenantPrompts);
+
   if (loading && globalPrompts.length === 0 && tenantPrompts.length === 0) {
     return (
       <Layout>
@@ -416,7 +508,7 @@ const SystemPrompts: React.FC = () => {
       <div className="system-prompts-container">
         <div className="system-prompts-header">
           <h1>System Prompts</h1>
-          <p>Manage global and tenant-specific chatbot system prompts</p>
+          <p>Manage global and tenant-specific system prompts for chatbot, scanner selection, scan initiation, and reconnaissance</p>
         </div>
 
         <div className="tabs">
@@ -452,6 +544,23 @@ const SystemPrompts: React.FC = () => {
           </div>
         )}
 
+        <div className="prompt-type-filter">
+          <label htmlFor="type-filter">Filter by Type:</label>
+          <select
+            id="type-filter"
+            value={promptTypeFilter}
+            onChange={(e) => setPromptTypeFilter(e.target.value as PromptType | 'all')}
+            className="prompt-type-filter-select"
+          >
+            <option value="all">All Types</option>
+            {Object.entries(PROMPT_TYPE_INFO).map(([type, info]) => (
+              <option key={type} value={type}>
+                {info.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {error && <div className="error-message">{error}</div>}
 
         <div className="prompts-section">
@@ -463,16 +572,22 @@ const SystemPrompts: React.FC = () => {
           </div>
 
           {activeTab === 'global' ? (
-            globalPrompts.length === 0 ? (
+            filteredGlobalPrompts.length === 0 ? (
               <div className="empty-state">
-                <p>No global prompts found. Create your first prompt to get started.</p>
+                <p>No global prompts found{promptTypeFilter !== 'all' ? ` for type "${PROMPT_TYPE_INFO[promptTypeFilter as PromptType]?.label}"` : ''}. Create your first prompt to get started.</p>
               </div>
             ) : (
               <div className="prompts-list">
-                {globalPrompts.map((prompt) => (
+                {filteredGlobalPrompts.map((prompt) => (
                   <div key={prompt.id} className="prompt-card">
                     <div className="prompt-header">
                       <div className="prompt-meta">
+                        <span
+                          className="prompt-type-badge"
+                          style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
+                        >
+                          {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
+                        </span>
                         <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
                           {prompt.is_active ? 'Active' : 'Inactive'}
                         </span>
@@ -506,16 +621,22 @@ const SystemPrompts: React.FC = () => {
               <div className="empty-state">
                 <p>Please select a tenant to view or manage tenant prompts.</p>
               </div>
-            ) : tenantPrompts.length === 0 ? (
+            ) : filteredTenantPrompts.length === 0 ? (
               <div className="empty-state">
-                <p>No tenant prompts found. Create a prompt for this tenant.</p>
+                <p>No tenant prompts found{promptTypeFilter !== 'all' ? ` for type "${PROMPT_TYPE_INFO[promptTypeFilter as PromptType]?.label}"` : ''}. Create a prompt for this tenant.</p>
               </div>
             ) : (
               <div className="prompts-list">
-                {tenantPrompts.map((prompt) => (
+                {filteredTenantPrompts.map((prompt) => (
                   <div key={prompt.id} className="prompt-card">
                     <div className="prompt-header">
                       <div className="prompt-meta">
+                        <span
+                          className="prompt-type-badge"
+                          style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
+                        >
+                          {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
+                        </span>
                         <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
                           {prompt.is_active ? 'Active' : 'Inactive'}
                         </span>

@@ -498,6 +498,7 @@ class ApiService {
   }
 
   async createSystemPrompt(promptData: {
+    prompt_type?: string;
     prompt_text: string;
     is_active?: boolean;
   }) {
@@ -506,6 +507,7 @@ class ApiService {
   }
 
   async updateSystemPrompt(promptId: number, promptData: {
+    prompt_type?: string;
     prompt_text?: string;
     is_active?: boolean;
     change_reason?: string;
@@ -530,6 +532,7 @@ class ApiService {
   }
 
   async createTenantSystemPrompt(tenantId: number, promptData: {
+    prompt_type?: string;
     prompt_text: string;
     is_active?: boolean;
   }) {
@@ -538,6 +541,7 @@ class ApiService {
   }
 
   async updateTenantSystemPrompt(tenantId: number, promptData: {
+    prompt_type?: string;
     prompt_text?: string;
     is_active?: boolean;
     change_reason?: string;
