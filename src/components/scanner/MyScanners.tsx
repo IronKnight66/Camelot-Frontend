@@ -67,8 +67,13 @@ const MyScanners: React.FC = () => {
   const activatedCount = tools.filter(t => t.userPreferences?.isActivated).length;
 
   return (
-    <Layout title="My Scanners">
+    <Layout>
       <div className="my-scanners">
+        <div className="my-scanners-header">
+          <h1>My Scanners</h1>
+          <p>Manage your personal scanner preferences and activated tools</p>
+        </div>
+
         <div className="stats-section">
           <div className="stats">
           <div className="stat-card">

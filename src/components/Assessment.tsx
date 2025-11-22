@@ -75,8 +75,12 @@ const Assessment: React.FC = () => {
   return (
     <Layout>
       <div className="assessment-container">
-        <div className="assessment-content">
+        <div className="assessment-header">
           <h1>New Assessment</h1>
+          <p>Configure and launch a comprehensive security assessment</p>
+        </div>
+
+        <div className="assessment-content">
           
           {/* Step Indicator */}
           <div className="step-indicator">

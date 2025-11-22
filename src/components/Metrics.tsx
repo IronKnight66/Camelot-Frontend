@@ -7,12 +7,12 @@ const Metrics: React.FC = () => {
   return (
     <Layout>
       <div className="metrics-container">
-        <div className="metrics-content">
+        <div className="metrics-header">
           <h1>Metrics & Dashboards</h1>
-          <p className="metrics-subtitle">
-            This page is coming soon. You'll be able to view comprehensive metrics, dashboards, and findings overview here.
-          </p>
-          
+          <p>View comprehensive metrics, dashboards, and findings overview</p>
+        </div>
+
+        <div className="metrics-content">
           <div className="metrics-placeholder">
             <div className="placeholder-icon">📊</div>
             <h2>Analytics Dashboard</h2>

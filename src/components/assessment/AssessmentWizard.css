@@ -1,12 +1,16 @@
-/* src/components/assessment/AssessmentWizard.css */
+/* Assessment Wizard - Medieval Quest Progress */
 
-/* Step Indicator */
+/* Round Table Step Indicator */
 .step-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 40px 0 50px;
-  padding: 20px 0;
+  padding: 30px 0;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .step-item {
@@ -17,62 +21,71 @@
 }
 
 .step-number {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: #e1e5e9;
-  color: #666;
+  background: var(--camelot-parchment);
+  color: var(--camelot-stone-gray);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  border: 2px solid #e1e5e9;
+  font-weight: 700;
+  font-size: 18px;
+  font-family: var(--camelot-font-heading);
+  transition: all var(--camelot-transition-base);
+  border: 3px solid var(--camelot-stone-gray);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .step-item.active .step-number {
-  background: #667eea;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-dark-gold);
+  box-shadow: 0 0 0 4px rgba(220, 20, 60, 0.15), var(--camelot-shadow-md);
+  transform: scale(1.1);
 }
 
 .step-item.completed .step-number {
-  background: #28a745;
+  background: linear-gradient(135deg, var(--camelot-forest-green) 0%, var(--camelot-dark-green) 100%);
   color: white;
-  border-color: #28a745;
+  border-color: var(--camelot-dark-gold);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .step-label {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--camelot-stone-gray);
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .step-item.active .step-label {
-  color: #667eea;
-  font-weight: 600;
+  color: var(--camelot-crimson-dark);
+  font-weight: 700;
 }
 
 .step-item.completed .step-label {
-  color: #28a745;
+  color: var(--camelot-forest-green);
 }
 
 .step-connector {
   width: 100px;
-  height: 2px;
-  background: #e1e5e9;
+  height: 3px;
+  background: var(--camelot-stone-gray);
   margin: 0 20px;
-  transition: all 0.3s ease;
+  transition: all var(--camelot-transition-base);
+  position: relative;
 }
 
 .step-connector.completed {
-  background: #28a745;
+  background: linear-gradient(90deg, var(--camelot-forest-green) 0%, var(--camelot-dark-green) 100%);
+  box-shadow: 0 2px 4px rgba(34, 139, 34, 0.3);
 }
 
-/* Wizard Content */
+/* Quest Content */
 .wizard-content {
   min-height: 400px;
 }
@@ -84,22 +97,27 @@
 
 .step-header {
   margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--camelot-dark-gold);
 }
 
 .step-header h2 {
-  color: #333;
-  font-size: 28px;
+  color: var(--camelot-crimson-dark);
+  font-size: 32px;
   font-weight: 700;
+  font-family: var(--camelot-font-heading);
   margin: 0 0 10px 0;
+  letter-spacing: 0.5px;
 }
 
 .step-header p {
-  color: #666;
+  color: var(--camelot-charcoal);
   font-size: 16px;
+  font-family: var(--camelot-font-body);
   margin: 0;
 }
 
-/* Form Groups */
+/* Quest Form Groups */
 .form-group {
   margin-bottom: 24px;
 }
@@ -107,111 +125,140 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
-  font-size: 14px;
+  color: var(--camelot-black-knight);
+  font-weight: 600;
+  font-size: 13px;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .required {
-  color: #dc3545;
+  color: var(--camelot-crimson);
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 16px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
   box-sizing: border-box;
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background-color: white;
 }
 
 .input-error {
-  border-color: #dc3545 !important;
+  border-color: var(--camelot-crimson) !important;
+  box-shadow: 0 0 0 3px rgba(220, 20, 60, 0.15) !important;
 }
 
 .error-message {
   display: block;
-  color: #dc3545;
-  font-size: 14px;
+  color: var(--camelot-crimson-dark);
+  font-size: 13px;
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
   margin-top: 6px;
 }
 
-/* Buttons */
+/* Buttons - Quest Action Buttons */
 .step-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 40px;
   padding-top: 30px;
-  border-top: 1px solid #e1e5e9;
+  border-top: 3px solid var(--camelot-dark-gold);
 }
 
 .btn-primary,
 .btn-secondary {
   padding: 12px 24px;
-  border: none;
-  border-radius: 8px;
+  border: 2px solid transparent;
+  border-radius: var(--camelot-radius-md);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
+  border-color: var(--camelot-crimson-dark);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--camelot-shadow-md);
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #a00030 100%);
 }
 
 .btn-secondary {
-  background: #6c757d;
+  background: linear-gradient(135deg, var(--camelot-light-stone) 0%, var(--camelot-stone-gray) 100%);
   color: white;
+  border-color: var(--camelot-stone-gray);
 }
 
 .btn-secondary:hover {
-  background: #5a6268;
+  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, #505050 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(135deg, var(--camelot-forest-green) 0%, var(--camelot-dark-green) 100%);
+  border-color: var(--camelot-dark-green);
 }
 
 .btn-submit:hover {
-  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+  box-shadow: var(--camelot-shadow-md);
+  background: linear-gradient(135deg, var(--camelot-dark-green) 0%, #004d00 100%);
 }
 
 .btn-add {
   padding: 8px 16px;
-  background: #667eea;
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
   color: white;
-  border: none;
-  border-radius: 6px;
+  border: 2px solid var(--camelot-navy);
+  border-radius: var(--camelot-radius-sm);
   font-size: 14px;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-add:hover {
-  background: #5568d3;
+  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+  transform: translateY(-1px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-remove {
-  background: #dc3545;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
-  border-radius: 4px;
+  border: 2px solid var(--camelot-crimson-dark);
+  border-radius: var(--camelot-radius-sm);
   width: 24px;
   height: 24px;
   display: flex;
@@ -220,30 +267,37 @@
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
-  transition: all 0.2s ease;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-remove:hover {
-  background: #c82333;
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #a00030 100%);
+  transform: scale(1.1);
+  box-shadow: var(--camelot-shadow-md);
 }
 
-/* Sections */
+/* Sections - Quest Configuration Areas */
 .section {
   margin-bottom: 40px;
   padding: 24px;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: var(--camelot-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .section h3 {
-  color: #333;
+  color: var(--camelot-crimson-dark);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin: 0 0 20px 0;
 }
 
-/* Endpoints List */
+/* Endpoints List - Quest Targets */
 .endpoints-list {
   display: flex;
   flex-direction: column;
@@ -251,16 +305,18 @@
 }
 
 .endpoint-item {
-  background: white;
+  background: var(--camelot-aged-parchment);
   padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e1e5e9;
-  transition: all 0.2s ease;
+  border-radius: var(--camelot-radius-md);
+  border: 2px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .endpoint-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 2px 8px rgba(65, 105, 225, 0.15), var(--camelot-shadow-sm);
+  transform: translateY(-1px);
 }
 
 .endpoint-row {
@@ -287,8 +343,9 @@
 .endpoint-url {
   flex: 1;
   font-size: 14px;
-  color: #333;
-  font-family: monospace;
+  color: var(--camelot-black-knight);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
 }
 
 .endpoint-attackable-select {
@@ -300,48 +357,60 @@
 
 .attackable-label {
   font-size: 14px;
-  font-weight: 500;
-  color: #333;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-charcoal);
   white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .attackable-dropdown {
   padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 14px;
-  background: white;
-  color: #333;
+  font-family: var(--camelot-font-body);
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
   cursor: pointer;
   min-width: 150px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .attackable-dropdown:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background: white;
 }
 
 .attackable-badge {
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
   text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border: 2px solid transparent;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .attackable-badge.attackable {
-  background: #d4edda;
-  color: #155724;
+  background: var(--camelot-success-bg);
+  color: var(--camelot-dark-green);
+  border-color: var(--camelot-forest-green);
 }
 
 .attackable-badge.not-attackable {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
+  border-color: var(--camelot-crimson);
 }
 
-/* Tools List */
+/* Tools List - Quest Weapons Arsenal */
 .tools-list {
   display: flex;
   flex-direction: column;
@@ -349,16 +418,18 @@
 }
 
 .tool-item {
-  background: white;
+  background: var(--camelot-aged-parchment);
   padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #e1e5e9;
-  transition: all 0.2s ease;
+  border-radius: var(--camelot-radius-md);
+  border: 2px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .tool-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 2px 8px rgba(65, 105, 225, 0.15), var(--camelot-shadow-sm);
+  transform: translateY(-1px);
 }
 
 .tool-checkbox {
@@ -372,6 +443,7 @@
   width: 20px;
   height: 20px;
   cursor: pointer;
+  accent-color: var(--camelot-crimson);
 }
 
 .tool-info {
@@ -383,22 +455,26 @@
 
 .tool-name {
   font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-black-knight);
+  letter-spacing: 0.3px;
 }
 
 .tool-description {
   font-size: 14px;
-  color: #666;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-charcoal);
 }
 
-/* Tool Settings */
+/* Tool Settings - Weapon Configuration */
 .tool-settings-card {
-  background: white;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 16px;
   overflow: hidden;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .tool-settings-header {
@@ -406,12 +482,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background: #f8f9fa;
-  transition: background 0.2s ease;
+  background: var(--camelot-parchment);
+  border-bottom: 2px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
 }
 
 .tool-settings-header:hover {
-  background: #e9ecef;
+  background: var(--camelot-pale-gold);
 }
 
 .tool-settings-header-left {
@@ -432,42 +509,51 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
+  accent-color: var(--camelot-crimson);
 }
 
 .tool-settings-title {
   font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-black-knight);
+  letter-spacing: 0.3px;
 }
 
 .tool-description-small {
   font-size: 13px;
-  color: #666;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-charcoal);
   margin-left: 26px;
 }
 
 .disabled-badge {
   font-size: 12px;
-  color: #6c757d;
-  font-weight: normal;
+  color: var(--camelot-stone-gray);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
   font-style: italic;
 }
 
 .tool-settings-toggle {
   font-size: 14px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
 }
 
 .tool-settings-content {
   padding: 20px;
-  border-top: 1px solid #e1e5e9;
+  border-top: none;
+  background: var(--camelot-aged-parchment);
 }
 
 .global-settings-content {
   padding: 20px;
-  background: white;
-  border-radius: 8px;
-  border: 1px solid #e1e5e9;
+  background: var(--camelot-aged-parchment);
+  border-radius: var(--camelot-radius-md);
+  border: 2px solid var(--camelot-dark-gold);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .setting-group {
@@ -481,9 +567,12 @@
 .setting-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
+  color: var(--camelot-black-knight);
+  font-weight: 600;
   font-size: 14px;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .setting-group input[type="number"],
@@ -491,16 +580,22 @@
 .setting-group input[type="password"] {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 14px;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
   box-sizing: border-box;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .setting-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background-color: white;
 }
 
 .credentials-inputs {
@@ -520,9 +615,14 @@
 .headers-input input {
   flex: 1;
   padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 14px;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .blocked-urls-list,
@@ -538,12 +638,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
+  background: var(--camelot-parchment);
+  border: 1px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-sm);
   font-size: 14px;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
-/* Review Page */
+/* Review Page - Quest Summary Scroll */
 .review-summary {
   display: flex;
   flex-direction: column;
@@ -551,10 +655,11 @@
 }
 
 .review-section {
-  background: white;
-  border: 1px solid #e1e5e9;
-  border-radius: 8px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   overflow: hidden;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .review-section-header {
@@ -562,44 +667,53 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e1e5e9;
+  background: var(--camelot-parchment);
+  border-bottom: 2px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
 }
 
 .review-section-header.clickable {
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
 .review-section-header.clickable:hover {
-  background: #e9ecef;
+  background: var(--camelot-pale-gold);
 }
 
 .review-section-header h3 {
   margin: 0;
   font-size: 18px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-crimson-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .review-count {
   font-size: 14px;
-  color: #666;
-  font-weight: 500;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
 }
 
 .review-toggle {
   font-size: 14px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
 }
 
 .review-section-content {
   padding: 20px;
+  background: var(--camelot-aged-parchment);
 }
 
 .review-value {
   font-size: 16px;
-  color: #333;
+  color: var(--camelot-black-knight);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
   margin: 0;
 }
 
@@ -614,10 +728,13 @@
 
 .review-list li {
   padding: 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
+  background: var(--camelot-parchment);
+  border: 1px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-sm);
   font-size: 14px;
-  color: #333;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .endpoint-review-item {
@@ -625,14 +742,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
+  background: var(--camelot-parchment);
+  border: 1px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-sm);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .tool-settings-review {
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #e1e5e9;
+  border-bottom: 2px solid var(--camelot-dark-gold);
 }
 
 .tool-settings-review:last-child {
@@ -644,8 +763,11 @@
 .tool-settings-review h4 {
   margin: 0 0 12px 0;
   font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-crimson-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .settings-details {
@@ -656,12 +778,14 @@
 
 .setting-detail {
   font-size: 14px;
-  color: #666;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-charcoal);
   padding: 8px 0;
 }
 
 .setting-detail strong {
-  color: #333;
+  color: var(--camelot-black-knight);
+  font-weight: 700;
   margin-right: 8px;
 }
 
@@ -674,7 +798,8 @@
 .nested-list li {
   padding: 4px 0;
   font-size: 13px;
-  color: #666;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-charcoal);
 }
 
 /* Responsive Design */

@@ -1,3 +1,4 @@
+/* Profile Page - Knight's Heraldic Profile Theme */
 .profile-container {
   max-width: 800px;
   margin: 0 auto;
@@ -5,19 +6,21 @@
 }
 
 .profile-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border: 3px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-xl);
+  box-shadow: var(--camelot-shadow-lg);
   overflow: hidden;
 }
 
 .profile-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
   padding: 30px;
   display: flex;
   align-items: center;
   gap: 20px;
+  border-bottom: 3px solid var(--camelot-dark-gold);
 }
 
 .profile-avatar {
@@ -30,29 +33,36 @@
   justify-content: center;
   font-size: 36px;
   font-weight: bold;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  font-family: var(--camelot-font-display);
+  border: 3px solid var(--camelot-gold);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .profile-header h2 {
   margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
 }
 
 .profile-email {
   margin: 5px 0 0 0;
-  opacity: 0.9;
-  font-size: 14px;
+  opacity: 0.95;
+  font-size: 15px;
+  font-family: var(--camelot-font-body);
 }
 
 .profile-content {
   padding: 30px;
+  background: var(--camelot-parchment);
 }
 
 .profile-section {
   margin-bottom: 30px;
   padding-bottom: 30px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 2px solid var(--camelot-dark-gold);
 }
 
 .profile-section:last-child {
@@ -63,9 +73,12 @@
 
 .profile-section h3 {
   margin: 0 0 20px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #374151;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-crimson-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .info-row {
@@ -73,7 +86,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--camelot-dark-gold);
 }
 
 .info-row:last-child {
@@ -81,18 +94,23 @@
 }
 
 .info-label {
-  font-weight: 500;
-  color: #6b7280;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-stone-gray);
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
 }
 
 .info-value {
-  color: #111827;
-  font-weight: 500;
+  color: var(--camelot-black-knight);
+  font-weight: 600;
+  font-family: var(--camelot-font-body);
 }
 
 .info-value.status-active {
-  color: #059669;
-  font-weight: 600;
+  color: var(--camelot-forest-green);
+  font-weight: 700;
 }
 
 .profile-form {
@@ -106,22 +124,32 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
-  color: #374151;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-black-knight);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  padding: 12px 16px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 14px;
-  transition: border-color 0.2s;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background-color: white;
 }
 
 .form-actions {
@@ -142,65 +170,94 @@
 }
 
 .group-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
   color: white;
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 2px solid var(--camelot-navy);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
   text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary {
-  background: #667eea;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
+  border: 2px solid var(--camelot-crimson-dark);
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary:hover {
-  background: #5568d3;
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-secondary {
-  background: #6b7280;
+  background: linear-gradient(135deg, var(--camelot-light-stone) 0%, var(--camelot-stone-gray) 100%);
   color: white;
-  border: none;
+  border: 2px solid var(--camelot-stone-gray);
   padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-secondary:hover {
-  background: #4b5563;
+  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, #505050 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .error-banner {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background: var(--camelot-danger-bg);
+  border: 2px solid var(--camelot-danger-border);
+  color: var(--camelot-crimson-dark);
   padding: 12px 16px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   margin: 20px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .error-banner button {
-  background: #991b1b;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
+  border: 2px solid var(--camelot-crimson-dark);
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--camelot-radius-sm);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--camelot-transition-base);
+}
+
+.error-banner button:hover {
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
+  transform: translateY(-1px);
 }
 
 .loading {
@@ -214,8 +271,9 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f4f6;
-  border-top-color: #667eea;
+  border: 4px solid var(--camelot-parchment);
+  border-top: 4px solid var(--camelot-crimson);
+  border-right: 4px solid var(--camelot-royal-blue);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -226,32 +284,38 @@
   }
 }
 
-/* Tabs styling */
+/* Tabs styling - Heraldic Tabs */
 .profile-tabs {
   display: flex;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 3px solid var(--camelot-dark-gold);
   padding: 0 30px;
   margin-bottom: 0;
+  background: var(--camelot-aged-parchment);
 }
 
 .tab {
   background: none;
   border: none;
   padding: 15px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  color: #6b7280;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-stone-gray);
   cursor: pointer;
   border-bottom: 3px solid transparent;
-  transition: all 0.2s;
+  margin-bottom: -3px;
+  transition: all var(--camelot-transition-base);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .tab:hover {
-  color: #374151;
-  background-color: #f9fafb;
+  color: var(--camelot-royal-blue);
+  background-color: rgba(65, 105, 225, 0.05);
 }
 
 .tab.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: var(--camelot-crimson);
+  border-bottom-color: var(--camelot-crimson);
+  background-color: rgba(220, 20, 60, 0.05);
 }

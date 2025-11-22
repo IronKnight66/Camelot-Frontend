@@ -167,8 +167,12 @@ const TenantScannerTools: React.FC = () => {
   }
 
   return (
-    <Layout title="Available Scanner Tools">
+    <Layout>
       <div className="tenant-scanner-tools">
+        <div className="tenant-tools-header">
+          <h1>Available Scanner Tools</h1>
+          <p>Enable and disable scanner tools for your tenant</p>
+        </div>
 
       {error && (
         <div className="error-banner">

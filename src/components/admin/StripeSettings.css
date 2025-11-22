@@ -1,58 +1,83 @@
+/* Stripe Settings - Royal Treasury Configuration */
 .stripe-settings-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
-.stripe-settings-container h2 {
-  color: #333;
-  margin-bottom: 8px;
+.page-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.page-header h2 {
+  margin: 0 0 8px 0;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  font-size: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
-  color: #666;
-  margin-bottom: 30px;
+  color: var(--camelot-charcoal);
+  margin: 0;
+  font-family: var(--camelot-font-body);
+  font-size: 18px;
 }
 
 /* Config Status */
 .config-status {
-  background: #f8f9fa;
+  background: var(--camelot-aged-parchment);
   padding: 16px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 24px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--camelot-royal-blue);
+  border: 2px solid var(--camelot-dark-gold);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .config-status p {
   margin: 0;
-  font-size: 1rem;
+  font-size: 16px;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
 }
 
 .status-configured {
-  color: #28a745;
-  font-weight: 600;
+  color: var(--camelot-forest-green);
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
 }
 
 .status-not-configured {
-  color: #ffc107;
-  font-weight: 600;
+  color: var(--camelot-dark-gold);
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
 }
 
 /* Form */
 .stripe-config-form {
-  background: white;
-  border-radius: 8px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
   padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--camelot-shadow-md);
   margin-bottom: 24px;
 }
 
 .stripe-config-form h3 {
-  color: #333;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-top: 24px;
   margin-bottom: 16px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--camelot-dark-gold);
 }
 
 .stripe-config-form h3:first-of-type {
@@ -66,37 +91,49 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: var(--camelot-black-knight);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
 }
 
 .current-value {
   font-weight: normal;
-  color: #666;
-  font-size: 0.875rem;
+  color: var(--camelot-charcoal);
+  font-size: 12px;
+  font-family: var(--camelot-font-body);
+  text-transform: none;
 }
 
 .form-input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
+  font-size: 14px;
+  font-family: var(--camelot-font-body);
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
   box-sizing: border-box;
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background: white;
 }
 
 .form-help {
   display: block;
   margin-top: 6px;
-  font-size: 0.875rem;
-  color: #6c757d;
+  font-size: 12px;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
 }
 
 .form-actions {
@@ -108,85 +145,113 @@
 .btn-primary,
 .btn-secondary {
   padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
+  border: 2px solid transparent;
+  border-radius: var(--camelot-radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary {
-  background-color: #667eea;
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
   color: white;
+  border-color: var(--camelot-navy);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #5568d3;
+  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-primary:disabled {
-  background-color: #ccc;
+  background: var(--camelot-stone-gray);
+  border-color: var(--camelot-stone-gray);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  border-color: var(--camelot-dark-gold);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #5a6268;
+  background: var(--camelot-pale-gold);
+  transform: translateY(-1px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-secondary:disabled {
-  background-color: #ccc;
+  background: var(--camelot-stone-gray);
+  border-color: var(--camelot-stone-gray);
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Messages */
 .error-message {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
   padding: 12px 16px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 20px;
-  border: 1px solid #f5c6cb;
+  border: 2px solid var(--camelot-danger-border);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .success-message {
-  background-color: #d4edda;
-  color: #155724;
+  background: var(--camelot-success-bg);
+  color: var(--camelot-dark-green);
   padding: 12px 16px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 20px;
-  border: 1px solid #c3e6cb;
+  border: 2px solid var(--camelot-forest-green);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .loading {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
+  font-size: 16px;
 }
 
 /* Help Section */
 .help-section {
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
   padding: 24px;
-  border: 1px solid #e0e0e0;
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .help-section h3 {
-  color: #333;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-top: 0;
   margin-bottom: 16px;
 }
 
 .help-section ol {
   padding-left: 20px;
-  color: #666;
+  color: var(--camelot-charcoal);
   line-height: 1.8;
+  font-family: var(--camelot-font-body);
 }
 
 .help-section li {
@@ -194,27 +259,30 @@
 }
 
 .help-section a {
-  color: #667eea;
+  color: var(--camelot-royal-blue);
   text-decoration: none;
+  font-weight: 600;
 }
 
 .help-section a:hover {
   text-decoration: underline;
+  color: var(--camelot-navy);
 }
 
 .help-section code {
-  background-color: #e9ecef;
+  background: var(--camelot-parchment);
   padding: 2px 6px;
-  border-radius: 3px;
+  border-radius: var(--camelot-radius-sm);
   font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #d63384;
+  font-size: 13px;
+  color: var(--camelot-crimson-dark);
+  border: 1px solid var(--camelot-dark-gold);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .stripe-settings-container {
-    padding: 16px;
+    padding: 20px 16px;
   }
 
   .stripe-config-form {

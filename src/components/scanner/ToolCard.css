@@ -1,10 +1,11 @@
-/* src/components/scanner/ToolCard.css */
+/* Tool Card - Medieval Weapon Cards Theme */
 .tool-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-md);
   padding: 20px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all var(--camelot-transition-base);
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -12,7 +13,8 @@
 
 .tool-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--camelot-shadow-lg);
+  border-color: var(--camelot-gold);
 }
 
 .tool-card-header {
@@ -20,13 +22,18 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 15px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--camelot-dark-gold);
 }
 
 .tool-card-title h3 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--camelot-crimson-dark);
   font-size: 18px;
-  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .tool-card-badges {
@@ -38,28 +45,35 @@
 .category-badge,
 .pricing-badge {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
   color: white;
   font-size: 11px;
-  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  border: 2px solid transparent;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .pricing-badge {
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .inactive-badge {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: #ef4444;
-  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
+  border: 2px solid var(--camelot-crimson);
   font-size: 11px;
-  font-weight: 600;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .tool-card-actions {
@@ -87,29 +101,35 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
-  transition: 0.3s;
+  background: linear-gradient(135deg, var(--camelot-light-stone) 0%, var(--camelot-stone-gray) 100%);
+  border: 2px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
   border-radius: 24px;
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.3s;
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--camelot-parchment);
+  border: 1px solid var(--camelot-dark-gold);
+  transition: all var(--camelot-transition-base);
   border-radius: 50%;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 input:checked + .slider {
-  background-color: #10b981;
+  background: linear-gradient(135deg, var(--camelot-forest-green) 0%, var(--camelot-dark-green) 100%);
+  border-color: var(--camelot-dark-green);
 }
 
 input:checked + .slider:before {
   transform: translateX(20px);
+  background: white;
 }
 
 .tool-card-body {
@@ -119,17 +139,20 @@ input:checked + .slider:before {
 }
 
 .tool-description {
-  color: #666;
+  color: var(--camelot-charcoal);
   font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--camelot-font-body);
+  line-height: 1.6;
   margin: 0;
 }
 
 .tool-usage-info {
   padding: 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 3px solid #3b82f6;
+  background: var(--camelot-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
+  border-left: 4px solid var(--camelot-royal-blue);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .usage-stats {
@@ -137,12 +160,16 @@ input:checked + .slider:before {
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: #555;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
+  font-weight: 600;
 }
 
 .last-used {
   font-size: 12px;
-  color: #999;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-stone-gray);
+  font-style: italic;
 }
 
 .tool-meta {
@@ -150,28 +177,32 @@ input:checked + .slider:before {
   flex-direction: column;
   gap: 6px;
   padding-top: 12px;
-  border-top: 1px solid #e9ecef;
+  border-top: 2px solid var(--camelot-dark-gold);
 }
 
 .tool-info-row {
   display: flex;
   gap: 8px;
   font-size: 13px;
+  font-family: var(--camelot-font-body);
 }
 
 .tool-info-row .label {
-  color: #999;
-  font-weight: 500;
+  color: var(--camelot-stone-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .tool-info-row .value {
-  color: #333;
+  color: var(--camelot-black-knight);
+  font-weight: 600;
 }
 
 .tool-info-row .value .scan-count {
-  color: #666;
+  color: var(--camelot-charcoal);
   font-size: 12px;
-  font-weight: normal;
+  font-weight: 500;
 }
 
 .tool-card-footer {
@@ -188,12 +219,17 @@ input:checked + .slider:before {
 
 .scan-type-tag {
   display: inline-block;
-  padding: 3px 8px;
-  background: #e0e7ff;
-  color: #4f46e5;
-  border-radius: 4px;
+  padding: 4px 10px;
+  background: var(--camelot-info-bg);
+  color: var(--camelot-navy);
+  border: 1px solid var(--camelot-royal-blue);
+  border-radius: var(--camelot-radius-sm);
   font-size: 11px;
-  font-weight: 500;
+  font-family: var(--camelot-font-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .tool-actions {
@@ -203,32 +239,42 @@ input:checked + .slider:before {
 }
 
 .btn {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
+  padding: 10px 18px;
+  border-radius: var(--camelot-radius-md);
+  border: 2px solid transparent;
   font-size: 13px;
-  font-weight: 500;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--camelot-transition-base);
   flex: 1;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
   color: white;
+  border-color: var(--camelot-navy);
 }
 
 .btn-primary:hover {
-  background: #2563eb;
+  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-secondary {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  border-color: var(--camelot-dark-gold);
 }
 
 .btn-secondary:hover {
-  background: #e5e7eb;
+  background: var(--camelot-pale-gold);
+  transform: translateY(-1px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 /* Responsive design */

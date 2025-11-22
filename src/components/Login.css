@@ -1,35 +1,97 @@
-/* src/components/Login.css */
+/* src/components/Login.css - Camelot Castle Gate Theme */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Castle stone wall texture with dramatic gradient */
+  background:
+    radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, var(--camelot-charcoal) 0%, var(--camelot-stone-gray) 50%, var(--camelot-charcoal) 100%);
+  /* Uncomment below when you download the castle gate background image (see public/assets/ASSETS_README.md) */
+  /* background-image: url('/assets/illustrations/castle-gate-bg.jpg'); */
+  /* background-size: cover; */
+  /* background-position: center; */
+  /* background-blend-mode: multiply; */
   padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Castle gate archway effect */
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    /* Torch light effects from sides */
+    radial-gradient(ellipse at 10% 50%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
+    radial-gradient(ellipse at 90% 50%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
+    /* Dark vignette */
+    radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+  z-index: 0;
+}
+
+/* Castle stones pattern */
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 100px,
+      rgba(139, 69, 19, 0.05) 100px,
+      rgba(139, 69, 19, 0.05) 102px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 150px,
+      rgba(139, 69, 19, 0.05) 150px,
+      rgba(139, 69, 19, 0.05) 152px
+    );
+  z-index: 0;
+  pointer-events: none;
 }
 
 .login-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border: 3px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-xl);
+  box-shadow: var(--camelot-shadow-xl);
   padding: 40px;
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
+  position: relative;
+  z-index: 1;
 }
 
 .login-card h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #333;
-  font-size: 28px;
-  font-weight: 600;
+  color: var(--camelot-crimson-dark);
+  font-size: 36px;
+  font-weight: 700;
+  font-family: var(--camelot-font-display);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
 }
 
 .login-card p {
   text-align: center;
-  color: #666;
+  color: var(--camelot-charcoal);
   margin-bottom: 20px;
-  line-height: 1.5;
+  line-height: 1.6;
+  font-family: var(--camelot-font-body);
 }
 
 .form-group {
@@ -39,44 +101,57 @@
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #333;
-  font-weight: 500;
+  color: var(--camelot-black-knight);
+  font-weight: 600;
   font-size: 14px;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 16px;
-  transition: border-color 0.3s ease;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
   box-sizing: border-box;
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background-color: white;
 }
 
 button[type="submit"] {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
-  border-radius: 8px;
+  border: 2px solid var(--camelot-crimson-dark);
+  border-radius: var(--camelot-radius-md);
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all var(--camelot-transition-base);
   margin-bottom: 20px;
+  box-shadow: var(--camelot-shadow-md);
 }
 
 button[type="submit"]:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--camelot-shadow-lg);
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
 }
 
 button[type="submit"]:disabled {
@@ -92,17 +167,19 @@ button[type="submit"]:disabled {
 .link-button {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--camelot-royal-blue);
   cursor: pointer;
   font-size: 14px;
+  font-family: var(--camelot-font-body);
   text-decoration: underline;
   margin: 5px 0;
   padding: 5px;
-  transition: color 0.3s ease;
+  transition: color var(--camelot-transition-base);
+  font-weight: 600;
 }
 
 .link-button:hover {
-  color: #764ba2;
+  color: var(--camelot-navy);
 }
 
 .link-button:disabled {
@@ -111,13 +188,15 @@ button[type="submit"]:disabled {
 }
 
 .error {
-  background: #fee;
-  color: #c33;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 20px;
   font-size: 14px;
-  border: 1px solid #fcc;
+  font-family: var(--camelot-font-body);
+  border: 2px solid var(--camelot-danger-border);
+  font-weight: 600;
 }
 
 /* Responsive design */

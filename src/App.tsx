@@ -13,6 +13,7 @@ import MyScanners from './components/scanner/MyScanners';
 import UserManagement from './components/admin/UserManagement';
 import TenantManagement from './components/admin/TenantManagement';
 import SystemPrompts from './components/admin/SystemPrompts';
+import ScanTypes from './components/admin/ScanTypes';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
 import TenantAdminSettings from './components/TenantAdminSettings';
@@ -105,15 +106,27 @@ function App() {
             />
 
             {/* System Prompts - Super Admin Only */}
-            <Route 
-              path="/settings/admin/system-prompts" 
+            <Route
+              path="/settings/admin/system-prompts"
               element={
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="super-admin">
                     <SystemPrompts />
                   </RoleBasedRoute>
                 </ProtectedRoute>
-              } 
+              }
+            />
+
+            {/* Scan Types - Super Admin Only */}
+            <Route
+              path="/settings/admin/scan-types"
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="super-admin">
+                    <ScanTypes />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              }
             />
 
             {/* API Keys - Admin Only */}

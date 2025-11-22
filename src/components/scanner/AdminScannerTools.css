@@ -1,40 +1,71 @@
-/* src/components/scanner/AdminScannerTools.css */
+/* Admin Scanner Tools - Royal Armory Management */
 .admin-scanner-tools {
   padding: 30px 20px;
 }
 
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   margin-bottom: 30px;
 }
 
-.page-header h1 {
-  color: #333;
-  font-size: 32px;
+.page-header h2 {
+  margin: 0 0 8px 0;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
   font-weight: 700;
+  font-size: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  color: var(--camelot-charcoal);
   margin: 0;
+  font-family: var(--camelot-font-body);
+  font-size: 18px;
+}
+
+.actions-bar {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .error-banner {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
+  border: 2px solid var(--camelot-danger-border);
   padding: 15px;
-  border-radius: 8px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .error-banner button {
-  background: #dc3545;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
+  border: 2px solid var(--camelot-crimson-dark);
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: var(--camelot-radius-sm);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
+}
+
+.error-banner button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .filters-section {
@@ -43,9 +74,10 @@
   flex-wrap: wrap;
   margin-bottom: 30px;
   padding: 20px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .filter-group {
@@ -58,24 +90,32 @@
 
 .filter-group label {
   font-size: 12px;
-  font-weight: 500;
-  color: #666;
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  color: var(--camelot-stone-gray);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .filter-group input,
 .filter-group select {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   font-size: 14px;
+  font-family: var(--camelot-font-body);
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background: white;
 }
 
 .loading {
@@ -89,11 +129,12 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border: 4px solid var(--camelot-parchment);
+  border-top: 4px solid var(--camelot-crimson);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 @keyframes spin {
@@ -110,11 +151,13 @@
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
 }
 
 .empty-state p {
   font-size: 16px;
+  font-weight: 600;
 }
 
 .unauthorized-message {
@@ -125,19 +168,25 @@
   min-height: 400px;
   text-align: center;
   padding: 40px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-xl);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .unauthorized-message h2 {
-  color: #dc3545;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
   font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 16px;
 }
 
 .unauthorized-message p {
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
   font-size: 16px;
   margin-bottom: 24px;
   max-width: 500px;
@@ -159,4 +208,3 @@
     grid-template-columns: 1fr;
   }
 }
-

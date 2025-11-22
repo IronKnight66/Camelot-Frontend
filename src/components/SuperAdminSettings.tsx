@@ -89,6 +89,15 @@ const SuperAdminSettings: React.FC = () => {
               Manage Prompts
             </Link>
           </div>
+
+          <div className="tenant-settings-hub-card">
+            <div className="tenant-settings-hub-card-icon">🎯</div>
+            <h2>Supported Scan Types</h2>
+            <p>Manage the available scan types that scanner tools can use</p>
+            <Link to="/settings/admin/scan-types" className="tenant-settings-hub-btn" style={{ background: '#fd7e14', color: 'white' }}>
+              Manage Scan Types
+            </Link>
+          </div>
         </div>
 
         {/* Info box */}
@@ -113,6 +122,9 @@ const SuperAdminSettings: React.FC = () => {
               </div>
               <div className="info-item">
                 <strong>System Prompts:</strong> Configure global and tenant-specific system prompts for the chatbot assistant. Track history of all prompt changes.
+              </div>
+              <div className="info-item">
+                <strong>Supported Scan Types:</strong> Define and manage the scan types that can be used by scanner tools for security assessments.
               </div>
             </div>
           </div>

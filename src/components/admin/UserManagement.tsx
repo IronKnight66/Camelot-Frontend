@@ -251,8 +251,12 @@ const UserManagement: React.FC = () => {
   return (
     <Layout>
       <div className="user-management-container">
-        <div className="user-management-header">
-          <h1>User Management</h1>
+        <div className="page-header">
+          <h2>User Management</h2>
+          <p className="subtitle">Manage tenant users, roles, and permissions</p>
+        </div>
+
+        <div className="actions-bar">
           <button className="btn btn-primary" onClick={() => setCreateModalOpen(true)}>
             + Add User
           </button>

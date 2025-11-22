@@ -127,8 +127,10 @@ const StripeSettings: React.FC = () => {
   return (
     <Layout>
       <div className="stripe-settings-container">
-      <h2>Stripe Configuration</h2>
-      <p className="subtitle">Configure Stripe for billing and subscription management</p>
+        <div className="page-header">
+          <h2>Stripe Configuration</h2>
+          <p className="subtitle">Configure Stripe for billing and subscription management</p>
+        </div>
 
       {error && (
         <div className="error-message">

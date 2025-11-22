@@ -187,11 +187,9 @@ const APIKeysSettings: React.FC = () => {
 
   return (
     <div className="api-keys-settings">
-      <div className="section-header">
+      <div className="api-keys-header">
         <h2>API Keys</h2>
-        <p className="section-description">
-          Manage your AI provider API keys. These keys are stored securely in AWS Secrets Manager.
-        </p>
+        <p>Manage your AI provider API keys stored securely in AWS Secrets Manager</p>
       </div>
 
       {error && (

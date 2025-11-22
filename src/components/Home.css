@@ -1,4 +1,4 @@
-/* src/components/Home.css */
+/* src/components/Home.css - Camelot Throne Room Theme */
 .home-container {
   padding: 30px 20px;
 }
@@ -9,23 +9,37 @@
 }
 
 .error-banner {
-  background: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
   padding: 15px;
-  border-radius: 8px;
+  border-radius: var(--camelot-radius-md);
+  border: 2px solid var(--camelot-danger-border);
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .error-banner button {
-  background: #dc3545;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
-  border: none;
+  border: 2px solid var(--camelot-crimson-dark);
   padding: 8px 16px;
-  border-radius: 4px;
+  border-radius: var(--camelot-radius-sm);
   cursor: pointer;
+  font-family: var(--camelot-font-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all var(--camelot-transition-base);
+}
+
+.error-banner button:hover {
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
+  transform: translateY(-1px);
 }
 
 .loading {
@@ -39,8 +53,9 @@
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #667eea;
+  border: 4px solid var(--camelot-parchment);
+  border-top: 4px solid var(--camelot-crimson);
+  border-right: 4px solid var(--camelot-royal-blue);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
@@ -63,47 +78,56 @@
 }
 
 .card {
-  background: white;
+  background: var(--camelot-aged-parchment);
   padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--camelot-radius-lg);
+  border: 2px solid var(--camelot-dark-gold);
+  box-shadow: var(--camelot-shadow-md);
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform var(--camelot-transition-base), box-shadow var(--camelot-transition-base);
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: var(--camelot-shadow-lg);
 }
 
 .card h3 {
-  color: #666;
+  color: var(--camelot-stone-gray);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
   margin: 0 0 10px 0;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
 .card-value {
-  color: #333;
-  font-size: 32px;
+  color: var(--camelot-crimson-dark);
+  font-size: 36px;
   font-weight: 700;
+  font-family: var(--camelot-font-display);
   margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .section {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--camelot-aged-parchment);
+  border-radius: var(--camelot-radius-lg);
+  border: 2px solid var(--camelot-dark-gold);
+  box-shadow: var(--camelot-shadow-md);
   padding: 25px;
 }
 
 .section h2 {
-  color: #333;
-  font-size: 20px;
-  font-weight: 600;
+  color: var(--camelot-crimson-dark);
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
   margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--camelot-dark-gold);
+  letter-spacing: 0.5px;
 }
 
 .table-container {
@@ -114,47 +138,61 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  font-family: var(--camelot-font-body);
 }
 
 .data-table th {
-  background: #f8f9fa;
-  color: #666;
-  font-weight: 600;
-  padding: 12px;
+  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, var(--camelot-light-stone) 100%);
+  color: white;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 14px 12px;
   text-align: left;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 3px solid var(--camelot-dark-gold);
+  font-size: 13px;
 }
 
 .data-table td {
   padding: 12px;
-  border-bottom: 1px solid #e9ecef;
-  color: #333;
+  border-bottom: 1px solid var(--camelot-dark-gold);
+  color: var(--camelot-black-knight);
+}
+
+.data-table tr:nth-child(even) {
+  background: var(--camelot-parchment);
 }
 
 .data-table tr:hover {
-  background: #f8f9fa;
+  background: var(--camelot-pale-gold);
 }
 
 .status-badge,
 .severity-badge {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  color: white;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-family: var(--camelot-font-heading);
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: var(--camelot-shadow-sm);
+  border: 2px solid transparent;
 }
 
 .empty-state {
   text-align: center;
   padding: 40px 20px;
-  color: #666;
+  color: var(--camelot-stone-gray);
+  font-family: var(--camelot-font-body);
 }
 
 .empty-state p {
   margin: 0;
   font-size: 16px;
+  font-style: italic;
 }
 
 /* Responsive design */

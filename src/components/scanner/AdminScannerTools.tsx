@@ -164,9 +164,14 @@ const AdminScannerTools: React.FC = () => {
   }
 
   return (
-    <Layout title="Scanner Tool Registry">
+    <Layout>
       <div className="admin-scanner-tools">
         <div className="page-header">
+          <h2>Global Scanner Tool Registry</h2>
+          <p className="subtitle">Manage the global registry of scanner tools available to all tenants</p>
+        </div>
+
+        <div className="actions-bar">
           <button className="btn-primary" onClick={handleCreate}>
             + Create New Tool
           </button>

@@ -131,7 +131,7 @@ const Reports: React.FC = () => {
       <div className="reports-container">
         <div className="reports-header">
           <h1>Reports & Analytics</h1>
-          <p className="reports-subtitle">View chat logs, usage statistics, and cost breakdowns</p>
+          <p>View chat logs, usage statistics, and cost breakdowns</p>
         </div>
 
         <div className="reports-tabs">

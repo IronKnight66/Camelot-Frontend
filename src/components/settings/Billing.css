@@ -1,34 +1,48 @@
+/* Billing - Royal Treasury Management */
 .billing-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 30px 20px;
 }
 
 .billing-container h2 {
-  color: #333;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .billing-section {
-  background: white;
-  border-radius: 8px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .billing-section h3 {
-  color: #333;
+  color: var(--camelot-crimson-dark);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-top: 0;
   margin-bottom: 20px;
-  font-size: 1.25rem;
+  font-size: 20px;
 }
 
 /* Subscription Card */
 .subscription-card {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
   padding: 20px;
+  background: var(--camelot-parchment);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .subscription-header {
@@ -40,8 +54,12 @@
 
 .plan-name {
   margin: 0 0 8px 0;
-  font-size: 1.5rem;
-  color: #667eea;
+  font-size: 24px;
+  color: var(--camelot-royal-blue);
+  font-family: var(--camelot-font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .subscription-price {
@@ -49,55 +67,66 @@
 }
 
 .subscription-price .amount {
-  font-size: 2rem;
+  font-size: 32px;
   font-weight: bold;
-  color: #333;
+  color: var(--camelot-forest-green);
+  font-family: var(--camelot-font-display);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .subscription-price .interval {
-  color: #666;
-  font-size: 1rem;
+  color: var(--camelot-charcoal);
+  font-size: 16px;
+  font-family: var(--camelot-font-body);
 }
 
 .subscription-info {
-  color: #666;
+  color: var(--camelot-charcoal);
   margin-bottom: 20px;
+  font-family: var(--camelot-font-body);
 }
 
 /* Status Badges */
 .status-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--camelot-radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .status-badge-success {
-  background-color: #d4edda;
-  color: #155724;
+  background: var(--camelot-success-bg);
+  color: var(--camelot-dark-green);
+  border: 1px solid var(--camelot-forest-green);
 }
 
 .status-badge-info {
-  background-color: #d1ecf1;
-  color: #0c5460;
+  background: var(--camelot-info-bg);
+  color: var(--camelot-navy);
+  border: 1px solid var(--camelot-royal-blue);
 }
 
 .status-badge-warning {
-  background-color: #fff3cd;
-  color: #856404;
+  background: var(--camelot-warning-bg);
+  color: var(--camelot-dark-gold);
+  border: 1px solid var(--camelot-gold);
 }
 
 .status-badge-danger {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
+  border: 1px solid var(--camelot-danger-border);
 }
 
 .status-badge-neutral {
-  background-color: #e9ecef;
-  color: #495057;
+  background: var(--camelot-aged-parchment);
+  color: var(--camelot-charcoal);
+  border: 1px solid var(--camelot-stone-gray);
 }
 
 /* Actions */
@@ -113,7 +142,8 @@
 
 .plan-selection p {
   margin-bottom: 16px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
 }
 
 .plan-buttons {
@@ -127,39 +157,52 @@
 .btn-secondary,
 .btn-danger {
   padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
+  border: 2px solid transparent;
+  border-radius: var(--camelot-radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .btn-primary {
-  background-color: #667eea;
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
   color: white;
+  border-color: var(--camelot-navy);
 }
 
 .btn-primary:hover {
-  background-color: #5568d3;
+  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  border-color: var(--camelot-dark-gold);
 }
 
 .btn-secondary:hover {
-  background-color: #5a6268;
+  background: var(--camelot-pale-gold);
+  transform: translateY(-1px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 .btn-danger {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
   color: white;
+  border-color: var(--camelot-crimson-dark);
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #a00030 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
 }
 
 /* Payment Methods */
@@ -175,13 +218,14 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background: #f8f9fa;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
+  background: var(--camelot-parchment);
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 .card-icon {
-  font-size: 2rem;
+  font-size: 32px;
 }
 
 .card-details {
@@ -189,26 +233,34 @@
 }
 
 .card-brand {
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 4px 0;
-  color: #333;
+  color: var(--camelot-black-knight);
+  font-family: var(--camelot-font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .card-number {
   margin: 0 0 4px 0;
-  color: #666;
-  font-family: monospace;
+  color: var(--camelot-charcoal);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
 }
 
 .card-expiry {
   margin: 0;
-  font-size: 0.875rem;
-  color: #999;
+  font-size: 13px;
+  color: var(--camelot-stone-gray);
+  font-family: var(--camelot-font-body);
 }
 
 /* Invoices Table */
 .invoices-table {
   overflow-x: auto;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
+  background: var(--camelot-parchment);
 }
 
 .invoices-table table {
@@ -220,44 +272,56 @@
 .invoices-table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--camelot-dark-gold);
+  font-family: var(--camelot-font-body);
 }
 
 .invoices-table th {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #333;
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.invoices-table tr:hover {
-  background-color: #f8f9fa;
+.invoices-table tbody tr:hover {
+  background: var(--camelot-pale-gold);
 }
 
 .invoice-link {
-  color: #667eea;
+  color: var(--camelot-royal-blue);
   text-decoration: none;
   margin-right: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: var(--camelot-font-heading);
 }
 
 .invoice-link:hover {
   text-decoration: underline;
+  color: var(--camelot-navy);
 }
 
 /* Loading and Error States */
 .loading {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--camelot-charcoal);
+  font-family: var(--camelot-font-body);
 }
 
 .error-message {
-  background-color: #f8d7da;
-  color: #721c24;
+  background: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
   padding: 12px 16px;
-  border-radius: 6px;
+  border-radius: var(--camelot-radius-md);
   margin-bottom: 20px;
-  border: 1px solid #f5c6cb;
+  border: 2px solid var(--camelot-danger-border);
+  font-family: var(--camelot-font-body);
+  font-weight: 600;
+  box-shadow: var(--camelot-shadow-sm);
 }
 
 /* Responsive */

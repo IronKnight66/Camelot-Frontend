@@ -156,10 +156,14 @@ const ChatInterface: React.FC = () => {
   return (
     <Layout>
       <div className="chat-interface-container">
-        <div className="chat-header">
+        <div className="page-header">
           <h1>Arthur</h1>
-          <button 
-            onClick={handleClearSession} 
+          <p>Your AI assistant for security analysis and guidance</p>
+        </div>
+
+        <div className="chat-actions">
+          <button
+            onClick={handleClearSession}
             className="clear-session-btn"
             title="Start a new conversation"
           >

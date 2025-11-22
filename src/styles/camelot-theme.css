@@ -1,0 +1,611 @@
+/**
+ * CAMELOT MEDIEVAL THEME
+ * Knights & Heraldry Color Palette
+ * Inspired by King Arthur and the Round Table
+ */
+
+/* =====================================================
+   CSS CUSTOM PROPERTIES - MEDIEVAL COLOR PALETTE
+   ===================================================== */
+
+:root {
+  /* PRIMARY HERALDIC COLORS */
+  --camelot-crimson: #DC143C;           /* Crimson Red - Primary actions, headers */
+  --camelot-crimson-dark: #8B0000;      /* Dark Crimson - Hover states, depth */
+  --camelot-crimson-light: #F08080;     /* Light Crimson - Highlights */
+
+  --camelot-royal-blue: #4169E1;        /* Royal Blue - Links, secondary actions */
+  --camelot-navy: #000080;              /* Navy Blue - Deep accents, shadows */
+  --camelot-sky-blue: #87CEEB;          /* Sky Blue - Light accents */
+
+  --camelot-gold: #FFD700;              /* Noble Gold - Success, highlights */
+  --camelot-dark-gold: #DAA520;         /* Dark Gold - Borders, accents */
+  --camelot-pale-gold: #FFFACD;         /* Pale Gold - Subtle backgrounds */
+
+  --camelot-forest-green: #228B22;      /* Forest Green - Active states, success */
+  --camelot-dark-green: #006400;        /* Dark Green - Deep success tones */
+
+  /* NEUTRAL MEDIEVAL TONES */
+  --camelot-black-knight: #1C1C1C;      /* Black Knight - Primary text */
+  --camelot-charcoal: #2C2C2C;          /* Charcoal - Secondary text */
+  --camelot-stone-gray: #696969;        /* Stone Gray - Borders, dividers */
+  --camelot-light-stone: #808080;       /* Light Stone - Secondary elements */
+  --camelot-parchment: #F4E8D0;         /* Parchment - Light backgrounds */
+  --camelot-pale-parchment: #FAF0DC;    /* Pale Parchment - Subtle backgrounds */
+  --camelot-aged-parchment: #E8DCC0;    /* Aged Parchment - Card backgrounds */
+
+  /* SEMANTIC COLORS (Medieval Theme) */
+  --camelot-danger: var(--camelot-crimson);
+  --camelot-danger-dark: var(--camelot-crimson-dark);
+  --camelot-danger-bg: #FFF0F0;
+  --camelot-danger-border: var(--camelot-crimson-light);
+
+  --camelot-success: var(--camelot-forest-green);
+  --camelot-success-dark: var(--camelot-dark-green);
+  --camelot-success-bg: #F0FFF0;
+  --camelot-success-border: var(--camelot-forest-green);
+
+  --camelot-info: var(--camelot-royal-blue);
+  --camelot-info-dark: var(--camelot-navy);
+  --camelot-info-bg: #F0F8FF;
+  --camelot-info-border: var(--camelot-sky-blue);
+
+  --camelot-warning: var(--camelot-gold);
+  --camelot-warning-dark: var(--camelot-dark-gold);
+  --camelot-warning-bg: #FFFEF0;
+  --camelot-warning-border: var(--camelot-pale-gold);
+
+  /* SHADOWS & DEPTH */
+  --camelot-shadow-sm: 0 2px 4px rgba(28, 28, 28, 0.1);
+  --camelot-shadow-md: 0 4px 8px rgba(28, 28, 28, 0.15);
+  --camelot-shadow-lg: 0 8px 16px rgba(28, 28, 28, 0.2);
+  --camelot-shadow-xl: 0 12px 24px rgba(28, 28, 28, 0.25);
+  --camelot-shadow-emboss: inset 0 2px 4px rgba(255, 255, 255, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  --camelot-shadow-engrave: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+
+  /* BORDER RADIUS (Gothic/Medieval style - less rounded than modern) */
+  --camelot-radius-sm: 3px;
+  --camelot-radius-md: 5px;
+  --camelot-radius-lg: 8px;
+  --camelot-radius-xl: 12px;
+
+  /* SPACING */
+  --camelot-space-xs: 4px;
+  --camelot-space-sm: 8px;
+  --camelot-space-md: 16px;
+  --camelot-space-lg: 24px;
+  --camelot-space-xl: 32px;
+  --camelot-space-xxl: 48px;
+
+  /* TYPOGRAPHY SCALE */
+  --camelot-font-display: 'MedievalSharp', 'Cinzel', serif;
+  --camelot-font-heading: 'Cinzel', serif;
+  --camelot-font-body: 'Crimson Text', Georgia, serif;
+  --camelot-font-mono: 'Courier New', monospace;
+
+  --camelot-text-xs: 11px;
+  --camelot-text-sm: 13px;
+  --camelot-text-base: 16px;
+  --camelot-text-lg: 18px;
+  --camelot-text-xl: 22px;
+  --camelot-text-2xl: 28px;
+  --camelot-text-3xl: 36px;
+  --camelot-text-4xl: 48px;
+
+  /* TRANSITIONS */
+  --camelot-transition-fast: 0.15s ease;
+  --camelot-transition-base: 0.3s ease;
+  --camelot-transition-slow: 0.5s ease;
+}
+
+/* =====================================================
+   GLOBAL MEDIEVAL TYPOGRAPHY
+   ===================================================== */
+
+body {
+  font-family: var(--camelot-font-body);
+  font-size: var(--camelot-text-base);
+  line-height: 1.6;
+  color: var(--camelot-black-knight);
+  background-color: var(--camelot-pale-parchment);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--camelot-font-heading);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--camelot-black-knight);
+  margin-top: 0;
+}
+
+h1 {
+  font-size: var(--camelot-text-4xl);
+  font-family: var(--camelot-font-display);
+  letter-spacing: 0.5px;
+}
+
+h2 {
+  font-size: var(--camelot-text-3xl);
+  letter-spacing: 0.3px;
+}
+
+h3 {
+  font-size: var(--camelot-text-2xl);
+}
+
+h4 {
+  font-size: var(--camelot-text-xl);
+}
+
+h5 {
+  font-size: var(--camelot-text-lg);
+}
+
+h6 {
+  font-size: var(--camelot-text-base);
+  font-weight: 700;
+}
+
+/* =====================================================
+   HERALDIC CARD STYLES
+   ===================================================== */
+
+.camelot-card {
+  background-color: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  padding: var(--camelot-space-lg);
+  box-shadow: var(--camelot-shadow-md);
+  transition: transform var(--camelot-transition-base), box-shadow var(--camelot-transition-base);
+}
+
+.camelot-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--camelot-shadow-lg);
+}
+
+.camelot-card-header {
+  border-bottom: 2px solid var(--camelot-dark-gold);
+  padding-bottom: var(--camelot-space-md);
+  margin-bottom: var(--camelot-space-md);
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-xl);
+  color: var(--camelot-crimson-dark);
+}
+
+/* =====================================================
+   HERALDIC BUTTON STYLES
+   ===================================================== */
+
+.camelot-btn {
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-base);
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--camelot-radius-md);
+  cursor: pointer;
+  transition: all var(--camelot-transition-base);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: var(--camelot-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.camelot-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.camelot-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.camelot-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--camelot-shadow-md);
+}
+
+.camelot-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--camelot-shadow-sm);
+}
+
+/* Button Variants */
+.camelot-btn-crimson {
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  color: white;
+  border: 2px solid var(--camelot-crimson-dark);
+}
+
+.camelot-btn-crimson:hover {
+  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
+}
+
+.camelot-btn-royal {
+  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
+  color: white;
+  border: 2px solid var(--camelot-navy);
+}
+
+.camelot-btn-royal:hover {
+  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+}
+
+.camelot-btn-gold {
+  background: linear-gradient(135deg, var(--camelot-gold) 0%, var(--camelot-dark-gold) 100%);
+  color: var(--camelot-black-knight);
+  border: 2px solid var(--camelot-dark-gold);
+}
+
+.camelot-btn-gold:hover {
+  background: linear-gradient(135deg, var(--camelot-dark-gold) 0%, #B8860B 100%);
+}
+
+.camelot-btn-green {
+  background: linear-gradient(135deg, var(--camelot-forest-green) 0%, var(--camelot-dark-green) 100%);
+  color: white;
+  border: 2px solid var(--camelot-dark-green);
+}
+
+.camelot-btn-green:hover {
+  background: linear-gradient(135deg, var(--camelot-dark-green) 0%, #004d00 100%);
+}
+
+.camelot-btn-stone {
+  background: linear-gradient(135deg, var(--camelot-light-stone) 0%, var(--camelot-stone-gray) 100%);
+  color: white;
+  border: 2px solid var(--camelot-stone-gray);
+}
+
+.camelot-btn-stone:hover {
+  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, #505050 100%);
+}
+
+/* =====================================================
+   SCROLL-STYLE FORM INPUTS
+   ===================================================== */
+
+.camelot-input,
+.camelot-textarea,
+.camelot-select {
+  font-family: var(--camelot-font-body);
+  font-size: var(--camelot-text-base);
+  padding: 12px 16px;
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-md);
+  background-color: var(--camelot-parchment);
+  color: var(--camelot-black-knight);
+  transition: all var(--camelot-transition-base);
+  box-shadow: var(--camelot-shadow-engrave);
+}
+
+.camelot-input:focus,
+.camelot-textarea:focus,
+.camelot-select:focus {
+  outline: none;
+  border-color: var(--camelot-royal-blue);
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
+  background-color: white;
+}
+
+.camelot-input::placeholder,
+.camelot-textarea::placeholder {
+  color: var(--camelot-stone-gray);
+  font-style: italic;
+}
+
+.camelot-label {
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-sm);
+  font-weight: 600;
+  color: var(--camelot-charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: var(--camelot-space-sm);
+}
+
+/* =====================================================
+   MEDIEVAL TABLE STYLES
+   ===================================================== */
+
+.camelot-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--camelot-font-body);
+  background-color: var(--camelot-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--camelot-shadow-md);
+}
+
+.camelot-table thead {
+  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, var(--camelot-light-stone) 100%);
+  color: white;
+}
+
+.camelot-table thead th {
+  font-family: var(--camelot-font-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: var(--camelot-text-sm);
+  padding: 14px;
+  text-align: left;
+  border-bottom: 3px solid var(--camelot-dark-gold);
+}
+
+.camelot-table tbody tr {
+  border-bottom: 1px solid var(--camelot-dark-gold);
+  transition: background-color var(--camelot-transition-fast);
+}
+
+.camelot-table tbody tr:nth-child(even) {
+  background-color: var(--camelot-aged-parchment);
+}
+
+.camelot-table tbody tr:hover {
+  background-color: var(--camelot-pale-gold);
+}
+
+.camelot-table tbody td {
+  padding: 12px 14px;
+  font-size: var(--camelot-text-base);
+  color: var(--camelot-black-knight);
+}
+
+/* =====================================================
+   WAX SEAL BADGES
+   ===================================================== */
+
+.camelot-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: var(--camelot-shadow-sm);
+  border: 2px solid transparent;
+}
+
+.camelot-badge-crimson {
+  background-color: var(--camelot-danger-bg);
+  color: var(--camelot-crimson-dark);
+  border-color: var(--camelot-crimson);
+}
+
+.camelot-badge-royal {
+  background-color: var(--camelot-info-bg);
+  color: var(--camelot-navy);
+  border-color: var(--camelot-royal-blue);
+}
+
+.camelot-badge-gold {
+  background-color: var(--camelot-warning-bg);
+  color: var(--camelot-dark-gold);
+  border-color: var(--camelot-gold);
+}
+
+.camelot-badge-green {
+  background-color: var(--camelot-success-bg);
+  color: var(--camelot-dark-green);
+  border-color: var(--camelot-forest-green);
+}
+
+.camelot-badge-stone {
+  background-color: #F5F5F5;
+  color: var(--camelot-stone-gray);
+  border-color: var(--camelot-light-stone);
+}
+
+/* =====================================================
+   GOTHIC MODAL STYLES
+   ===================================================== */
+
+.camelot-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(28, 28, 28, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.camelot-modal {
+  background-color: var(--camelot-parchment);
+  border: 3px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-xl);
+  box-shadow: var(--camelot-shadow-xl);
+  max-width: 800px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.camelot-modal-header {
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  color: white;
+  padding: var(--camelot-space-lg);
+  border-bottom: 3px solid var(--camelot-dark-gold);
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-2xl);
+  border-radius: var(--camelot-radius-xl) var(--camelot-radius-xl) 0 0;
+}
+
+.camelot-modal-body {
+  padding: var(--camelot-space-lg);
+}
+
+.camelot-modal-footer {
+  border-top: 2px solid var(--camelot-dark-gold);
+  padding: var(--camelot-space-lg);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--camelot-space-md);
+  background-color: var(--camelot-aged-parchment);
+  border-radius: 0 0 var(--camelot-radius-xl) var(--camelot-radius-xl);
+}
+
+/* =====================================================
+   HERALDIC NAVIGATION TABS
+   ===================================================== */
+
+.camelot-tabs {
+  display: flex;
+  border-bottom: 3px solid var(--camelot-dark-gold);
+  gap: var(--camelot-space-md);
+  background-color: var(--camelot-aged-parchment);
+  padding: var(--camelot-space-sm) var(--camelot-space-md) 0;
+}
+
+.camelot-tab {
+  font-family: var(--camelot-font-heading);
+  font-size: var(--camelot-text-base);
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  color: var(--camelot-stone-gray);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: all var(--camelot-transition-base);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.camelot-tab:hover {
+  color: var(--camelot-royal-blue);
+  background-color: rgba(65, 105, 225, 0.05);
+}
+
+.camelot-tab.active {
+  color: var(--camelot-crimson);
+  border-bottom-color: var(--camelot-crimson);
+  background-color: rgba(220, 20, 60, 0.05);
+}
+
+/* =====================================================
+   LOADING SPINNER (SHIELD ROTATION)
+   ===================================================== */
+
+.camelot-spinner {
+  border: 4px solid var(--camelot-parchment);
+  border-top: 4px solid var(--camelot-crimson);
+  border-right: 4px solid var(--camelot-royal-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: camelot-spin 1s linear infinite;
+  margin: var(--camelot-space-lg) auto;
+}
+
+@keyframes camelot-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* =====================================================
+   UTILITY CLASSES
+   ===================================================== */
+
+.camelot-text-center {
+  text-align: center;
+}
+
+.camelot-text-crimson {
+  color: var(--camelot-crimson);
+}
+
+.camelot-text-royal {
+  color: var(--camelot-royal-blue);
+}
+
+.camelot-text-gold {
+  color: var(--camelot-dark-gold);
+}
+
+.camelot-bg-parchment {
+  background-color: var(--camelot-parchment);
+}
+
+.camelot-bg-aged-parchment {
+  background-color: var(--camelot-aged-parchment);
+}
+
+.camelot-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--camelot-dark-gold) 50%, transparent 100%);
+  margin: var(--camelot-space-lg) 0;
+}
+
+.camelot-shadow-sm { box-shadow: var(--camelot-shadow-sm); }
+.camelot-shadow-md { box-shadow: var(--camelot-shadow-md); }
+.camelot-shadow-lg { box-shadow: var(--camelot-shadow-lg); }
+.camelot-shadow-xl { box-shadow: var(--camelot-shadow-xl); }
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --camelot-text-base: 14px;
+    --camelot-text-4xl: 32px;
+    --camelot-text-3xl: 24px;
+    --camelot-text-2xl: 20px;
+    --camelot-space-lg: 16px;
+    --camelot-space-xl: 24px;
+  }
+
+  .camelot-btn {
+    padding: 10px 20px;
+    font-size: var(--camelot-text-sm);
+  }
+
+  .camelot-card {
+    padding: var(--camelot-space-md);
+  }
+
+  .camelot-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .camelot-modal {
+    width: 95%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .camelot-table {
+    font-size: var(--camelot-text-sm);
+  }
+
+  .camelot-table thead th,
+  .camelot-table tbody td {
+    padding: 8px;
+  }
+}

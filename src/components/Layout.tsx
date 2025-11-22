@@ -132,9 +132,18 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         )}
         {children}
       </main>
-      
+
       {/* Persistent Chatbot Sidebar */}
       <ChatbotSidebar />
+
+      {/* Footer with attribution */}
+      <footer className="layout-footer">
+        <div className="footer-content">
+          <p className="attribution-text">
+            Medieval icons by <a href="https://game-icons.net" target="_blank" rel="noopener noreferrer">Game-icons.net</a> licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">CC BY 3.0</a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -205,6 +205,31 @@ class ApiService {
     return response.data;
   }
 
+  async createScanType(scanTypeData: {
+    name: string;
+    display_name: string;
+    description?: string | null;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.post('/api/v1/scan-types', scanTypeData);
+    return response.data;
+  }
+
+  async updateScanType(scanTypeId: number, scanTypeData: {
+    name?: string;
+    display_name?: string;
+    description?: string | null;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.put(`/api/v1/scan-types/${scanTypeId}`, scanTypeData);
+    return response.data;
+  }
+
+  async deleteScanType(scanTypeId: number) {
+    const response = await this.api.delete(`/api/v1/scan-types/${scanTypeId}`);
+    return response.data;
+  }
+
   // User Profile API
   async getCurrentUser() {
     const response = await this.api.get('/api/v1/auth/me');
