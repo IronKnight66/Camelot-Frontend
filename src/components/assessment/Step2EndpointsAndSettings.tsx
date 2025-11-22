@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { AssessmentFormData, Endpoint, ToolSetting } from '../../types/assessment';
 import { mockEndpoints, mockTools } from './mockData';
+import apiService from '../../services/api';
 import './AssessmentWizard.css';
 
 interface Step2EndpointsAndSettingsProps {
@@ -25,6 +26,8 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
     }));
   });
   const [expandedToolSettings, setExpandedToolSettings] = useState<{ [toolId: string]: boolean }>({});
+  const [isDiscoveringEndpoints, setIsDiscoveringEndpoints] = useState<boolean>(false);
+  const [discoveryError, setDiscoveryError] = useState<string | null>(null);
 
   const availableTools = formData.testType ? mockTools[formData.testType as keyof typeof mockTools] || [] : [];
 
@@ -134,6 +137,112 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
     }));
   };
 
+  const handleDiscoverEndpoints = async () => {
+    if (!formData.websiteUrl) {
+      alert('Please enter a website URL in Step 1 first');
+      return;
+    }
+
+    setIsDiscoveringEndpoints(true);
+    setDiscoveryError(null);
+
+    try {
+      console.log('🔍 Discovering endpoints for:', formData.websiteUrl);
+
+      // Extract domain from URL
+      const domain = formData.websiteUrl.replace('https://', '').replace('http://', '').split('/')[0];
+
+      // Call API to start subfinder scan
+      const result = await apiService.discoverEndpoints(domain, 'subdomain_enumeration');
+      console.log('Discovery scan started:', result);
+
+      const scanId = result.scan_id;
+      let pollCount = 0;
+      const maxPolls = 30; // 1 minute max (poll every 2 seconds)
+
+      // Poll for scan completion
+      const pollInterval = setInterval(async () => {
+        try {
+          pollCount++;
+          console.log(`Polling scan status (${pollCount}/${maxPolls})...`);
+
+          const status = await apiService.getScanStatus(scanId);
+          console.log('Scan status:', status);
+
+          if (status.status === 'completed') {
+            clearInterval(pollInterval);
+
+            // Get scan results
+            const results = await apiService.getScanResults(scanId);
+            console.log('📊 Scan results:', results);
+
+            // Transform results into endpoint format
+            // Assuming results contain a list of discovered subdomains
+            const discoveredEndpoints: any[] = [];
+
+            // Check various possible result formats
+            if (results.findings && Array.isArray(results.findings)) {
+              results.findings.forEach((finding: any) => {
+                if (finding.title || finding.url) {
+                  discoveredEndpoints.push({
+                    url: finding.url || `https://${finding.title}`,
+                    selected: true,
+                    isAttackable: true
+                  });
+                }
+              });
+            } else if (results.endpoints && Array.isArray(results.endpoints)) {
+              results.endpoints.forEach((endpoint: any) => {
+                discoveredEndpoints.push({
+                  url: typeof endpoint === 'string' ? endpoint : endpoint.url,
+                  selected: true,
+                  isAttackable: true
+                });
+              });
+            } else if (results.results && typeof results.results === 'string') {
+              // Parse text results (one subdomain per line)
+              const lines = results.results.split('\n').filter((line: string) => line.trim());
+              lines.forEach((line: string) => {
+                if (line.trim()) {
+                  discoveredEndpoints.push({
+                    url: line.startsWith('http') ? line : `https://${line.trim()}`,
+                    selected: true,
+                    isAttackable: true
+                  });
+                }
+              });
+            }
+
+            if (discoveredEndpoints.length > 0) {
+              setEndpoints(discoveredEndpoints);
+              onChange({ endpoints: discoveredEndpoints });
+              alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
+            } else {
+              setDiscoveryError('No endpoints discovered. Try manual entry.');
+            }
+
+            setIsDiscoveringEndpoints(false);
+          } else if (status.status === 'failed') {
+            clearInterval(pollInterval);
+            setDiscoveryError('Endpoint discovery failed. Please try again.');
+            setIsDiscoveringEndpoints(false);
+          } else if (pollCount >= maxPolls) {
+            clearInterval(pollInterval);
+            setDiscoveryError('Discovery timeout. Scan is still running - check Scans page.');
+            setIsDiscoveringEndpoints(false);
+          }
+        } catch (pollError: any) {
+          console.error('Poll error:', pollError);
+        }
+      }, 2000); // Poll every 2 seconds
+
+    } catch (error: any) {
+      console.error('❌ Endpoint discovery failed:', error);
+      setDiscoveryError(error?.response?.data?.detail || error?.message || 'Failed to discover endpoints');
+      setIsDiscoveringEndpoints(false);
+    }
+  };
+
   const handleNext = () => {
     // Update endpoints in formData
     onChange({ endpoints });
@@ -149,7 +258,31 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
 
       {/* Endpoints Section */}
       <div className="section">
-        <h3>Select Endpoints</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3>Select Endpoints</h3>
+          <button
+            type="button"
+            onClick={handleDiscoverEndpoints}
+            disabled={isDiscoveringEndpoints || !formData.websiteUrl}
+            className="btn-secondary"
+            style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+          >
+            {isDiscoveringEndpoints ? '🔍 Discovering...' : '🔍 Discover Endpoints'}
+          </button>
+        </div>
+
+        {discoveryError && (
+          <div style={{ padding: '0.75rem', backgroundColor: '#fee', color: '#c00', borderRadius: '4px', marginBottom: '1rem' }}>
+            ⚠️ {discoveryError}
+          </div>
+        )}
+
+        {isDiscoveringEndpoints && (
+          <div style={{ padding: '0.75rem', backgroundColor: '#e3f2fd', color: '#1976d2', borderRadius: '4px', marginBottom: '1rem' }}>
+            🔍 Running subfinder scan... This may take 30-60 seconds.
+          </div>
+        )}
+
         <div className="endpoints-list">
           {endpoints.map((endpoint) => (
             <div key={endpoint.url} className="endpoint-item">

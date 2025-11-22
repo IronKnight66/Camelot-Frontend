@@ -106,6 +106,35 @@ class ApiService {
     return response.data;
   }
 
+  async startScan(scanId: string) {
+    const response = await this.api.post(`/api/v1/scans/${scanId}/start`);
+    return response.data;
+  }
+
+  async getScanStatus(scanId: string) {
+    const response = await this.api.get(`/api/v1/scans/${scanId}/status`);
+    return response.data;
+  }
+
+  async getScanResults(scanId: string) {
+    const response = await this.api.get(`/api/v1/scans/${scanId}/results`);
+    return response.data;
+  }
+
+  async cancelScan(scanId: string) {
+    const response = await this.api.delete(`/api/v1/scans/${scanId}`);
+    return response.data;
+  }
+
+  // Endpoint Discovery (Subfinder scanner trigger)
+  async discoverEndpoints(target: string, scanType: string = 'subdomain_enumeration') {
+    const response = await this.api.post('/api/v1/scans/discover-endpoints', {
+      target,
+      scan_type: scanType
+    });
+    return response.data;
+  }
+
   // Findings API
   async getFindings() {
     const response = await this.api.get('/api/v1/findings');
