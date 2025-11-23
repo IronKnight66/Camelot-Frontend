@@ -127,7 +127,7 @@ class ApiService {
   }
 
   // Endpoint Discovery (Subfinder scanner trigger)
-  async discoverEndpoints(target: string, scanType: string = 'subdomain_enumeration') {
+  async discoverEndpoints(target: string, scanType: string = 'reconnaissance') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
       target,
       scan_type: scanType
