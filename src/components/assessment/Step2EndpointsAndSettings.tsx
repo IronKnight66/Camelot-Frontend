@@ -153,7 +153,7 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       const domain = formData.websiteUrl.replace('https://', '').replace('http://', '').split('/')[0];
 
       // Call API to start subfinder scan
-      const result = await apiService.discoverEndpoints(domain, 'subdomain_enumeration');
+      const result = await apiService.discoverEndpoints(domain, 'reconnaissance');
       console.log('Discovery scan started:', result);
 
       const scanId = result.scan_id;
