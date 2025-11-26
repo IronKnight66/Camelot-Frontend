@@ -8,7 +8,7 @@
  * - See backend CHATBOT_ARCHITECTURE.md for full data flow documentation
  */
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 import ApiService from '../../services/api';
 import './ChatInterface.css';
@@ -38,11 +38,21 @@ const ChatInterface: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     // Create new session on mount
     createNewSession();
   }, []);
+
+  useEffect(() => {
+    // If we navigated here with an initial prompt (from the home hero),
+    // seed the input and optionally send it automatically once the session exists.
+    const state = location.state as { initialPrompt?: string } | null;
+    if (state?.initialPrompt) {
+      setInput(state.initialPrompt);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     // Auto-scroll to bottom when messages change

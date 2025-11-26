@@ -1,5 +1,6 @@
-/* Import Camelot Medieval Theme */
+/* Import Camelot themes */
 @import './styles/camelot-theme.css';
+@import './styles/camelot-cyberpunk-theme.css';
 
 body {
   margin: 0;

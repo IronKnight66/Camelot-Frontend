@@ -35,7 +35,7 @@ function App() {
     <AuthProvider>
       <ChatbotProvider>
         <Router>
-          <div className="App">
+          <div className="App camelot-cyber-app">
           <Routes>
             <Route path="/login" element={<Login />} />
             

@@ -1,0 +1,566 @@
+/**
+ * CAMELOT CYBERPUNK–MEDIEVAL THEME
+ * Neon Camelot city + armored knights
+ *
+ * This file defines CSS custom properties and a small set of
+ * generic utility classes that can wrap existing pages to
+ * achieve the new cyberpunk visual style.
+ */
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES – CYBERPUNK COLOR PALETTE
+   ============================================================ */
+
+:root {
+  /* BACKGROUNDS */
+  --camelot-cyber-bg: #020617;           /* Near-black navy */
+  --camelot-cyber-bg-soft: #050b1f;      /* Soft background for sections */
+  --camelot-cyber-surface: #0b1220;      /* Main card/panel background */
+  --camelot-cyber-surface-alt: #111827;  /* Navigation, secondary panels */
+  --camelot-cyber-border: #1f2937;       /* Subtle borders/dividers */
+
+  /* PRIMARY / TECHNOLOGY */
+  --camelot-cyber-primary: #22d3ee;        /* Teal cyan */
+  --camelot-cyber-primary-strong: #06b6d4; /* Hover/active */
+  --camelot-cyber-primary-soft: #0ea5e9;   /* Outlines, subtle accents */
+
+  /* CAMELOT ENERGY ACCENTS */
+  --camelot-cyber-accent: #f97316;       /* Orange accent / primary CTA */
+  --camelot-cyber-accent-soft: #fb923c;  /* Hover / gradient stop */
+
+  /* SEMANTIC */
+  --camelot-cyber-success: #4ade80;
+  --camelot-cyber-warning: #facc15;
+  --camelot-cyber-danger: #f43f5e;
+  --camelot-cyber-info: #38bdf8;
+
+  /* TEXT */
+  --camelot-cyber-text: #e5e7eb;        /* Primary text */
+  --camelot-cyber-text-soft: #9ca3af;   /* Secondary text */
+  --camelot-cyber-heading: #f9fafb;     /* Headings */
+  --camelot-cyber-muted: #6b7280;       /* Disabled / tertiary */
+
+  /* GLOWS */
+  --camelot-cyber-glow-teal: 0 0 25px rgba(34, 211, 238, 0.35);
+  --camelot-cyber-glow-orange: 0 0 25px rgba(249, 115, 22, 0.4);
+  --camelot-cyber-glow-soft: 0 0 40px rgba(56, 189, 248, 0.25);
+
+  /* RADIUS */
+  --camelot-cyber-radius-xs: 4px;
+  --camelot-cyber-radius-sm: 6px;
+  --camelot-cyber-radius-md: 10px;
+  --camelot-cyber-radius-lg: 16px;
+
+  /* TYPOGRAPHY */
+  --camelot-cyber-font-display: "Cinzel", "MedievalSharp", "Times New Roman",
+    serif;
+  --camelot-cyber-font-ui: "Inter", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --camelot-cyber-font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+  --camelot-cyber-text-xs: 11px;
+  --camelot-cyber-text-sm: 13px;
+  --camelot-cyber-text-base: 15px;
+  --camelot-cyber-text-md: 16px;
+  --camelot-cyber-text-lg: 18px;
+  --camelot-cyber-text-xl: 22px;
+  --camelot-cyber-text-2xl: 28px;
+  --camelot-cyber-text-3xl: 36px;
+  --camelot-cyber-text-4xl: 46px;
+
+  /* SPACING */
+  --camelot-cyber-space-xs: 4px;
+  --camelot-cyber-space-sm: 8px;
+  --camelot-cyber-space-md: 16px;
+  --camelot-cyber-space-lg: 24px;
+  --camelot-cyber-space-xl: 32px;
+  --camelot-cyber-space-xxl: 48px;
+
+  /* TRANSITIONS */
+  --camelot-cyber-transition-fast: 0.15s ease-out;
+  --camelot-cyber-transition-base: 0.25s ease-out;
+  --camelot-cyber-transition-slow: 0.4s ease-out;
+}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+
+.camelot-cyber-app {
+  min-height: 100vh;
+  /* Deep night sky with strong teal city glow and fiery orange ground, matching the reference art */
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(56, 189, 248, 0.38),
+      transparent 52%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(94, 234, 212, 0.22),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 50% 120%,
+      rgba(248, 113, 113, 0.6),
+      transparent 55%
+    ),
+    linear-gradient(180deg, #00010a 0%, #020617 35%, #020617 100%);
+  color: var(--camelot-cyber-text);
+  font-family: var(--camelot-cyber-font-ui);
+}
+
+.camelot-cyber-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--camelot-cyber-space-md) var(--camelot-cyber-space-xl);
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.95),
+    rgba(15, 23, 42, 0.9)
+  );
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow: 0 1px 0 rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(16px);
+}
+
+.camelot-cyber-app-title {
+  font-family: var(--camelot-cyber-font-display);
+  font-size: var(--camelot-cyber-text-2xl);
+  color: var(--camelot-cyber-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.camelot-cyber-app-nav a {
+  color: var(--camelot-cyber-text-soft);
+  font-size: var(--camelot-cyber-text-sm);
+  text-decoration: none;
+  margin-left: var(--camelot-cyber-space-lg);
+  position: relative;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.camelot-cyber-app-nav a:hover {
+  color: var(--camelot-cyber-heading);
+}
+
+.camelot-cyber-app-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--camelot-cyber-primary),
+    var(--camelot-cyber-accent)
+  );
+  box-shadow: var(--camelot-cyber-glow-teal);
+}
+
+/* ============================================================
+   PANELS & CARDS
+   ============================================================ */
+
+.camelot-cyber-panel {
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.08),
+      transparent 55%
+    ),
+    var(--camelot-cyber-surface);
+  border-radius: var(--camelot-cyber-radius-md);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  padding: var(--camelot-cyber-space-lg);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.6);
+  position: relative;
+}
+
+.camelot-cyber-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(15, 23, 42, 0.6);
+  pointer-events: none;
+}
+
+.camelot-cyber-panel--glow:hover {
+  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6), var(--camelot-cyber-glow-soft);
+}
+
+.camelot-cyber-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--camelot-cyber-space-md);
+}
+
+.camelot-cyber-panel-title {
+  font-family: var(--camelot-cyber-font-display);
+  font-size: var(--camelot-cyber-text-xl);
+  color: var(--camelot-cyber-heading);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.camelot-cyber-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--camelot-cyber-radius-sm);
+  border: 1px solid transparent;
+  font-family: var(--camelot-cyber-font-ui);
+  font-size: var(--camelot-cyber-text-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--camelot-cyber-transition-base),
+    color var(--camelot-cyber-transition-base),
+    box-shadow var(--camelot-cyber-transition-base),
+    transform var(--camelot-cyber-transition-fast);
+}
+
+.camelot-cyber-btn-primary {
+  composes: camelot-cyber-btn;
+  background: linear-gradient(
+    135deg,
+    var(--camelot-cyber-primary),
+    var(--camelot-cyber-accent)
+  );
+  color: var(--camelot-cyber-heading);
+  box-shadow: var(--camelot-cyber-glow-orange);
+}
+
+.camelot-cyber-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
+    var(--camelot-cyber-glow-orange);
+}
+
+.camelot-cyber-btn-secondary {
+  composes: camelot-cyber-btn;
+  background: transparent;
+  color: var(--camelot-cyber-primary);
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: none;
+}
+
+.camelot-cyber-btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.8);
+  box-shadow: var(--camelot-cyber-glow-teal);
+}
+
+.camelot-cyber-btn-danger {
+  composes: camelot-cyber-btn;
+  background: linear-gradient(
+    135deg,
+    var(--camelot-cyber-danger),
+    #be123c
+  );
+  color: var(--camelot-cyber-heading);
+}
+
+.camelot-cyber-btn-danger:hover {
+  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
+    0 0 18px rgba(248, 113, 113, 0.45);
+}
+
+/* ============================================================
+   FORM FIELDS
+   ============================================================ */
+
+.camelot-cyber-input,
+.camelot-cyber-select {
+  width: 100%;
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.15),
+      transparent 55%
+    ),
+    var(--camelot-cyber-surface-alt);
+  border-radius: var(--camelot-cyber-radius-sm);
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  padding: 10px 12px;
+  color: var(--camelot-cyber-text);
+  font-family: var(--camelot-cyber-font-ui);
+  font-size: var(--camelot-cyber-text-sm);
+  outline: none;
+  transition: border-color var(--camelot-cyber-transition-fast),
+    box-shadow var(--camelot-cyber-transition-fast),
+    background var(--camelot-cyber-transition-slow);
+}
+
+.camelot-cyber-input::placeholder,
+.camelot-cyber-select::placeholder {
+  color: var(--camelot-cyber-muted);
+}
+
+.camelot-cyber-input:focus,
+.camelot-cyber-select:focus {
+  border-color: var(--camelot-cyber-primary-soft);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), var(--camelot-cyber-glow-teal);
+}
+
+/* ============================================================
+   UTILITY
+   ============================================================ */
+
+.camelot-cyber-section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--camelot-cyber-space-xl) var(--camelot-cyber-space-lg);
+}
+
+.camelot-cyber-kicker {
+  font-size: var(--camelot-cyber-text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--camelot-cyber-text-soft);
+}
+
+.camelot-cyber-title-large {
+  font-family: var(--camelot-cyber-font-display);
+  font-size: var(--camelot-cyber-text-4xl);
+  color: var(--camelot-cyber-heading);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.camelot-cyber-subtitle {
+  margin-top: var(--camelot-cyber-space-sm);
+  font-size: var(--camelot-cyber-text-md);
+  color: var(--camelot-cyber-text-soft);
+}
+
+/* ============================================================
+   OVERRIDES FOR EXISTING LAYOUT / ASSESSMENT
+   ============================================================ */
+
+/* Page background: let the global cyber gradient show; specific pages can layer their own media */
+.camelot-cyber-app .layout-container {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.camelot-cyber-app .layout-header::after {
+  display: none; /* hide medieval battlements */
+}
+
+/* Navigation links – neon underline instead of medieval buttons */
+.camelot-cyber-app-nav .nav-link {
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  padding: 6px 0;
+  color: var(--camelot-cyber-text-soft);
+  font-family: var(--camelot-cyber-font-ui);
+}
+
+.camelot-cyber-app-nav .nav-link:hover {
+  background: transparent;
+  color: var(--camelot-cyber-heading);
+}
+
+.camelot-cyber-app-nav .nav-link.active {
+  background: transparent;
+  color: var(--camelot-cyber-heading);
+  border: none;
+}
+
+/* Use the neon underline on active links */
+.camelot-cyber-app-nav .nav-link.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--camelot-cyber-primary),
+    var(--camelot-cyber-accent)
+  );
+  box-shadow: var(--camelot-cyber-glow-teal);
+}
+
+/* Assessment container + panel */
+.camelot-cyber-app .assessment-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: var(--camelot-cyber-space-xl) var(--camelot-cyber-space-lg);
+  color: var(--camelot-cyber-text);
+}
+
+.camelot-cyber-app .assessment-header h1 {
+  font-family: var(--camelot-cyber-font-display);
+  font-size: var(--camelot-cyber-text-3xl);
+  color: var(--camelot-cyber-heading);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.camelot-cyber-app .assessment-header p {
+  color: var(--camelot-cyber-text-soft);
+  font-family: var(--camelot-cyber-font-ui);
+}
+
+.camelot-cyber-app .assessment-content {
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.16),
+      transparent 55%
+    ),
+    var(--camelot-cyber-surface);
+  border-radius: var(--camelot-cyber-radius-lg);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  padding: var(--camelot-cyber-space-lg);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+}
+
+/* Step indicator – glowing runes */
+.camelot-cyber-app .step-indicator {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: var(--camelot-cyber-space-md) 0 var(--camelot-cyber-space-lg);
+}
+
+.camelot-cyber-app .step-number {
+  width: 46px;
+  height: 46px;
+  background: radial-gradient(
+    circle at top,
+    rgba(34, 211, 238, 0.22),
+    rgba(15, 23, 42, 1)
+  );
+  color: var(--camelot-cyber-text-soft);
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: var(--camelot-cyber-glow-soft);
+  font-family: var(--camelot-cyber-font-ui);
+}
+
+.camelot-cyber-app .step-item.active .step-number {
+  background: radial-gradient(
+    circle at top,
+    rgba(34, 211, 238, 0.8),
+    rgba(15, 23, 42, 1)
+  );
+  color: var(--camelot-cyber-heading);
+  border-color: var(--camelot-cyber-primary-soft);
+}
+
+.camelot-cyber-app .step-item.completed .step-number {
+  background: radial-gradient(
+    circle at top,
+    rgba(56, 189, 248, 0.4),
+    rgba(15, 23, 42, 1)
+  );
+  color: var(--camelot-cyber-heading);
+  border-color: rgba(56, 189, 248, 0.9);
+}
+
+.camelot-cyber-app .step-label {
+  color: var(--camelot-cyber-text-soft);
+  font-family: var(--camelot-cyber-font-ui);
+}
+
+.camelot-cyber-app .step-item.active .step-label {
+  color: var(--camelot-cyber-primary-soft);
+}
+
+.camelot-cyber-app .step-item.completed .step-label {
+  color: var(--camelot-cyber-success);
+}
+
+.camelot-cyber-app .step-connector {
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.35),
+    rgba(30, 64, 175, 0.6)
+  );
+}
+
+.camelot-cyber-app .step-connector.completed {
+  background: linear-gradient(
+    90deg,
+    var(--camelot-cyber-primary),
+    var(--camelot-cyber-accent)
+  );
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.6);
+}
+
+/* Form fields & buttons inside wizard */
+.camelot-cyber-app .form-group input,
+.camelot-cyber-app .form-group select {
+  background: radial-gradient(
+      circle at top left,
+      rgba(34, 211, 238, 0.18),
+      transparent 55%
+    ),
+    var(--camelot-cyber-surface-alt);
+  border-radius: var(--camelot-cyber-radius-sm);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  color: var(--camelot-cyber-text);
+  font-family: var(--camelot-cyber-font-ui);
+  box-shadow: none;
+}
+
+.camelot-cyber-app .form-group input:focus,
+.camelot-cyber-app .form-group select:focus {
+  border-color: var(--camelot-cyber-primary-soft);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), var(--camelot-cyber-glow-teal);
+  background: var(--camelot-cyber-surface-alt);
+}
+
+.camelot-cyber-app .btn-primary,
+.camelot-cyber-app .btn-secondary {
+  border-radius: var(--camelot-cyber-radius-sm);
+  font-family: var(--camelot-cyber-font-ui);
+  letter-spacing: 0.16em;
+  box-shadow: none;
+}
+
+.camelot-cyber-app .btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--camelot-cyber-primary),
+    var(--camelot-cyber-accent)
+  );
+  color: var(--camelot-cyber-heading);
+  border-color: transparent;
+  box-shadow: var(--camelot-cyber-glow-orange);
+}
+
+.camelot-cyber-app .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
+    var(--camelot-cyber-glow-orange);
+}
+
+.camelot-cyber-app .btn-secondary {
+  background: transparent;
+  color: var(--camelot-cyber-primary);
+  border-color: rgba(34, 211, 238, 0.55);
+}
+
+.camelot-cyber-app .btn-secondary:hover {
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: var(--camelot-cyber-glow-teal);
+}
+
+
+

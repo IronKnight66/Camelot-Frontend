@@ -10,9 +10,11 @@ import './Layout.css';
 interface LayoutProps {
   children: React.ReactNode;
   title?: string;
+  /** When true, renders a slim header with minimal chrome for hero-style pages */
+  minimal?: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title }) => {
+const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const userRole = getUserRole(user);
@@ -31,85 +33,87 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
   };
 
   return (
-    <div className="layout-container">
-      <header className="layout-header">
+    <div className={`layout-container ${minimal ? 'layout-container-hero' : ''}`}>
+      <header className={`layout-header camelot-cyber-app-header ${minimal ? 'layout-header-minimal' : ''}`}>
         <div className="header-content">
           <Link to="/" className="logo-link">
-            <h1>Camelot Security Platform</h1>
+            <h1 className="camelot-cyber-app-title">Camelot Security Platform</h1>
           </Link>
-          <nav className="main-nav">
-            <Link 
-              to="/" 
-              className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-            >
-              Dashboard
-            </Link>
-            <Link 
-              to="/scanners" 
-              className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
-            >
-              Scanners
-            </Link>
-            <Link 
-              to="/chat" 
-              className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
-            >
-              Chat
-            </Link>
-            <Link 
-              to="/assessment" 
-              className={`nav-link ${location.pathname === '/assessment' ? 'active' : ''}`}
-            >
-              Assessment
-            </Link>
-            <Link 
-              to="/metrics" 
-              className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
-            >
-              Metrics
-            </Link>
-            <Link 
-              to="/reports" 
-              className={`nav-link ${location.pathname === '/reports' ? 'active' : ''}`}
-            >
-              Reports
-            </Link>
-            {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
-              <>
-                <Link 
-                  to="/settings/tenant" 
-                  className={`nav-link ${
-                    location.pathname === '/settings' || 
-                    location.pathname === '/settings/tenant' ||
-                    location.pathname.startsWith('/settings/api-keys') ||
-                    location.pathname.startsWith('/settings/billing') ||
-                    location.pathname.startsWith('/settings/tenant-tools') ||
-                    location.pathname.startsWith('/admin/users')
-                      ? 'active' 
-                      : ''
-                  }`}
-                >
-                  Settings
-                </Link>
-                {userRole === 'super-admin' && (
+          {!minimal && (
+            <nav className="main-nav camelot-cyber-app-nav">
+              <Link 
+                to="/" 
+                className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+              >
+                Dashboard
+              </Link>
+              <Link 
+                to="/scanners" 
+                className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
+              >
+                Scanners
+              </Link>
+              <Link 
+                to="/chat" 
+                className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
+              >
+                Chat
+              </Link>
+              <Link 
+                to="/assessment" 
+                className={`nav-link ${location.pathname === '/assessment' ? 'active' : ''}`}
+              >
+                Assessment
+              </Link>
+              <Link 
+                to="/metrics" 
+                className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
+              >
+                Metrics
+              </Link>
+              <Link 
+                to="/reports" 
+                className={`nav-link ${location.pathname === '/reports' ? 'active' : ''}`}
+              >
+                Reports
+              </Link>
+              {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
+                <>
                   <Link 
-                    to="/settings/admin" 
+                    to="/settings/tenant" 
                     className={`nav-link ${
-                      location.pathname === '/settings/admin' ||
-                      location.pathname.startsWith('/settings/admin/scanner-tools') ||
-                      location.pathname.startsWith('/settings/tenant-scanners') ||
-                      location.pathname.startsWith('/settings/stripe') ||
-                      location.pathname.startsWith('/settings/subscription-plans')
+                      location.pathname === '/settings' || 
+                      location.pathname === '/settings/tenant' ||
+                      location.pathname.startsWith('/settings/api-keys') ||
+                      location.pathname.startsWith('/settings/billing') ||
+                      location.pathname.startsWith('/settings/tenant-tools') ||
+                      location.pathname.startsWith('/admin/users')
                         ? 'active' 
                         : ''
                     }`}
                   >
-                    Super Admin
+                    Settings
                   </Link>
-                )}
-              </>
-            )}
-          </nav>
+                  {userRole === 'super-admin' && (
+                    <Link 
+                      to="/settings/admin" 
+                      className={`nav-link ${
+                        location.pathname === '/settings/admin' ||
+                        location.pathname.startsWith('/settings/admin/scanner-tools') ||
+                        location.pathname.startsWith('/settings/tenant-scanners') ||
+                        location.pathname.startsWith('/settings/stripe') ||
+                        location.pathname.startsWith('/settings/subscription-plans')
+                          ? 'active' 
+                          : ''
+                      }`}
+                    >
+                      Super Admin
+                    </Link>
+                  )}
+                </>
+              )}
+            </nav>
+          )}
           <div className="user-info">
             <Link 
               to="/profile" 
@@ -124,7 +128,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         </div>
       </header>
 
-      <main className={`layout-main ${isOpen ? 'with-sidebar' : ''}`}>
+      <main className={`layout-main ${isOpen && !minimal ? 'with-sidebar' : ''} ${minimal ? 'layout-main-hero' : ''}`}>
         {title && (
           <div className="page-title">
             <h2>{title}</h2>
@@ -133,8 +137,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title }) => {
         {children}
       </main>
 
-      {/* Persistent Chatbot Sidebar */}
-      <ChatbotSidebar />
+      {/* Persistent Chatbot Sidebar - hidden on minimal hero pages to keep focus on central prompt */}
+      {!minimal && <ChatbotSidebar />}
 
       {/* Footer with attribution */}
       <footer className="layout-footer">
