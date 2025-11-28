@@ -9,7 +9,7 @@
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Layout from '../Layout';
+import { useAuth } from '../../contexts/AuthContext';
 import ApiService from '../../services/api';
 import './ChatInterface.css';
 
@@ -36,9 +36,12 @@ const ChatInterface: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hasAutoSentRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     // Create new session on mount
@@ -47,12 +50,61 @@ const ChatInterface: React.FC = () => {
 
   useEffect(() => {
     // If we navigated here with an initial prompt (from the home hero),
-    // seed the input and optionally send it automatically once the session exists.
+    // automatically send it once the session exists.
     const state = location.state as { initialPrompt?: string } | null;
-    if (state?.initialPrompt) {
-      setInput(state.initialPrompt);
+    if (state?.initialPrompt && sessionId && messages.length > 0 && !hasAutoSentRef.current) {
+      hasAutoSentRef.current = true; // Mark as sent immediately to prevent re-triggers
+      
+      // Auto-send the message
+      const sendInitialMessage = async () => {
+        const userMessage: Message = {
+          role: 'user',
+          content: state.initialPrompt!.trim(),
+          timestamp: new Date().toISOString()
+        };
+
+        setMessages(prev => [...prev, userMessage]);
+        setLoading(true);
+        setError(null);
+
+        try {
+          const response: ChatResponse = await ApiService.sendChatMessage(state.initialPrompt!.trim(), sessionId);
+          
+          const assistantMessage: Message = {
+            role: 'assistant',
+            content: response.response,
+            timestamp: new Date().toISOString()
+          };
+
+          setMessages(prev => [...prev, assistantMessage]);
+
+          // Handle navigation action if present
+          if (response.action) {
+            setTimeout(() => {
+              handleNavigation(response.action!);
+            }, 1000);
+          }
+        } catch (err: any) {
+          console.error('Failed to send message:', err);
+          setError(err.response?.data?.error?.message || 'Failed to send message. Please try again.');
+          
+          const errorMessage: Message = {
+            role: 'assistant',
+            content: 'I encountered an error processing your request. Please try again.',
+            timestamp: new Date().toISOString()
+          };
+          setMessages(prev => [...prev, errorMessage]);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      sendInitialMessage();
+      
+      // Clear the location state to prevent re-sending on refresh
+      navigate(location.pathname, { replace: true });
     }
-  }, [location.state]);
+  }, [location.state, sessionId, messages.length, navigate]);
 
   useEffect(() => {
     // Auto-scroll to bottom when messages change
@@ -163,54 +215,139 @@ const ChatInterface: React.FC = () => {
     }
   };
 
-  return (
-    <Layout>
-      <div className="chat-interface-container">
-        <div className="page-header">
-          <h1>Arthur</h1>
-          <p>Your AI assistant for security analysis and guidance</p>
-        </div>
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (!user?.email) return 'U';
+    const email = user.email;
+    return email.charAt(0).toUpperCase();
+  };
 
-        <div className="chat-actions">
-          <button
+  return (
+    <div className="chat-interface-layout">
+      {/* Left Sidebar */}
+      <div className={`chat-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        <div className="chat-sidebar-header">
+          <button 
+            className="new-chat-btn"
             onClick={handleClearSession}
-            className="clear-session-btn"
             title="Start a new conversation"
           >
-            New Chat
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>New chat</span>
+          </button>
+          <button 
+            className="sidebar-toggle-btn"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {sidebarCollapsed ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M13 17l5-5-5-5M6 17l5-5-5-5"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
+              </svg>
+            )}
           </button>
         </div>
+        
+        {!sidebarCollapsed && (
+          <div className="chat-sidebar-content">
+            <div className="chat-history-section">
+              <div className="chat-history-item active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>Current conversation</span>
+              </div>
+            </div>
+          </div>
+        )}
 
+        <div className="chat-sidebar-footer">
+          <button 
+            className="user-profile-btn"
+            onClick={() => navigate('/profile')}
+          >
+            <div className="user-avatar">
+              {getUserInitials()}
+            </div>
+            {!sidebarCollapsed && <span>{user?.email}</span>}
+          </button>
+        </div>
+      </div>
+
+      {/* Main Chat Area */}
+      <div className="chat-main-area">
         {error && (
-          <div className="chat-error">
+          <div className="chat-error-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
             {error}
           </div>
         )}
 
-        <div className="chat-messages">
+        <div className="chat-messages-container">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`chat-message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+              className={`chat-message-row ${message.role === 'user' ? 'user-row' : 'assistant-row'}`}
             >
-              <div className="message-content">
-                {message.content}
-              </div>
-              {message.timestamp && (
-                <div className="message-timestamp">
-                  {new Date(message.timestamp).toLocaleTimeString()}
+              <div className="chat-message-wrapper">
+                <div className="message-avatar">
+                  {message.role === 'assistant' ? (
+                    <img 
+                      src="/assets/images/knight.png" 
+                      alt="Arthur" 
+                      className="avatar-img"
+                    />
+                  ) : (
+                    <div className="user-avatar-circle">
+                      {getUserInitials()}
+                    </div>
+                  )}
                 </div>
-              )}
+                <div className="message-content-area">
+                  <div className="message-header">
+                    <span className="message-author">
+                      {message.role === 'assistant' ? 'Arthur' : 'You'}
+                    </span>
+                  </div>
+                  <div className="message-text">
+                    {message.content}
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
           
           {loading && (
-            <div className="chat-message assistant-message">
-              <div className="message-content">
-                <div className="typing-indicator">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+            <div className="chat-message-row assistant-row">
+              <div className="chat-message-wrapper">
+                <div className="message-avatar">
+                  <img 
+                    src="/assets/images/knight.png" 
+                    alt="Arthur" 
+                    className="avatar-img"
+                  />
+                </div>
+                <div className="message-content-area">
+                  <div className="message-header">
+                    <span className="message-author">Arthur</span>
+                  </div>
+                  <div className="message-text">
+                    <div className="typing-indicator-modern">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -219,26 +356,32 @@ const ChatInterface: React.FC = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="chat-input-container">
-          <textarea
-            className="chat-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message here... (Press Enter to send, Shift+Enter for new line)"
-            rows={3}
-            disabled={loading || !sessionId}
-          />
-          <button
-            className="send-button"
-            onClick={handleSend}
-            disabled={!input.trim() || loading || !sessionId}
-          >
-            Send
-          </button>
+        <div className="chat-input-area">
+          <div className="chat-input-wrapper">
+            <textarea
+              className="chat-input-field"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Message Arthur..."
+              rows={1}
+              disabled={loading || !sessionId}
+            />
+            <button
+              className="send-button-modern"
+              onClick={handleSend}
+              disabled={!input.trim() || loading || !sessionId}
+              title="Send message"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
