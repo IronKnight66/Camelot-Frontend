@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { ScannerTool, ScannerToolsListParams } from '../../types/scanner';
 import apiService from '../../services/api';
 import Layout from '../Layout';
-import ToolCard from './ToolCard';
 import ToolModal from './ToolModal';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserRole } from '../../utils/roleHelpers';
@@ -250,27 +249,82 @@ const AdminScannerTools: React.FC = () => {
           <p>Loading scanner tools...</p>
         </div>
       ) : filteredTools.length > 0 ? (
-        <div className="tools-grid">
-          {filteredTools.map(tool => (
-            <ToolCard
-              key={tool.id}
-              tool={tool}
-              onToggle={async (toolId) => {
-                const tool = filteredTools.find(t => t.id === toolId);
-                if (tool) {
-                  await handleSave({ ...tool, isActive: !tool.isActive });
-                }
-              }}
-              onViewDetails={handleViewDetails}
-              onSettings={(toolId) => {
-                const tool = filteredTools.find(t => t.id === toolId);
-                setSelectedTool(tool || null);
-                setModalMode('edit');
-                setIsModalOpen(true);
-              }}
-              role="super-admin"
-            />
-          ))}
+        <div className="table-wrapper">
+          <table className="scanner-tools-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Version</th>
+                <th>Docker Image</th>
+                <th>Pricing</th>
+                <th>Execution Method</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTools.map(tool => (
+                <tr key={tool.id}>
+                  <td>
+                    <strong>{tool.displayName || tool.name}</strong>
+                  </td>
+                  <td>
+                    <span className={`category-badge ${tool.category?.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {tool.category || 'N/A'}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`status-badge ${tool.isActive ? 'active' : 'inactive'}`}>
+                      {tool.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td>{tool.version || 'Unknown'}</td>
+                  <td>
+                    <code className="docker-image">
+                      {tool.dockerImage ? `${tool.dockerImage}:${tool.dockerTag || 'latest'}` : 'N/A'}
+                    </code>
+                  </td>
+                  <td>{tool.pricingTier || 'Free'}</td>
+                  <td>{tool.executionMethod || 'N/A'}</td>
+                  <td>
+                    <div className="tool-actions">
+                      <button
+                        className="btn-secondary btn-sm"
+                        onClick={() => handleViewDetails(tool.id)}
+                      >
+                        View
+                      </button>
+                      <button
+                        className="btn-primary btn-sm"
+                        onClick={() => {
+                          setSelectedTool(tool);
+                          setModalMode('edit');
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn-warning btn-sm"
+                        onClick={async () => {
+                          await handleSave({ ...tool, isActive: !tool.isActive });
+                        }}
+                      >
+                        {tool.isActive ? 'Deactivate' : 'Activate'}
+                      </button>
+                      <button
+                        className="btn-danger btn-sm"
+                        onClick={() => handleDelete(tool.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       ) : (
         <div className="empty-state">

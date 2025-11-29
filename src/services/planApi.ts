@@ -26,7 +26,7 @@ class PlanApiService {
     const baseURL = process.env.NODE_ENV === 'development' ? '/' : (process.env.REACT_APP_API_URL || '/');
     this.api = axios.create({
       baseURL: baseURL,
-      timeout: 10000,
+      timeout: 60000, // 60 seconds - increased for consistency with main API service
       headers: {
         'Content-Type': 'application/json',
       },

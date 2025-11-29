@@ -478,7 +478,7 @@ const SystemPrompts: React.FC = () => {
     });
   };
 
-  const truncateText = (text: string, maxLength: number = 200) => {
+  const truncateText = (text: string, maxLength: number = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
@@ -577,43 +577,59 @@ const SystemPrompts: React.FC = () => {
                 <p>No global prompts found{promptTypeFilter !== 'all' ? ` for type "${PROMPT_TYPE_INFO[promptTypeFilter as PromptType]?.label}"` : ''}. Create your first prompt to get started.</p>
               </div>
             ) : (
-              <div className="prompts-list">
-                {filteredGlobalPrompts.map((prompt) => (
-                  <div key={prompt.id} className="prompt-card">
-                    <div className="prompt-header">
-                      <div className="prompt-meta">
-                        <span
-                          className="prompt-type-badge"
-                          style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
-                        >
-                          {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
-                        </span>
-                        <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
-                          {prompt.is_active ? 'Active' : 'Inactive'}
-                        </span>
-                        <span className="prompt-date">Created: {formatDate(prompt.created_at)}</span>
-                        {prompt.created_by && (
-                          <span className="prompt-author">By: {prompt.created_by}</span>
-                        )}
-                      </div>
-                      <div className="prompt-actions">
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => handleViewHistory(prompt.id, 'global')}
-                        >
-                          History
-                        </button>
-                        <button
-                          className="btn btn-sm btn-primary"
-                          onClick={() => handleEdit(prompt)}
-                        >
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div className="prompt-text">{truncateText(prompt.prompt_text)}</div>
-                  </div>
-                ))}
+              <div className="table-wrapper">
+                <table className="system-prompts-table">
+                  <thead>
+                    <tr>
+                      <th>Prompt Type</th>
+                      <th>Status</th>
+                      <th>Prompt Text</th>
+                      <th>Created</th>
+                      <th>Created By</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredGlobalPrompts.map((prompt) => (
+                      <tr key={prompt.id}>
+                        <td>
+                          <span
+                            className="prompt-type-badge"
+                            style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
+                          >
+                            {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
+                            {prompt.is_active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="prompt-text-preview">{truncateText(prompt.prompt_text, 100)}</span>
+                        </td>
+                        <td>{formatDate(prompt.created_at)}</td>
+                        <td>{prompt.created_by || 'N/A'}</td>
+                        <td>
+                          <div className="prompt-actions">
+                            <button
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => handleViewHistory(prompt.id, 'global')}
+                            >
+                              History
+                            </button>
+                            <button
+                              className="btn btn-sm btn-primary"
+                              onClick={() => handleEdit(prompt)}
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )
           ) : (
@@ -626,43 +642,59 @@ const SystemPrompts: React.FC = () => {
                 <p>No tenant prompts found{promptTypeFilter !== 'all' ? ` for type "${PROMPT_TYPE_INFO[promptTypeFilter as PromptType]?.label}"` : ''}. Create a prompt for this tenant.</p>
               </div>
             ) : (
-              <div className="prompts-list">
-                {filteredTenantPrompts.map((prompt) => (
-                  <div key={prompt.id} className="prompt-card">
-                    <div className="prompt-header">
-                      <div className="prompt-meta">
-                        <span
-                          className="prompt-type-badge"
-                          style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
-                        >
-                          {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
-                        </span>
-                        <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
-                          {prompt.is_active ? 'Active' : 'Inactive'}
-                        </span>
-                        <span className="prompt-date">Created: {formatDate(prompt.created_at)}</span>
-                        {prompt.created_by && (
-                          <span className="prompt-author">By: {prompt.created_by}</span>
-                        )}
-                      </div>
-                      <div className="prompt-actions">
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => handleViewHistory(prompt.id, 'tenant')}
-                        >
-                          History
-                        </button>
-                        <button
-                          className="btn btn-sm btn-primary"
-                          onClick={() => handleEdit(prompt)}
-                        >
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div className="prompt-text">{truncateText(prompt.prompt_text)}</div>
-                  </div>
-                ))}
+              <div className="table-wrapper">
+                <table className="system-prompts-table">
+                  <thead>
+                    <tr>
+                      <th>Prompt Type</th>
+                      <th>Status</th>
+                      <th>Prompt Text</th>
+                      <th>Created</th>
+                      <th>Created By</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredTenantPrompts.map((prompt) => (
+                      <tr key={prompt.id}>
+                        <td>
+                          <span
+                            className="prompt-type-badge"
+                            style={{ backgroundColor: PROMPT_TYPE_INFO[prompt.prompt_type]?.color || '#6c757d' }}
+                          >
+                            {PROMPT_TYPE_INFO[prompt.prompt_type]?.label || prompt.prompt_type}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${prompt.is_active ? 'active' : 'inactive'}`}>
+                            {prompt.is_active ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="prompt-text-preview">{truncateText(prompt.prompt_text, 100)}</span>
+                        </td>
+                        <td>{formatDate(prompt.created_at)}</td>
+                        <td>{prompt.created_by || 'N/A'}</td>
+                        <td>
+                          <div className="prompt-actions">
+                            <button
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => handleViewHistory(prompt.id, 'tenant')}
+                            >
+                              History
+                            </button>
+                            <button
+                              className="btn btn-sm btn-primary"
+                              onClick={() => handleEdit(prompt)}
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )
           )}

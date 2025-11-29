@@ -198,3 +198,4 @@ Place generated assets in:
 Each asset should be exported at **2x resolution** where possible to support high‑DPI displays, then optimized (e.g., `imageoptim`, `squoosh.app`) to keep bundle size reasonable.
 
 
+

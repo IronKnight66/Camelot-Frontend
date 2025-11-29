@@ -1,0 +1,874 @@
+/* Super Admin Settings - Sidebar Layout */
+
+.super-admin-container {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 200px);
+}
+
+.super-admin-layout {
+  display: flex;
+  height: 100%;
+  min-height: calc(100vh - 200px);
+  gap: 0;
+}
+
+.super-admin-sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: #0f172a;
+  border-right: 1px solid rgba(56, 189, 248, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.super-admin-sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.super-admin-sidebar-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #e2e8f0;
+  font-family: var(--camelot-font-heading, inherit);
+}
+
+.super-admin-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  gap: 4px;
+}
+
+.super-admin-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  border-left: 3px solid transparent;
+}
+
+.super-admin-menu-item:hover {
+  background: rgba(56, 189, 248, 0.05);
+  color: #e2e8f0;
+}
+
+.super-admin-menu-item.active {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  border-left-color: #38bdf8;
+  font-weight: 600;
+}
+
+.super-admin-menu-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.super-admin-menu-label {
+  flex: 1;
+}
+
+.super-admin-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  background: #1e293b;
+  padding: 0;
+  min-width: 0; /* Allows flex item to shrink below content size */
+  position: relative;
+}
+
+/* Ensure content area has proper scrolling context */
+.super-admin-content > * {
+  min-height: 100%;
+  position: relative;
+}
+
+/* Hide headers and Layout wrappers when components are rendered inside super-admin-content */
+.super-admin-content .layout-container {
+  background: transparent;
+  min-height: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.super-admin-content .layout-header {
+  display: none !important;
+}
+
+.super-admin-content .layout-main {
+  padding: 24px !important;
+  margin: 0 !important;
+  flex: 1;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  min-width: 0;
+}
+
+.super-admin-content .layout-footer {
+  display: none !important;
+}
+
+/* Hide page headers and titles */
+.super-admin-content .page-header,
+.super-admin-content .tenant-management-header,
+.super-admin-content .page-title,
+.super-admin-content .page-title h2 {
+  display: none !important;
+}
+
+/* Hide specific component headers - more specific selectors */
+.super-admin-content .tenant-management-container > .tenant-management-header,
+.super-admin-content .scanner-tools-container > .page-header,
+.super-admin-content .stripe-settings-container > h1:first-of-type,
+.super-admin-content .subscription-plans-container > h1:first-of-type,
+.super-admin-content .system-prompts-container > .system-prompts-header,
+.super-admin-content .system-prompts-container > h1:first-of-type,
+.super-admin-content .system-prompts-container .system-prompts-header,
+.super-admin-content .scan-types-container > h1:first-of-type {
+  display: none !important;
+}
+
+/* Hide any h1 that appears as first child in content areas */
+.super-admin-content > div > div > h1:first-child,
+.super-admin-content .layout-main > div > h1:first-child {
+  display: none !important;
+}
+
+/* Ensure content containers take full width and proper padding */
+.super-admin-content .tenant-management-container,
+.super-admin-content .scanner-tools-container,
+.super-admin-content .stripe-settings-container,
+.super-admin-content .subscription-plans-container,
+.super-admin-content .system-prompts-container,
+.super-admin-content .scan-types-container,
+.super-admin-content .admin-scanner-tools {
+  max-width: 100% !important;
+  padding: 24px !important;
+  margin: 0 !important;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+  min-width: 0;
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+/* Ensure tables and wide content can scroll horizontally */
+.super-admin-content .tenants-table,
+.super-admin-content table,
+.super-admin-content .table-container {
+  overflow-x: auto;
+  width: 100%;
+  display: block;
+}
+
+.super-admin-content .tenants-table table,
+.super-admin-content table {
+  min-width: 100%;
+  display: table;
+}
+
+/* Ensure action buttons and footer sections are visible */
+.super-admin-content .tenant-management-footer,
+.super-admin-content .actions-bar,
+.super-admin-content .form-actions,
+.super-admin-content .modal-actions,
+.super-admin-content .action-buttons,
+.super-admin-content .btn-group {
+  padding: 16px 0 !important;
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Ensure buttons don't get cut off */
+.super-admin-content .btn,
+.super-admin-content button:not(.super-admin-menu-item),
+.super-admin-content .action-buttons button {
+  white-space: nowrap;
+  overflow: visible !important;
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+
+/* Ensure wide tables can scroll horizontally */
+.super-admin-content .table-wrapper,
+.super-admin-content .table-responsive {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .table-wrapper table,
+.super-admin-content .table-responsive table,
+.super-admin-content .tenant-scanners-table {
+  min-width: 800px; /* Ensure minimum width for tables */
+  background: #1e293b !important;
+}
+
+.super-admin-content .tenant-scanners-table thead {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .tenant-scanners-table th {
+  color: #94a3b8 !important;
+  background: #0f172a !important;
+}
+
+.super-admin-content .tenant-scanners-table td {
+  color: #e2e8f0 !important;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .tenant-scanners-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05) !important;
+}
+
+.super-admin-content .tenant-scanners-table code.docker-image,
+.super-admin-content .scanner-tools-table code.docker-image {
+  background: #0f172a !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+/* Global Scanner Registry table dark theme */
+.super-admin-content .scanner-tools-table {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .scanner-tools-table thead {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .scanner-tools-table th {
+  color: #94a3b8 !important;
+  background: #0f172a !important;
+}
+
+.super-admin-content .scanner-tools-table td {
+  color: #e2e8f0 !important;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .scanner-tools-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05) !important;
+}
+
+/* Badge styles for dark theme */
+.super-admin-content .category-badge,
+.super-admin-content .status-badge {
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .status-badge.active {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.super-admin-content .status-badge.inactive {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Scan Types table dark theme */
+.super-admin-content .scan-types-table {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .scan-types-table thead {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .scan-types-table th {
+  color: #94a3b8 !important;
+  background: #0f172a !important;
+}
+
+.super-admin-content .scan-types-table td {
+  color: #e2e8f0 !important;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .scan-types-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05) !important;
+}
+
+.super-admin-content .scan-types-table tbody tr.inactive td {
+  opacity: 0.6;
+  background: #1e293b !important;
+}
+
+.super-admin-content .scan-types-table code.internal-name {
+  background: #0f172a !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+/* System Prompts - Complete dark theme override */
+.super-admin-content .system-prompts-container {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .system-prompts-container .system-prompts-header,
+.super-admin-content .system-prompts-container .system-prompts-header h1,
+.super-admin-content .system-prompts-container .system-prompts-header p {
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .system-prompts-container .tabs {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-container .tab {
+  color: #94a3b8 !important;
+  background: transparent !important;
+}
+
+.super-admin-content .system-prompts-container .tab:hover {
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .system-prompts-container .tab.active {
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+.super-admin-content .system-prompts-container .tenant-selector label,
+.super-admin-content .system-prompts-container .prompt-type-filter label {
+  color: #94a3b8 !important;
+}
+
+.super-admin-content .system-prompts-container .tenant-selector select,
+.super-admin-content .system-prompts-container .prompt-type-filter-select {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-container .prompts-section {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-container .section-header h2 {
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .system-prompts-container .btn-primary {
+  background: #38bdf8 !important;
+  color: #0f172a !important;
+  border-color: #38bdf8 !important;
+}
+
+.super-admin-content .system-prompts-container .btn-primary:hover {
+  background: #0ea5e9 !important;
+}
+
+.super-admin-content .system-prompts-container .btn-secondary {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-container .btn-secondary:hover {
+  background: #475569 !important;
+}
+
+/* System Prompts table dark theme */
+.super-admin-content .table-wrapper {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-table {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-table thead {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .system-prompts-table th {
+  color: #94a3b8 !important;
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .system-prompts-table td {
+  color: #e2e8f0 !important;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .system-prompts-table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05) !important;
+}
+
+.super-admin-content .system-prompts-table .prompt-text-preview {
+  color: #94a3b8 !important;
+  font-size: 12px !important;
+  max-width: 200px !important;
+}
+
+.super-admin-content .system-prompts-table .prompt-type-badge {
+  color: white !important;
+  border: 1px solid rgba(56, 189, 248, 0.5) !important;
+  background: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-table .status-badge.active {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-table .status-badge.inactive {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Ensure prompt text column is narrow */
+.super-admin-content .system-prompts-table th:nth-child(3),
+.super-admin-content .system-prompts-table td:nth-child(3) {
+  max-width: 200px !important;
+  width: 200px !important;
+}
+
+.super-admin-content .system-prompts-container .empty-state,
+.super-admin-content .system-prompts-container .loading {
+  color: #94a3b8 !important;
+}
+
+.super-admin-content .system-prompts-container .error-message {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.super-admin-content .system-prompts-container .prompt-date,
+.super-admin-content .system-prompts-container .prompt-author {
+  color: #94a3b8 !important;
+}
+
+/* Ensure modals and overlays work properly */
+.super-admin-content .modal-overlay {
+  position: fixed !important;
+  z-index: 10000 !important;
+}
+
+/* Ensure filters and form sections are properly contained */
+.super-admin-content .filters-section,
+.super-admin-content .form-section {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible !important;
+  margin-bottom: 24px;
+}
+
+/* =====================================================
+   DARK THEME OVERRIDES FOR SUPER ADMIN COMPONENTS
+   ===================================================== */
+
+/* Background colors - Dark theme */
+.super-admin-content {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .tenant-management-container,
+.super-admin-content .admin-scanner-tools,
+.super-admin-content .stripe-settings-container,
+.super-admin-content .subscription-plans-container,
+.super-admin-content .system-prompts-container,
+.super-admin-content .scan-types-container {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* Subscription Plans - Remove all gold/yellow borders */
+.super-admin-content .subscription-plans-container *,
+.super-admin-content .plans-table-container,
+.super-admin-content .plans-table-container *,
+.super-admin-content .plan-form-container,
+.super-admin-content .plan-form-container * {
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .plans-table-container {
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: #1e293b !important;
+}
+
+.super-admin-content .plans-table thead {
+  border-bottom-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .plans-table td {
+  border-bottom-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .plan-form-container {
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: #1e293b !important;
+}
+
+.super-admin-content .plan-form-container h3 {
+  border-bottom-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .form-section {
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: #0f172a !important;
+}
+
+.super-admin-content .form-input,
+.super-admin-content .form-select,
+.super-admin-content .form-textarea {
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content .form-actions {
+  border-top-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .stripe-price-id {
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+}
+
+/* Tables - Dark theme */
+.super-admin-content .tenants-table,
+.super-admin-content table {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .tenants-table thead,
+.super-admin-content table thead {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .tenants-table th,
+.super-admin-content table th {
+  color: #94a3b8 !important;
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .tenants-table td,
+.super-admin-content table td {
+  color: #e2e8f0 !important;
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content .tenants-table tbody tr:hover td,
+.super-admin-content table tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.05) !important;
+}
+
+/* Cards and containers - Dark theme */
+.super-admin-content .tenant-management-container,
+.super-admin-content .filters-section,
+.super-admin-content .stripe-config-form,
+.super-admin-content .config-status,
+.super-admin-content .scanner-tool-card,
+.super-admin-content .plan-card,
+.super-admin-content .prompt-card {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Text colors - Dark theme */
+.super-admin-content h1,
+.super-admin-content h2,
+.super-admin-content h3,
+.super-admin-content h4,
+.super-admin-content h5,
+.super-admin-content h6 {
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content p,
+.super-admin-content .subtitle,
+.super-admin-content .tenant-description,
+.super-admin-content label {
+  color: #94a3b8 !important;
+}
+
+.super-admin-content .status-badge,
+.super-admin-content .badge {
+  background: rgba(56, 189, 248, 0.2) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.super-admin-content .status-badge.active {
+  background: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.super-admin-content .status-badge.inactive {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Form inputs - Dark theme */
+.super-admin-content input,
+.super-admin-content textarea,
+.super-admin-content select {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-content input:focus,
+.super-admin-content textarea:focus,
+.super-admin-content select:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1) !important;
+}
+
+.super-admin-content input::placeholder,
+.super-admin-content textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Buttons - Dark theme */
+.super-admin-content .btn,
+.super-admin-content button:not(.super-admin-menu-item) {
+  background: rgba(56, 189, 248, 0.2) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+.super-admin-content .btn:hover,
+.super-admin-content button:not(.super-admin-menu-item):hover {
+  background: rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+.super-admin-content .btn-primary {
+  background: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+  color: #0f172a !important;
+}
+
+.super-admin-content .btn-primary:hover {
+  background: #0ea5e9 !important;
+  border-color: #0ea5e9 !important;
+}
+
+.super-admin-content .btn-danger {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #f87171 !important;
+}
+
+.super-admin-content .btn-danger:hover {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.super-admin-content .btn-success {
+  background: rgba(34, 197, 94, 0.2) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  color: #4ade80 !important;
+}
+
+.super-admin-content .btn-success:hover {
+  background: rgba(34, 197, 94, 0.3) !important;
+  border-color: rgba(34, 197, 94, 0.5) !important;
+}
+
+/* Links - Dark theme */
+.super-admin-content a {
+  color: #38bdf8 !important;
+}
+
+.super-admin-content a:hover {
+  color: #0ea5e9 !important;
+}
+
+/* Error and success messages - Dark theme */
+.super-admin-content .error-banner,
+.super-admin-content .alert-danger,
+.super-admin-content .error-message {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #f87171 !important;
+}
+
+.super-admin-content .alert-success,
+.super-admin-content .success-message {
+  background: rgba(34, 197, 94, 0.2) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+  color: #4ade80 !important;
+}
+
+.super-admin-content .alert-info {
+  background: rgba(56, 189, 248, 0.2) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #38bdf8 !important;
+}
+
+/* Code and pre elements - Dark theme */
+.super-admin-content code,
+.super-admin-content pre {
+  background: #0f172a !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+/* Empty states - Dark theme */
+.super-admin-content .empty-state {
+  color: #94a3b8 !important;
+}
+
+/* Loading states - Dark theme */
+.super-admin-content .loading {
+  color: #94a3b8 !important;
+}
+
+/* Modals - Dark theme */
+.super-admin-content .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.super-admin-content .modal-content {
+  background: #0f172a !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Tabs - Dark theme */
+.super-admin-content .tabs,
+.super-admin-content .tab-list {
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .tab {
+  color: #94a3b8 !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+
+.super-admin-content .tab.active {
+  background: rgba(56, 189, 248, 0.1) !important;
+  color: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+}
+
+/* Tooltips - Dark theme */
+.super-admin-content .tooltip {
+  background: #1e293b !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #e2e8f0 !important;
+}
+
+.super-admin-access-denied {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 40px;
+  text-align: center;
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+}
+
+.super-admin-access-denied h1 {
+  color: #e2e8f0;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.super-admin-access-denied p {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .super-admin-layout {
+    flex-direction: column;
+  }
+
+  .super-admin-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  }
+
+  .super-admin-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .super-admin-menu-item {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .super-admin-menu-item.active {
+    border-left: none;
+    border-bottom-color: #38bdf8;
+  }
+
+  .super-admin-menu-label {
+    white-space: nowrap;
+  }
+}
+

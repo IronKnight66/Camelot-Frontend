@@ -1,14 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserRole, hasRole } from '../utils/roleHelpers';
 import Layout from './Layout';
-import './TenantSettingsHub.css';
+import TenantManagement from './admin/TenantManagement';
+import TenantScanners from './settings/TenantScanners';
+import AdminScannerTools from './scanner/AdminScannerTools';
+import StripeSettings from './admin/StripeSettings';
+import SubscriptionPlans from './admin/SubscriptionPlans';
+import SystemPrompts from './admin/SystemPrompts';
+import ScanTypes from './admin/ScanTypes';
+import './SuperAdminSettings.css';
+
+type SuperAdminSection = 'tenants' | 'tenant-scanners' | 'scanner-registry' | 'stripe' | 'subscriptions' | 'prompts' | 'scan-types';
 
 // Super Admin Settings Component
 const SuperAdminSettings: React.FC = () => {
   const { user } = useAuth();
   const userRole = getUserRole(user);
+  const [activeSection, setActiveSection] = useState<SuperAdminSection>('tenants');
 
   const hasAccess = (requiredRole: 'super-admin' | 'tenant-admin' | 'admin' | 'user') => {
     return hasRole(user, requiredRole);
@@ -17,8 +26,8 @@ const SuperAdminSettings: React.FC = () => {
   if (!hasAccess('super-admin')) {
     return (
       <Layout>
-        <div className="tenant-settings-hub-container">
-          <div className="tenant-settings-hub-header">
+        <div className="super-admin-container">
+          <div className="super-admin-access-denied">
             <h1>Access Denied</h1>
             <p>You need super-admin privileges to access global settings.</p>
           </div>
@@ -27,106 +36,60 @@ const SuperAdminSettings: React.FC = () => {
     );
   }
 
+  const menuItems: Array<{ id: SuperAdminSection; label: string; icon: string }> = [
+    { id: 'tenants', label: 'Tenant Management', icon: '🏢' },
+    { id: 'tenant-scanners', label: 'Tenant Scanners', icon: '🛠️' },
+    { id: 'scanner-registry', label: 'Global Scanner Registry', icon: '⚙️' },
+    { id: 'stripe', label: 'Stripe Configuration', icon: '💰' },
+    { id: 'subscriptions', label: 'Subscription Plans', icon: '📦' },
+    { id: 'prompts', label: 'System Prompts', icon: '💬' },
+    { id: 'scan-types', label: 'Supported Scan Types', icon: '🎯' },
+  ];
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'tenants':
+        return <TenantManagement />;
+      case 'tenant-scanners':
+        return <TenantScanners />;
+      case 'scanner-registry':
+        return <AdminScannerTools />;
+      case 'stripe':
+        return <StripeSettings />;
+      case 'subscriptions':
+        return <SubscriptionPlans />;
+      case 'prompts':
+        return <SystemPrompts />;
+      case 'scan-types':
+        return <ScanTypes />;
+      default:
+        return <TenantManagement />;
+    }
+  };
+
   return (
     <Layout>
-      <div className="tenant-settings-hub-container">
-        <div className="tenant-settings-hub-header">
-          <h1>Super Admin Settings</h1>
-          <p>Manage global system configuration and platform-wide settings</p>
-        </div>
-
-        <div className="tenant-settings-hub-grid">
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">🏢</div>
-            <h2>Tenant Management</h2>
-            <p>View and manage all tenants in the system</p>
-            <Link to="/settings/admin/tenants" className="tenant-settings-hub-btn" style={{ background: '#6f42c1', color: 'white' }}>
-              Manage Tenants
-            </Link>
-          </div>
-          
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">🛠️</div>
-            <h2>Tenant Scanners</h2>
-            <p>Add scanner tools to tenants from the global registry</p>
-            <Link to="/settings/tenant-scanners" className="tenant-settings-hub-btn">
-              Manage Tenant Scanners
-            </Link>
-          </div>
-          
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">⚙️</div>
-            <h2>Global Scanner Registry</h2>
-            <p>Manage the global scanner tool registry and system configuration</p>
-            <Link to="/settings/admin/scanner-tools" className="tenant-settings-hub-btn" style={{ background: '#dc3545', color: 'white' }}>
-              Open Global Registry
-            </Link>
-          </div>
-          
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">💰</div>
-            <h2>Stripe Configuration</h2>
-            <p>Configure Stripe API keys and webhook secrets for billing</p>
-            <Link to="/settings/stripe" className="tenant-settings-hub-btn" style={{ background: '#6772e5', color: 'white' }}>
-              Configure Stripe
-            </Link>
-          </div>
-          
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">📦</div>
-            <h2>Subscription Plans</h2>
-            <p>Manage subscription plans, pricing, features, and Stripe price IDs</p>
-            <Link to="/settings/subscription-plans" className="tenant-settings-hub-btn" style={{ background: '#28a745', color: 'white' }}>
-              Manage Plans
-            </Link>
-          </div>
-          
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">💬</div>
-            <h2>System Prompts</h2>
-            <p>Configure global and tenant-specific chatbot system prompts</p>
-            <Link to="/settings/admin/system-prompts" className="tenant-settings-hub-btn" style={{ background: '#17a2b8', color: 'white' }}>
-              Manage Prompts
-            </Link>
-          </div>
-
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">🎯</div>
-            <h2>Supported Scan Types</h2>
-            <p>Manage the available scan types that scanner tools can use</p>
-            <Link to="/settings/admin/scan-types" className="tenant-settings-hub-btn" style={{ background: '#fd7e14', color: 'white' }}>
-              Manage Scan Types
-            </Link>
-          </div>
-        </div>
-
-        {/* Info box */}
-        <div className="tenant-settings-hub-info">
-          <h3>About Super Admin Settings</h3>
-          <div className="tenant-settings-hub-info-content">
-            <div>
-              <div className="info-item">
-                <strong>Tenant Management:</strong> View and manage all tenants in the system, including their settings, subscription status, and contact information.
-              </div>
-              <div className="info-item">
-                <strong>Tenant Scanners:</strong> Add and manage scanner tools for specific tenants from the global registry.
-              </div>
-              <div className="info-item">
-                <strong>Global Scanner Registry:</strong> Manage the global scanner tool registry, add new tools, configure execution methods, and set system-wide defaults.
-              </div>
-              <div className="info-item">
-                <strong>Stripe Configuration:</strong> Configure Stripe API keys and webhook secrets for the billing system.
-              </div>
-              <div className="info-item">
-                <strong>Subscription Plans:</strong> Create and manage subscription plans with pricing, features, limits, and Stripe price IDs.
-              </div>
-              <div className="info-item">
-                <strong>System Prompts:</strong> Configure global and tenant-specific system prompts for the chatbot assistant. Track history of all prompt changes.
-              </div>
-              <div className="info-item">
-                <strong>Supported Scan Types:</strong> Define and manage the scan types that can be used by scanner tools for security assessments.
-              </div>
+      <div className="super-admin-container">
+        <div className="super-admin-layout">
+          <div className="super-admin-sidebar">
+            <div className="super-admin-sidebar-header">
+              <h2>Super Admin</h2>
             </div>
+            <nav className="super-admin-menu">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  className={`super-admin-menu-item ${activeSection === item.id ? 'active' : ''}`}
+                  onClick={() => setActiveSection(item.id)}
+                >
+                  <span className="super-admin-menu-icon">{item.icon}</span>
+                  <span className="super-admin-menu-label">{item.label}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+          <div className="super-admin-content">
+            {renderContent()}
           </div>
         </div>
       </div>

@@ -1,8 +1,10 @@
-/* Assessment Page - Medieval Quest Theme */
+/* Assessment Page - Dark Theme */
 .assessment-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
+  background: #0f172a;
+  color: #e2e8f0;
 }
 
 .assessment-header {
@@ -12,58 +14,61 @@
 
 .assessment-header h1 {
   font-size: 40px;
-  color: var(--camelot-crimson-dark);
-  font-family: var(--camelot-font-heading);
+  color: #e2e8f0;
+  font-family: var(--camelot-font-heading, inherit);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .assessment-header p {
   font-size: 18px;
-  color: var(--camelot-charcoal);
-  font-family: var(--camelot-font-body);
+  color: #94a3b8;
+  font-family: var(--camelot-font-body, inherit);
 }
 
 .assessment-content {
-  background: var(--camelot-aged-parchment);
-  border: 3px solid var(--camelot-dark-gold);
-  border-radius: var(--camelot-radius-xl);
+  background: #1e293b !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-radius: 8px;
   padding: 40px;
-  box-shadow: var(--camelot-shadow-lg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #e2e8f0;
 }
 
 .assessment-placeholder {
   text-align: center;
   padding: 60px 20px;
-  background: var(--camelot-parchment);
-  border: 2px solid var(--camelot-dark-gold);
-  border-radius: var(--camelot-radius-lg);
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-radius: 8px;
   margin: 40px 0;
-  box-shadow: var(--camelot-shadow-sm);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .placeholder-icon {
   font-size: 64px;
   margin-bottom: 20px;
-  color: var(--camelot-royal-blue);
+  color: #38bdf8;
 }
 
 .assessment-placeholder h2 {
   margin: 0 0 20px 0;
   font-size: 28px;
-  color: var(--camelot-black-knight);
-  font-family: var(--camelot-font-heading);
+  color: #e2e8f0;
+  font-family: inherit;
   font-weight: 700;
 }
 
 .assessment-placeholder p {
   font-size: 16px;
-  color: var(--camelot-charcoal);
+  color: #94a3b8;
   margin-bottom: 20px;
-  font-family: var(--camelot-font-body);
+  font-family: inherit;
 }
 
 .assessment-placeholder ul {
@@ -76,8 +81,8 @@
 .assessment-placeholder li {
   margin: 10px 0;
   font-size: 15px;
-  color: var(--camelot-black-knight);
-  font-family: var(--camelot-font-body);
+  color: #e2e8f0;
+  font-family: inherit;
 }
 
 .assessment-actions {
@@ -85,7 +90,8 @@
   justify-content: space-between;
   margin-top: 40px;
   padding-top: 20px;
-  border-top: 3px solid var(--camelot-dark-gold);
+  border-top: 1px solid rgba(56, 189, 248, 0.2) !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
 }
 
 .back-link,
@@ -103,28 +109,28 @@
 }
 
 .back-link {
-  background: linear-gradient(135deg, var(--camelot-light-stone) 0%, var(--camelot-stone-gray) 100%);
-  color: white;
-  border-color: var(--camelot-stone-gray);
+  background: #334155;
+  color: #e2e8f0;
+  border-color: rgba(56, 189, 248, 0.3) !important;
 }
 
 .back-link:hover {
-  background: linear-gradient(135deg, var(--camelot-stone-gray) 0%, #505050 100%);
+  background: #475569;
   transform: translateY(-2px);
-  box-shadow: var(--camelot-shadow-md);
-  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #e2e8f0;
 }
 
 .scanners-link {
-  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
-  color: white;
-  border-color: var(--camelot-navy);
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
 }
 
 .scanners-link:hover {
-  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
+  background: #0ea5e9;
   transform: translateY(-2px);
-  box-shadow: var(--camelot-shadow-md);
-  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #0f172a;
 }
 

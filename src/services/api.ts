@@ -11,7 +11,7 @@ class ApiService {
     const baseURL = process.env.NODE_ENV === 'development' ? '/' : (process.env.REACT_APP_API_URL || '/');
     this.api = axios.create({
       baseURL: baseURL,
-      timeout: 10000, // 10 seconds - sufficient now that backend connectivity is fixed
+      timeout: 60000, // 60 seconds - increased for long-running operations (scans, chatbot, AI analysis)
       headers: {
         'Content-Type': 'application/json',
       },

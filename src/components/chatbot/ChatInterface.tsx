@@ -11,6 +11,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import ApiService from '../../services/api';
+import SettingsModal from '../settings/SettingsModal';
+import ProfileModal from '../profile/ProfileModal';
 import './ChatInterface.css';
 
 interface Message {
@@ -37,7 +39,12 @@ const ChatInterface: React.FC = () => {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [settingsModalCategory, setSettingsModalCategory] = useState<'general' | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const hasAutoSentRef = useRef(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -222,6 +229,41 @@ const ChatInterface: React.FC = () => {
     return email.charAt(0).toUpperCase();
   };
 
+  // Handle user menu toggle
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
+  // Handle menu item click
+  const handleMenuClick = (path: string) => {
+    setIsUserMenuOpen(false);
+    if (path === '/settings/tenant') {
+      setSettingsModalCategory('general');
+      setIsSettingsModalOpen(true);
+    } else if (path === '/profile') {
+      setIsProfileModalOpen(true);
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <div className="chat-interface-layout">
       {/* Left Sidebar */}
@@ -268,15 +310,85 @@ const ChatInterface: React.FC = () => {
         )}
 
         <div className="chat-sidebar-footer">
-          <button 
-            className="user-profile-btn"
-            onClick={() => navigate('/profile')}
-          >
-            <div className="user-avatar">
-              {getUserInitials()}
-            </div>
-            {!sidebarCollapsed && <span>{user?.email}</span>}
-          </button>
+          <div className="user-menu-container" ref={userMenuRef}>
+            <button 
+              className="user-profile-btn"
+              onClick={toggleUserMenu}
+            >
+              <div className="user-avatar">
+                {getUserInitials()}
+              </div>
+              {!sidebarCollapsed && <span>{user?.email}</span>}
+              {!sidebarCollapsed && (
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2"
+                  className={`user-menu-arrow ${isUserMenuOpen ? 'open' : ''}`}
+                >
+                  <path d="M6 9l6 6 6-6"/>
+                </svg>
+              )}
+            </button>
+            {isUserMenuOpen && (
+              <div className="user-menu-dropdown">
+                <button 
+                  className="user-menu-item"
+                  onClick={() => handleMenuClick('/profile')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>Profile</span>
+                </button>
+                <button 
+                  className="user-menu-item"
+                  onClick={() => handleMenuClick('/settings/tenant')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m8.48 0l-4.24-4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m0-4.48l4.24 4.24"/>
+                  </svg>
+                  <span>Settings</span>
+                </button>
+                <button 
+                  className="user-menu-item"
+                  onClick={() => handleMenuClick('/assessment')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                  </svg>
+                  <span>Assessments</span>
+                </button>
+                <button 
+                  className="user-menu-item"
+                  onClick={() => handleMenuClick('/metrics')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                  </svg>
+                  <span>Metrics</span>
+                </button>
+                <button 
+                  className="user-menu-item"
+                  onClick={() => handleMenuClick('/reports')}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+                  </svg>
+                  <span>Reports</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -381,6 +493,22 @@ const ChatInterface: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={() => {
+          setIsSettingsModalOpen(false);
+          setSettingsModalCategory(undefined);
+        }}
+        initialCategory={settingsModalCategory}
+      />
+
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </div>
   );
 };

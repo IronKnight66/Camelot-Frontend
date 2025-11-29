@@ -328,60 +328,88 @@ const ScanTypes: React.FC = () => {
 
         {loading ? (
           <div className="loading-message">Loading scan types...</div>
+        ) : scanTypes.length === 0 ? (
+          <div className="empty-state">
+            <p>No scan types found. Create one to get started.</p>
+          </div>
         ) : (
-          <div className="scan-types-grid">
-            {scanTypes.length === 0 ? (
-              <div className="empty-state">
-                <p>No scan types found. Create one to get started.</p>
-              </div>
-            ) : (
-              scanTypes.map((scanType) => (
-                <div key={scanType.id} className={`scan-type-card ${!scanType.is_active ? 'inactive' : ''}`}>
-                  <div className="scan-type-header">
-                    <h3>{scanType.display_name}</h3>
-                    <span className={`status-badge ${scanType.is_active ? 'active' : 'inactive'}`}>
-                      {scanType.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </div>
-                  <p className="scan-type-name">Internal name: <code>{scanType.name}</code></p>
-                  {scanType.description && (
-                    <p className="scan-type-description">{scanType.description}</p>
-                  )}
-                  <div className="scan-type-actions">
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => handleEdit(scanType)}
-                    >
-                      Edit
-                    </button>
-                    {deleteConfirm === scanType.id ? (
-                      <div className="delete-confirm">
-                        <span>Delete?</span>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => handleDelete(scanType.id)}
-                        >
-                          Confirm
-                        </button>
+          <div className="table-wrapper">
+            <table className="scan-types-table">
+              <thead>
+                <tr>
+                  <th>Display Name</th>
+                  <th>Internal Name</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {scanTypes.map((scanType) => (
+                  <tr key={scanType.id} className={!scanType.is_active ? 'inactive' : ''}>
+                    <td>
+                      <strong>{scanType.display_name}</strong>
+                    </td>
+                    <td>
+                      <code className="internal-name">{scanType.name}</code>
+                    </td>
+                    <td>
+                      <span className="scan-type-description">
+                        {scanType.description || 'No description'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`status-badge ${scanType.is_active ? 'active' : 'inactive'}`}>
+                        {scanType.is_active ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      {scanType.created_at
+                        ? new Date(scanType.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                          })
+                        : 'N/A'}
+                    </td>
+                    <td>
+                      <div className="scan-type-actions">
                         <button
                           className="btn btn-sm btn-secondary"
-                          onClick={() => setDeleteConfirm(null)}
+                          onClick={() => handleEdit(scanType)}
                         >
-                          Cancel
+                          Edit
                         </button>
+                        {deleteConfirm === scanType.id ? (
+                          <div className="delete-confirm">
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(scanType.id)}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => setDeleteConfirm(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => setDeleteConfirm(scanType.id)}
+                          >
+                            Delete
+                          </button>
+                        )}
                       </div>
-                    ) : (
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => setDeleteConfirm(scanType.id)}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))
-            )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
 

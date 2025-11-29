@@ -154,6 +154,92 @@
   margin-bottom: 30px;
 }
 
+/* Table Styles */
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 30px;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-md);
+}
+
+.tenant-scanners-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.tenant-scanners-table thead {
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  border-bottom: 3px solid var(--camelot-dark-gold);
+}
+
+.tenant-scanners-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.tenant-scanners-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--camelot-dark-gold);
+  vertical-align: middle;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
+  background: var(--camelot-parchment);
+}
+
+.tenant-scanners-table tbody tr:hover td {
+  background: var(--camelot-pale-gold);
+}
+
+.tenant-scanners-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tenant-scanners-table .tool-description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  color: var(--camelot-charcoal);
+  font-size: 14px;
+}
+
+.tenant-scanners-table code.docker-image {
+  background: var(--camelot-aged-parchment);
+  padding: 4px 8px;
+  border-radius: var(--camelot-radius-sm);
+  font-size: 12px;
+  font-family: var(--camelot-font-mono);
+  color: var(--camelot-navy);
+  border: 1px solid var(--camelot-dark-gold);
+  max-width: 200px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tenant-scanners-table .tool-actions {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
 .tool-card {
   background: var(--camelot-aged-parchment);
   border: 2px solid var(--camelot-dark-gold);

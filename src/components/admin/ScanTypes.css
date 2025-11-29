@@ -30,6 +30,89 @@
   margin-top: 2rem;
 }
 
+/* Table Styles */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 2rem;
+  background: var(--camelot-aged-parchment);
+  border: 2px solid var(--camelot-dark-gold);
+  border-radius: var(--camelot-radius-lg);
+  box-shadow: var(--camelot-shadow-md);
+}
+
+.scan-types-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.scan-types-table thead {
+  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  border-bottom: 3px solid var(--camelot-dark-gold);
+}
+
+.scan-types-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 700;
+  font-family: var(--camelot-font-heading);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.scan-types-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--camelot-dark-gold);
+  vertical-align: middle;
+  font-family: var(--camelot-font-body);
+  color: var(--camelot-black-knight);
+  background: var(--camelot-parchment);
+}
+
+.scan-types-table tbody tr:hover td {
+  background: var(--camelot-pale-gold);
+}
+
+.scan-types-table tbody tr.inactive td {
+  opacity: 0.6;
+  background: var(--camelot-aged-parchment);
+}
+
+.scan-types-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.scan-types-table code.internal-name {
+  background: var(--camelot-aged-parchment);
+  padding: 4px 8px;
+  border-radius: var(--camelot-radius-sm);
+  font-size: 12px;
+  font-family: var(--camelot-font-mono);
+  color: var(--camelot-navy);
+  border: 1px solid var(--camelot-dark-gold);
+}
+
+.scan-types-table .scan-type-description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  color: var(--camelot-charcoal);
+  font-size: 14px;
+  margin: 0;
+}
+
+.scan-types-table .scan-type-actions {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
 .scan-type-card {
   background: white;
   border: 1px solid #e0e0e0;

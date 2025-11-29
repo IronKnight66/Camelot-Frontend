@@ -203,37 +203,46 @@ const TenantScanners: React.FC = () => {
           <div className="tools-container">
             <h2>Available Scanner Tools</h2>
             {availableToAdd.length > 0 ? (
-              <div className="tools-grid">
-                {availableToAdd.map(tool => (
-                  <div key={tool.id} className="tool-card">
-                    <div className="tool-header">
-                      <h3>{tool.displayName || tool.name}</h3>
-                      <span className={`category-badge ${tool.category}`}>{tool.category}</span>
-                    </div>
-                    {tool.description && (
-                      <p className="tool-description">{tool.description}</p>
-                    )}
-                    <div className="tool-meta">
-                      <div className="tool-meta-item">
-                        <strong>Version:</strong> {tool.version || 'Unknown'}
-                      </div>
-                      {tool.dockerImage && (
-                        <div className="tool-meta-item">
-                          <strong>Docker:</strong> {tool.dockerImage}
-                        </div>
-                      )}
-                      <div className="tool-meta-item">
-                        <strong>Pricing:</strong> {tool.pricingTier || 'Free'}
-                      </div>
-                    </div>
-                    <button
-                      className="btn-primary"
-                      onClick={() => openAddModal(tool)}
-                    >
-                      + Add to Tenant
-                    </button>
-                  </div>
-                ))}
+              <div className="table-wrapper">
+                <table className="tenant-scanners-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Version</th>
+                      <th>Docker Image</th>
+                      <th>Pricing</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {availableToAdd.map(tool => (
+                      <tr key={tool.id}>
+                        <td>
+                          <strong>{tool.displayName || tool.name}</strong>
+                        </td>
+                        <td>
+                          <span className={`category-badge ${tool.category}`}>
+                            {tool.category || 'N/A'}
+                          </span>
+                        </td>
+                        <td>{tool.version || 'Unknown'}</td>
+                        <td>
+                          <code className="docker-image">{tool.dockerImage || 'N/A'}</code>
+                        </td>
+                        <td>{tool.pricingTier || 'Free'}</td>
+                        <td>
+                          <button
+                            className="btn-primary btn-sm"
+                            onClick={() => openAddModal(tool)}
+                          >
+                            + Add to Tenant
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="empty-state">
@@ -245,41 +254,61 @@ const TenantScanners: React.FC = () => {
           <div className="tools-container">
             <h2>Scanners Added to Tenant</h2>
             {tenantTools.length > 0 ? (
-              <div className="tools-grid">
-                {tenantTools.map(tool => (
-                  <div key={tool.id} className="tool-card">
-                    <div className="tool-header">
-                      <h3>{tool.scanner_tool?.displayName || tool.scanner_tool?.name}</h3>
-                      <span className={`category-badge ${tool.scanner_tool?.category}`}>
-                        {tool.scanner_tool?.category}
-                      </span>
-                      <span className={`status-badge ${tool.is_enabled ? 'enabled' : 'disabled'}`}>
-                        {tool.is_enabled ? 'Enabled' : 'Disabled'}
-                      </span>
-                    </div>
-                    {tool.scanner_tool?.description && (
-                      <p className="tool-description">{tool.scanner_tool.description}</p>
-                    )}
-                    <div className="tool-meta">
-                      {tool.max_scans_per_month && (
-                        <div className="tool-meta-item">
-                          <strong>Scan Limit:</strong> {tool.current_usage_count || 0} / {tool.max_scans_per_month} per month
-                        </div>
-                      )}
-                    </div>
-                    <div className="tool-actions">
-                      <Link to="/settings/tenant-tools" className="btn-secondary">
-                        Manage Settings
-                      </Link>
-                      <button
-                        className="btn-danger"
-                        onClick={() => handleRemoveTool(tool.id)}
-                      >
-                        Remove from Tenant
-                      </button>
-                    </div>
-                  </div>
-                ))}
+              <div className="table-wrapper">
+                <table className="tenant-scanners-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Category</th>
+                      <th>Status</th>
+                      <th>Usage</th>
+                      <th>Version</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tenantTools.map(tool => (
+                      <tr key={tool.id}>
+                        <td>
+                          <strong>{tool.scanner_tool?.displayName || tool.scanner_tool?.name}</strong>
+                        </td>
+                        <td>
+                          <span className={`category-badge ${tool.scanner_tool?.category}`}>
+                            {tool.scanner_tool?.category || 'N/A'}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${tool.is_enabled ? 'enabled' : 'disabled'}`}>
+                            {tool.is_enabled ? 'Enabled' : 'Disabled'}
+                          </span>
+                        </td>
+                        <td>
+                          {tool.max_scans_per_month ? (
+                            <span>
+                              {tool.current_usage_count || 0} / {tool.max_scans_per_month} per month
+                            </span>
+                          ) : (
+                            <span>No limit</span>
+                          )}
+                        </td>
+                        <td>{tool.scanner_tool?.version || 'Unknown'}</td>
+                        <td>
+                          <div className="tool-actions">
+                            <Link to="/settings/tenant-tools" className="btn-secondary btn-sm">
+                              Manage
+                            </Link>
+                            <button
+                              className="btn-danger btn-sm"
+                              onClick={() => handleRemoveTool(tool.id)}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="empty-state">

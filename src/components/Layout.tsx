@@ -36,29 +36,11 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
     <div className={`layout-container ${minimal ? 'layout-container-hero' : ''}`}>
       <header className={`layout-header camelot-cyber-app-header ${minimal ? 'layout-header-minimal' : ''}`}>
         <div className="header-content">
-          <Link to="/" className="logo-link">
+          <Link to="/chat" className="logo-link">
             <h1 className="camelot-cyber-app-title">Camelot Security Platform</h1>
           </Link>
           {!minimal && (
             <nav className="main-nav camelot-cyber-app-nav">
-              <Link 
-                to="/" 
-                className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-              >
-                Dashboard
-              </Link>
-              <Link 
-                to="/scanners" 
-                className={`nav-link ${location.pathname.startsWith('/scanners') || location.pathname.startsWith('/admin/scanner-tools') || location.pathname.startsWith('/my-scanners') ? 'active' : ''}`}
-              >
-                Scanners
-              </Link>
-              <Link 
-                to="/chat" 
-                className={`nav-link ${location.pathname === '/chat' ? 'active' : ''}`}
-              >
-                Chat
-              </Link>
               <Link 
                 to="/assessment" 
                 className={`nav-link ${location.pathname === '/assessment' ? 'active' : ''}`}
@@ -77,50 +59,25 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
               >
                 Reports
               </Link>
-              {(userRole === 'admin' || userRole === 'super-admin' || userRole === 'tenant-admin') && (
-                <>
-                  <Link 
-                    to="/settings/tenant" 
-                    className={`nav-link ${
-                      location.pathname === '/settings' || 
-                      location.pathname === '/settings/tenant' ||
-                      location.pathname.startsWith('/settings/api-keys') ||
-                      location.pathname.startsWith('/settings/billing') ||
-                      location.pathname.startsWith('/settings/tenant-tools') ||
-                      location.pathname.startsWith('/admin/users')
-                        ? 'active' 
-                        : ''
-                    }`}
-                  >
-                    Settings
-                  </Link>
-                  {userRole === 'super-admin' && (
-                    <Link 
-                      to="/settings/admin" 
-                      className={`nav-link ${
-                        location.pathname === '/settings/admin' ||
-                        location.pathname.startsWith('/settings/admin/scanner-tools') ||
-                        location.pathname.startsWith('/settings/tenant-scanners') ||
-                        location.pathname.startsWith('/settings/stripe') ||
-                        location.pathname.startsWith('/settings/subscription-plans')
-                          ? 'active' 
-                          : ''
-                      }`}
-                    >
-                      Super Admin
-                    </Link>
-                  )}
-                </>
+              {userRole === 'super-admin' && (
+                <Link 
+                  to="/settings/admin" 
+                  className={`nav-link ${
+                    location.pathname === '/settings/admin' ||
+                    location.pathname.startsWith('/settings/admin/scanner-tools') ||
+                    location.pathname.startsWith('/settings/tenant-scanners') ||
+                    location.pathname.startsWith('/settings/stripe') ||
+                    location.pathname.startsWith('/settings/subscription-plans')
+                      ? 'active' 
+                      : ''
+                  }`}
+                >
+                  Super Admin
+                </Link>
               )}
             </nav>
           )}
           <div className="user-info">
-            <Link 
-              to="/profile" 
-              className={`user-name-link ${location.pathname === '/profile' ? 'active' : ''}`}
-            >
-              Welcome, {user?.email || user?.username}
-            </Link>
             <button onClick={handleSignOut} className="sign-out-btn">
               Sign Out
             </button>

@@ -137,3 +137,4 @@ You can extend prompts with `--stylize`, `--v`, or other parameters as needed.
 > `dimly lit command chamber inside a futuristic Camelot castle, central holographic round table projecting a city map, stone pillars with glowing runes, teal and orange reflections, composition leaving large empty oval area on top of the table for UI overlay, cyberpunk medieval, no text, no logo --ar 16:9`
 
 
+
