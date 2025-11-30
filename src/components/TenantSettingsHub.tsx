@@ -58,6 +58,18 @@ const TenantSettingsHub: React.FC = () => {
               </Link>
             </div>
           )}
+
+          {/* Findings Configuration - Available to admin and above */}
+          {hasAccess('admin') && (
+            <div className="tenant-settings-hub-card">
+              <div className="tenant-settings-hub-card-icon">🏷️</div>
+              <h2>Findings Configuration</h2>
+              <p>Configure custom severity and status levels for security findings</p>
+              <Link to="/settings/findings-config" className="tenant-settings-hub-btn">
+                Configure Findings
+              </Link>
+            </div>
+          )}
         </div>
 
         {hasAccess('super-admin') && (

@@ -21,12 +21,14 @@ import SuperAdminSettings from './components/SuperAdminSettings';
 import APIKeys from './components/settings/APIKeys';
 import TenantScanners from './components/settings/TenantScanners';
 import Billing from './components/settings/Billing';
+import FindingsConfiguration from './components/settings/FindingsConfiguration';
 import StripeSettings from './components/admin/StripeSettings';
 import SubscriptionPlans from './components/admin/SubscriptionPlans';
 import ChatInterface from './components/chatbot/ChatInterface';
 import Assessment from './components/Assessment';
 import Metrics from './components/Metrics';
 import Reports from './components/Reports';
+import Findings from './components/Findings';
 import './aws-config';
 import './App.css';
 
@@ -136,6 +138,18 @@ function App() {
                 <ProtectedRoute>
                   <RoleBasedRoute requiredRole="admin">
                     <APIKeys />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Findings Configuration - Admin Only */}
+            <Route 
+              path="/settings/findings-config" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <FindingsConfiguration />
                   </RoleBasedRoute>
                 </ProtectedRoute>
               } 
@@ -293,6 +307,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Reports />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Findings Page */}
+            <Route 
+              path="/findings" 
+              element={
+                <ProtectedRoute>
+                  <Findings />
                 </ProtectedRoute>
               } 
             />

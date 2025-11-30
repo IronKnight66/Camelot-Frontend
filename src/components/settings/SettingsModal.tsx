@@ -12,7 +12,7 @@ interface SettingsModalProps {
   initialCategory?: SettingsCategory;
 }
 
-type SettingsCategory = 'general' | 'users' | 'api-keys' | 'billing' | 'scanner-tools' | 'super-admin';
+type SettingsCategory = 'general' | 'users' | 'api-keys' | 'billing' | 'scanner-tools' | 'findings-config' | 'super-admin';
 
 interface User {
   username: string;
@@ -256,6 +256,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     { id: 'users', label: 'User Management', icon: '👥', requiresRole: 'admin' },
     { id: 'api-keys', label: 'API Keys', icon: '🔑', requiresRole: 'admin' },
     { id: 'billing', label: 'Billing', icon: '💳', requiresRole: 'admin' },
+    { id: 'findings-config', label: 'Findings Config', icon: '🏷️', requiresRole: 'admin' },
     { id: 'scanner-tools', label: 'Scanner Tools', icon: '🔧', requiresRole: 'tenant-admin' },
     { id: 'super-admin', label: 'Super Admin', icon: '👑', requiresRole: 'super-admin' },
   ];
@@ -1487,6 +1488,369 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     );
   };
 
+  // Findings Configuration Component
+  const FindingsConfigContent: React.FC = () => {
+    interface Level {
+      id: number;
+      label: string;
+      value: string;
+      color: string;
+      sort_order: number;
+      is_active: boolean;
+      is_system_default: boolean;
+    }
+
+    const [activeTab, setActiveTab] = useState<'severity' | 'status'>('severity');
+    const [severityLevels, setSeverityLevels] = useState<Level[]>([]);
+    const [statusLevels, setStatusLevels] = useState<Level[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [editingLevel, setEditingLevel] = useState<Level | null>(null);
+
+    const [formData, setFormData] = useState({
+      label: '',
+      value: '',
+      color: '#DC143C',
+      sort_order: 1
+    });
+
+    useEffect(() => {
+      loadLevels();
+    }, []);
+
+    const loadLevels = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const [severity, status] = await Promise.all([
+          ApiService.getSeverityLevels(),
+          ApiService.getStatusLevels()
+        ]);
+        
+        setSeverityLevels(severity);
+        setStatusLevels(status);
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to load configuration');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const generateValue = (label: string): string => {
+      return label.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    };
+
+    const handleLabelChange = (label: string) => {
+      setFormData({
+        ...formData,
+        label,
+        value: generateValue(label)
+      });
+    };
+
+    const handleAdd = () => {
+      const levels = activeTab === 'severity' ? severityLevels : statusLevels;
+      const maxSort = levels.length > 0 ? Math.max(...levels.map(l => l.sort_order)) : 0;
+      
+      setFormData({
+        label: '',
+        value: '',
+        color: '#DC143C',
+        sort_order: maxSort + 1
+      });
+      setEditingLevel(null);
+      setShowAddForm(true);
+    };
+
+    const handleEdit = (level: Level) => {
+      setFormData({
+        label: level.label,
+        value: level.value,
+        color: level.color,
+        sort_order: level.sort_order
+      });
+      setEditingLevel(level);
+      setShowAddForm(true);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError(null);
+
+      try {
+        if (editingLevel) {
+          const updateData = {
+            label: formData.label,
+            color: formData.color,
+            sort_order: formData.sort_order
+          };
+          
+          if (activeTab === 'severity') {
+            await ApiService.updateSeverityLevel(editingLevel.id, updateData);
+          } else {
+            await ApiService.updateStatusLevel(editingLevel.id, updateData);
+          }
+        } else {
+          if (activeTab === 'severity') {
+            await ApiService.createSeverityLevel(formData);
+          } else {
+            await ApiService.createStatusLevel(formData);
+          }
+        }
+
+        await loadLevels();
+        setShowAddForm(false);
+        setEditingLevel(null);
+        setFormData({ label: '', value: '', color: '#DC143C', sort_order: 1 });
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to save level');
+      }
+    };
+
+    const handleDelete = async (level: Level) => {
+      if (!window.confirm(`Are you sure you want to delete "${level.label}"?`)) {
+        return;
+      }
+
+      try {
+        setError(null);
+        if (activeTab === 'severity') {
+          await ApiService.deleteSeverityLevel(level.id);
+        } else {
+          await ApiService.deleteStatusLevel(level.id);
+        }
+        await loadLevels();
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to delete level');
+      }
+    };
+
+    const currentLevels = activeTab === 'severity' ? severityLevels : statusLevels;
+
+    if (loading) {
+      return (
+        <div className="settings-content-section">
+          <h2>Findings Configuration</h2>
+          <div className="settings-loading">Loading configuration...</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="settings-content-section">
+        <div className="settings-findings-config-header">
+          <h2>Findings Configuration</h2>
+          <button
+            className="settings-action-btn"
+            onClick={() => handleOpenFullPage('/settings/findings-config')}
+          >
+            Open Full Page
+          </button>
+        </div>
+        <p className="settings-description">
+          Configure custom severity and status levels for security findings.
+        </p>
+
+        {error && (
+          <div className="settings-error-message">
+            {error}
+            <button className="settings-error-close" onClick={() => setError(null)}>×</button>
+          </div>
+        )}
+
+        <div className="settings-tabs">
+          <button
+            className={`settings-tab ${activeTab === 'severity' ? 'active' : ''}`}
+            onClick={() => setActiveTab('severity')}
+          >
+            Severity Levels ({severityLevels.length})
+          </button>
+          <button
+            className={`settings-tab ${activeTab === 'status' ? 'active' : ''}`}
+            onClick={() => setActiveTab('status')}
+          >
+            Status Levels ({statusLevels.length})
+          </button>
+        </div>
+
+        {!showAddForm && (
+          <div className="settings-toolbar">
+            <button className="settings-action-btn" onClick={handleAdd}>
+              + Add {activeTab === 'severity' ? 'Severity' : 'Status'} Level
+            </button>
+          </div>
+        )}
+
+        {showAddForm ? (
+          <form className="settings-findings-form" onSubmit={handleSubmit}>
+            <h3>{editingLevel ? 'Edit' : 'Add'} {activeTab === 'severity' ? 'Severity' : 'Status'} Level</h3>
+            
+            <div className="settings-form-group">
+              <label htmlFor="fc-label">Label *</label>
+              <input
+                id="fc-label"
+                type="text"
+                value={formData.label}
+                onChange={(e) => handleLabelChange(e.target.value)}
+                placeholder="e.g., Critical, High, New"
+                required
+              />
+            </div>
+
+            <div className="settings-form-group">
+              <label htmlFor="fc-value">Value (auto-generated)</label>
+              <input
+                id="fc-value"
+                type="text"
+                value={formData.value}
+                readOnly
+                className="settings-readonly-input"
+              />
+              <small className="settings-form-hint">Used internally - generated from label</small>
+            </div>
+
+            <div className="settings-form-row">
+              <div className="settings-form-group">
+                <label htmlFor="fc-color">Color *</label>
+                <div className="settings-color-picker-wrapper">
+                  <input
+                    id="fc-color"
+                    type="color"
+                    value={formData.color}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    value={formData.color}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    pattern="^#[0-9A-Fa-f]{6}$"
+                    placeholder="#DC143C"
+                  />
+                </div>
+              </div>
+
+              <div className="settings-form-group">
+                <label htmlFor="fc-sort">Sort Order *</label>
+                <input
+                  id="fc-sort"
+                  type="number"
+                  value={formData.sort_order}
+                  onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) })}
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="settings-findings-preview">
+              <label>Preview:</label>
+              <span
+                className="settings-badge-preview"
+                style={{
+                  backgroundColor: formData.color,
+                  color: '#fff',
+                  padding: '6px 12px',
+                  borderRadius: '4px',
+                  fontWeight: 600,
+                  fontSize: '13px',
+                  display: 'inline-block'
+                }}
+              >
+                {formData.label.toUpperCase() || 'PREVIEW'}
+              </span>
+            </div>
+
+            <div className="settings-nested-modal-actions">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAddForm(false);
+                  setEditingLevel(null);
+                  setFormData({ label: '', value: '', color: '#DC143C', sort_order: 1 });
+                }}
+              >
+                Cancel
+              </button>
+              <button type="submit">
+                {editingLevel ? 'Update' : 'Create'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="settings-findings-levels-list">
+            {currentLevels.length === 0 ? (
+              <div className="settings-empty-state">
+                <p>No {activeTab} levels configured. Add your first level to get started.</p>
+              </div>
+            ) : (
+              <div className="settings-levels-grid">
+                {currentLevels.map((level) => (
+                  <div key={level.id} className="settings-level-card">
+                    <div className="settings-level-header">
+                      <span
+                        className="settings-level-badge"
+                        style={{
+                          backgroundColor: level.color,
+                          color: '#fff'
+                        }}
+                      >
+                        {level.label}
+                      </span>
+                      {level.is_system_default && (
+                        <span className="settings-system-badge">System</span>
+                      )}
+                    </div>
+                    <div className="settings-level-details">
+                      <div className="settings-level-detail-row">
+                        <span className="settings-level-label">Value:</span>
+                        <code className="settings-level-value">{level.value}</code>
+                      </div>
+                      <div className="settings-level-detail-row">
+                        <span className="settings-level-label">Color:</span>
+                        <span className="settings-level-value">{level.color}</span>
+                      </div>
+                      <div className="settings-level-detail-row">
+                        <span className="settings-level-label">Sort Order:</span>
+                        <span className="settings-level-value">{level.sort_order}</span>
+                      </div>
+                    </div>
+                    {!level.is_system_default && (
+                      <div className="settings-level-actions">
+                        <button
+                          className="settings-btn-sm"
+                          onClick={() => handleEdit(level)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="settings-btn-sm settings-btn-danger"
+                          onClick={() => handleDelete(level)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="settings-info-box" style={{ marginTop: '20px' }}>
+          <h4>ℹ️ About Findings Configuration</h4>
+          <ul>
+            <li>Customize severity and status levels to match your workflow</li>
+            <li>System default levels cannot be modified or deleted</li>
+            <li>Changes apply immediately to all new findings</li>
+            <li>Existing findings retain their current levels</li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   // User Management Component
   const UserManagementContent: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
@@ -1715,6 +2079,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
             </button>
           </div>
         );
+
+      case 'findings-config':
+        return <FindingsConfigContent />;
 
       case 'scanner-tools':
         return <ScannerToolsContent />;

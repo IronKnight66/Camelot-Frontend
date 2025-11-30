@@ -137,13 +137,85 @@ class ApiService {
   }
 
   // Findings API
-  async getFindings() {
-    const response = await this.api.get('/api/v1/findings');
+  async getFindings(params?: {
+    page?: number;
+    page_size?: number;
+    severity_filter?: string;
+    status_filter?: string;
+    category_filter?: string;
+    scan_id?: number;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = `/api/v1/findings${queryString ? `?${queryString}` : ''}`;
+    const response = await this.api.get(url);
     return response.data;
   }
 
   async getFinding(findingId: string) {
     const response = await this.api.get(`/api/v1/findings/${findingId}`);
+    return response.data;
+  }
+
+  async updateFinding(findingId: string, findingData: {
+    title?: string;
+    description?: string;
+    severity?: string;
+    category?: string;
+    status?: string;
+    assigned_to?: string;
+    due_date?: string;
+    resolution_notes?: string;
+    false_positive_reason?: string;
+  }) {
+    const response = await this.api.put(`/api/v1/findings/${findingId}`, findingData);
+    return response.data;
+  }
+
+  async addFindingComment(findingId: string, commentData: {
+    comment_text: string;
+    comment_type?: string;
+    is_internal?: boolean;
+  }) {
+    const response = await this.api.post(`/api/v1/findings/${findingId}/comments`, commentData);
+    return response.data;
+  }
+
+  async markFindingFalsePositive(findingId: string, reason: string) {
+    const response = await this.api.post(`/api/v1/findings/${findingId}/mark-false-positive`, {
+      reason
+    });
+    return response.data;
+  }
+
+  async assignFinding(findingId: string, assignedTo: string, dueDate?: string) {
+    const response = await this.api.post(`/api/v1/findings/${findingId}/assign`, {
+      assigned_to: assignedTo,
+      due_date: dueDate
+    });
+    return response.data;
+  }
+
+  async getFindingComments(findingId: string) {
+    const response = await this.api.get(`/api/v1/findings/${findingId}/comments`);
+    return response.data;
+  }
+
+  async triggerPocGeneration(findingId: string) {
+    const response = await this.api.post(`/api/v1/findings/${findingId}/trigger-poc`);
+    return response.data;
+  }
+
+  async getFindingsSummary(scanId?: number) {
+    const params = scanId ? `?scan_id=${scanId}` : '';
+    const response = await this.api.get(`/api/v1/findings/stats/summary${params}`);
     return response.data;
   }
 
@@ -602,6 +674,106 @@ class ApiService {
     change_reason?: string;
   }) {
     const response = await this.api.put(`/api/v1/admin/system-prompts/tenants/${tenantId}`, promptData);
+    return response.data;
+  }
+
+  // ============================================================================
+  // Tenant Configuration - Severity Levels
+  // ============================================================================
+
+  async getSeverityLevels(includeInactive: boolean = false) {
+    const response = await this.api.get('/api/v1/tenant-config/severity-levels', {
+      params: { include_inactive: includeInactive }
+    });
+    return response.data;
+  }
+
+  async createSeverityLevel(data: {
+    label: string;
+    value: string;
+    color: string;
+    sort_order: number;
+  }) {
+    const response = await this.api.post('/api/v1/tenant-config/severity-levels', data);
+    return response.data;
+  }
+
+  async updateSeverityLevel(id: number, data: {
+    label?: string;
+    color?: string;
+    sort_order?: number;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.put(`/api/v1/tenant-config/severity-levels/${id}`, data);
+    return response.data;
+  }
+
+  async deleteSeverityLevel(id: number) {
+    const response = await this.api.delete(`/api/v1/tenant-config/severity-levels/${id}`);
+    return response.data;
+  }
+
+  async getSeverityLevelUsage(value: string) {
+    const response = await this.api.get(`/api/v1/tenant-config/severity-levels/${value}/usage`);
+    return response.data;
+  }
+
+  // ============================================================================
+  // Tenant Configuration - Status Levels
+  // ============================================================================
+
+  async getStatusLevels(includeInactive: boolean = false) {
+    const response = await this.api.get('/api/v1/tenant-config/status-levels', {
+      params: { include_inactive: includeInactive }
+    });
+    return response.data;
+  }
+
+  async createStatusLevel(data: {
+    label: string;
+    value: string;
+    color: string;
+    sort_order: number;
+  }) {
+    const response = await this.api.post('/api/v1/tenant-config/status-levels', data);
+    return response.data;
+  }
+
+  async updateStatusLevel(id: number, data: {
+    label?: string;
+    color?: string;
+    sort_order?: number;
+    is_active?: boolean;
+  }) {
+    const response = await this.api.put(`/api/v1/tenant-config/status-levels/${id}`, data);
+    return response.data;
+  }
+
+  async deleteStatusLevel(id: number) {
+    const response = await this.api.delete(`/api/v1/tenant-config/status-levels/${id}`);
+    return response.data;
+  }
+
+  async getStatusLevelUsage(value: string) {
+    const response = await this.api.get(`/api/v1/tenant-config/status-levels/${value}/usage`);
+    return response.data;
+  }
+
+  // ============================================================================
+  // Tenant Configuration - Migration
+  // ============================================================================
+
+  async migrateFindingsLevel(oldValue: string, newValue: string, levelType: 'severity' | 'status') {
+    const response = await this.api.post('/api/v1/tenant-config/migrate-findings', {
+      old_value: oldValue,
+      new_value: newValue,
+      level_type: levelType
+    });
+    return response.data;
+  }
+
+  async initializeTenantDefaults() {
+    const response = await this.api.post('/api/v1/tenant-config/initialize-defaults');
     return response.data;
   }
 }
