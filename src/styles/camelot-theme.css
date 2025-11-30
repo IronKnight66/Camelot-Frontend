@@ -18,21 +18,21 @@
   --camelot-navy: #000080;              /* Navy Blue - Deep accents, shadows */
   --camelot-sky-blue: #87CEEB;          /* Sky Blue - Light accents */
 
-  --camelot-gold: #FFD700;              /* Noble Gold - Success, highlights */
-  --camelot-dark-gold: #DAA520;         /* Dark Gold - Borders, accents */
-  --camelot-pale-gold: #FFFACD;         /* Pale Gold - Subtle backgrounds */
+  --camelot-gold: #f97316;              /* Orange - Success, highlights (replaced gold) */
+  --camelot-dark-gold: #38bdf8;         /* Cyan Blue - Borders, accents (replaced dark gold) */
+  --camelot-pale-gold: #0f172a;         /* Dark Navy - Subtle backgrounds (replaced pale gold) */
 
   --camelot-forest-green: #228B22;      /* Forest Green - Active states, success */
   --camelot-dark-green: #006400;        /* Dark Green - Deep success tones */
 
   /* NEUTRAL MEDIEVAL TONES */
-  --camelot-black-knight: #1C1C1C;      /* Black Knight - Primary text */
-  --camelot-charcoal: #2C2C2C;          /* Charcoal - Secondary text */
-  --camelot-stone-gray: #696969;        /* Stone Gray - Borders, dividers */
-  --camelot-light-stone: #808080;       /* Light Stone - Secondary elements */
-  --camelot-parchment: #F4E8D0;         /* Parchment - Light backgrounds */
-  --camelot-pale-parchment: #FAF0DC;    /* Pale Parchment - Subtle backgrounds */
-  --camelot-aged-parchment: #E8DCC0;    /* Aged Parchment - Card backgrounds */
+  --camelot-black-knight: #e2e8f0;      /* Light text for dark theme */
+  --camelot-charcoal: #94a3b8;          /* Light gray - Secondary text */
+  --camelot-stone-gray: rgba(56, 189, 248, 0.3);  /* Blue accent - Borders, dividers */
+  --camelot-light-stone: #64748b;       /* Slate - Secondary elements */
+  --camelot-parchment: #1e293b;         /* Dark Navy - backgrounds */
+  --camelot-pale-parchment: #020617;    /* Darker Navy - Subtle backgrounds */
+  --camelot-aged-parchment: #0f172a;    /* Dark - Card backgrounds */
 
   /* SEMANTIC COLORS (Medieval Theme) */
   --camelot-danger: var(--camelot-crimson);
@@ -50,10 +50,10 @@
   --camelot-info-bg: #F0F8FF;
   --camelot-info-border: var(--camelot-sky-blue);
 
-  --camelot-warning: var(--camelot-gold);
-  --camelot-warning-dark: var(--camelot-dark-gold);
-  --camelot-warning-bg: #FFFEF0;
-  --camelot-warning-border: var(--camelot-pale-gold);
+  --camelot-warning: #f97316;
+  --camelot-warning-dark: #ea580c;
+  --camelot-warning-bg: rgba(249, 115, 22, 0.1);
+  --camelot-warning-border: #fb923c;
 
   /* SHADOWS & DEPTH */
   --camelot-shadow-sm: 0 2px 4px rgba(28, 28, 28, 0.1);
@@ -243,13 +243,13 @@ h6 {
 }
 
 .camelot-btn-gold {
-  background: linear-gradient(135deg, var(--camelot-gold) 0%, var(--camelot-dark-gold) 100%);
-  color: var(--camelot-black-knight);
-  border: 2px solid var(--camelot-dark-gold);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: #f9fafb;
+  border: 2px solid #fb923c;
 }
 
 .camelot-btn-gold:hover {
-  background: linear-gradient(135deg, var(--camelot-dark-gold) 0%, #B8860B 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
 }
 
 .camelot-btn-green {
@@ -357,7 +357,7 @@ h6 {
 }
 
 .camelot-table tbody tr:hover {
-  background-color: var(--camelot-pale-gold);
+  background-color: #334155;
 }
 
 .camelot-table tbody td {
@@ -396,9 +396,9 @@ h6 {
 }
 
 .camelot-badge-gold {
-  background-color: var(--camelot-warning-bg);
-  color: var(--camelot-dark-gold);
-  border-color: var(--camelot-gold);
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #f97316;
+  border-color: #fb923c;
 }
 
 .camelot-badge-green {
@@ -543,7 +543,7 @@ h6 {
 }
 
 .camelot-text-gold {
-  color: var(--camelot-dark-gold);
+  color: #f97316;
 }
 
 .camelot-bg-parchment {
@@ -556,7 +556,7 @@ h6 {
 
 .camelot-divider {
   height: 2px;
-  background: linear-gradient(90deg, transparent 0%, var(--camelot-dark-gold) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.3) 50%, transparent 100%);
   margin: var(--camelot-space-lg) 0;
 }
 

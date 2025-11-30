@@ -118,10 +118,13 @@ const Findings: React.FC = () => {
         api.getStatusLevels()
       ]);
       
+      console.log('📊 Loaded severity levels:', severity);
+      console.log('📊 Loaded status levels:', status);
+      
       setSeverityLevels(severity);
       setStatusLevels(status);
     } catch (err) {
-      console.error('Failed to load severity/status levels:', err);
+      console.error('❌ Failed to load severity/status levels:', err);
       // Don't show error to user - fall back to empty levels
     }
   };
@@ -164,6 +167,30 @@ const Findings: React.FC = () => {
     setSorting([]);
   };
 
+  const handleSeverityClick = (severity: string) => {
+    // Switch to list tab
+    setActiveTab('list');
+    
+    // Clear other filters
+    setGlobalFilter('');
+    setSorting([]);
+    
+    // Apply severity filter
+    setColumnFilters([{ id: 'severity', value: severity }]);
+  };
+
+  const handleStatusClick = (status: string) => {
+    // Switch to list tab
+    setActiveTab('list');
+    
+    // Clear other filters
+    setGlobalFilter('');
+    setSorting([]);
+    
+    // Apply status filter
+    setColumnFilters([{ id: 'status', value: status }]);
+  };
+
   const handleViewDetails = useCallback((finding: Finding) => {
     setSelectedFinding(finding);
   }, []);
@@ -171,6 +198,30 @@ const Findings: React.FC = () => {
   const closeDetailsModal = () => {
     setSelectedFinding(null);
   };
+
+  const handleSeverityChange = useCallback(async (findingId: number, newSeverity: string) => {
+    setUpdatingStatus(findingId);
+    try {
+      await api.updateFinding(findingId.toString(), { severity: newSeverity });
+      
+      // Update the finding in the local state
+      setFindings(prevFindings => 
+        prevFindings.map(f => 
+          f.id === findingId ? { ...f, severity: newSeverity } : f
+        )
+      );
+      
+      // If the modal is open for this finding, update it too
+      if (selectedFinding && selectedFinding.id === findingId) {
+        setSelectedFinding({ ...selectedFinding, severity: newSeverity });
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || 'Failed to update finding severity');
+      console.error('Error updating finding severity:', err);
+    } finally {
+      setUpdatingStatus(null);
+    }
+  }, [selectedFinding]);
 
   const handleStatusChange = useCallback(async (findingId: number, newStatus: string) => {
     setUpdatingStatus(findingId);
@@ -270,7 +321,31 @@ const Findings: React.FC = () => {
       {
         accessorKey: 'severity',
         header: 'Severity',
-        cell: (info) => renderSeverityBadge(info.getValue() as string),
+        cell: (info) => {
+          const finding = info.row.original;
+          const currentLevel = severityLevels.find(l => l.value === finding.severity);
+          const color = currentLevel?.color || '#808080';
+          
+          return (
+            <select
+              className={`severity-dropdown ${getSeverityClass(finding.severity)}`}
+              style={{ backgroundColor: color, color: '#fff', borderColor: color }}
+              value={finding.severity}
+              onChange={(e) => handleSeverityChange(finding.id, e.target.value)}
+              disabled={updatingStatus === finding.id}
+            >
+              {severityLevels.length > 0 ? (
+                severityLevels.map(level => (
+                  <option key={level.value} value={level.value}>
+                    {level.label}
+                  </option>
+                ))
+              ) : (
+                <option value={finding.severity}>{finding.severity}</option>
+              )}
+            </select>
+          );
+        },
         enableSorting: true,
         filterFn: (row, id, value) => {
           return value === '' || row.getValue(id) === value;
@@ -292,11 +367,15 @@ const Findings: React.FC = () => {
               onChange={(e) => handleStatusChange(finding.id, e.target.value)}
               disabled={updatingStatus === finding.id}
             >
-              {statusLevels.map(level => (
-                <option key={level.value} value={level.value}>
-                  {level.label}
-                </option>
-              ))}
+              {statusLevels.length > 0 ? (
+                statusLevels.map(level => (
+                  <option key={level.value} value={level.value}>
+                    {level.label}
+                  </option>
+                ))
+              ) : (
+                <option value={finding.status}>{finding.status}</option>
+              )}
             </select>
           );
         },
@@ -344,11 +423,31 @@ const Findings: React.FC = () => {
                 </div>
               )}
               {finding.target_ip && <div className="target-ip">{finding.target_ip}</div>}
+              {finding.target_port && <div className="target-port">:{finding.target_port}</div>}
               {!finding.target_url && !finding.target_ip && <span>—</span>}
             </>
           );
         },
         enableGlobalFilter: true,
+        enableColumnFilter: true,
+        filterFn: (row, columnId, filterValue) => {
+          const finding = row.original;
+          const searchLower = filterValue.toLowerCase();
+          
+          // Search across target URL, IP, and port
+          const searchableFields = [
+            finding.target_url,
+            finding.target_ip,
+            finding.target_port?.toString(),
+          ].filter(Boolean);
+          
+          return searchableFields.some(field => 
+            field?.toLowerCase().includes(searchLower)
+          );
+        },
+        // Custom accessor for sorting
+        accessorFn: (row) => row.target_url || row.target_ip || '',
+        enableSorting: true,
       },
       {
         accessorKey: 'created_at',
@@ -377,7 +476,7 @@ const Findings: React.FC = () => {
         },
       },
     ],
-    [updatingStatus, handleStatusChange, handleViewDetails]
+    [updatingStatus, handleSeverityChange, handleStatusChange, handleViewDetails, severityLevels, statusLevels]
   );
 
   // Configure TanStack Table
@@ -399,7 +498,7 @@ const Findings: React.FC = () => {
       const finding = row.original;
       const searchLower = filterValue.toLowerCase();
       
-      // Search across multiple fields
+      // Search across multiple fields including target information
       const searchableFields = [
         finding.title,
         finding.description,
@@ -408,6 +507,10 @@ const Findings: React.FC = () => {
         finding.cwe_id,
         finding.target_url,
         finding.target_ip,
+        finding.target_port?.toString(),
+        finding.category,
+        finding.severity,
+        finding.status,
       ].filter(Boolean);
       
       return searchableFields.some(field => 
@@ -481,7 +584,7 @@ const Findings: React.FC = () => {
                 <div className="table-search-wrapper">
                   <input
                     type="text"
-                    placeholder="Search findings by title, description, CVE/CWE, target..."
+                    placeholder="Search by title, CVE/CWE, target URL/IP, severity, status..."
                     value={globalFilter ?? ''}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="table-search-input"
@@ -574,23 +677,43 @@ const Findings: React.FC = () => {
             <div className="summary-section">
               <h3>By Severity</h3>
               <div className="summary-grid">
-                <div className="summary-item severity-critical">
+                <div 
+                  className="summary-item severity-critical clickable" 
+                  onClick={() => handleSeverityClick('critical')}
+                  title="Click to filter by Critical severity"
+                >
                   <span className="summary-label">Critical</span>
                   <span className="summary-value">{summary.by_severity.critical}</span>
                 </div>
-                <div className="summary-item severity-high">
+                <div 
+                  className="summary-item severity-high clickable" 
+                  onClick={() => handleSeverityClick('high')}
+                  title="Click to filter by High severity"
+                >
                   <span className="summary-label">High</span>
                   <span className="summary-value">{summary.by_severity.high}</span>
                 </div>
-                <div className="summary-item severity-medium">
+                <div 
+                  className="summary-item severity-medium clickable" 
+                  onClick={() => handleSeverityClick('medium')}
+                  title="Click to filter by Medium severity"
+                >
                   <span className="summary-label">Medium</span>
                   <span className="summary-value">{summary.by_severity.medium}</span>
                 </div>
-                <div className="summary-item severity-low">
+                <div 
+                  className="summary-item severity-low clickable" 
+                  onClick={() => handleSeverityClick('low')}
+                  title="Click to filter by Low severity"
+                >
                   <span className="summary-label">Low</span>
                   <span className="summary-value">{summary.by_severity.low}</span>
                 </div>
-                <div className="summary-item severity-info">
+                <div 
+                  className="summary-item severity-info clickable" 
+                  onClick={() => handleSeverityClick('info')}
+                  title="Click to filter by Info severity"
+                >
                   <span className="summary-label">Info</span>
                   <span className="summary-value">{summary.by_severity.info}</span>
                 </div>
@@ -600,19 +723,35 @@ const Findings: React.FC = () => {
             <div className="summary-section">
               <h3>By Status</h3>
               <div className="summary-grid">
-                <div className="summary-item status-new">
+                <div 
+                  className="summary-item status-new clickable" 
+                  onClick={() => handleStatusClick('new')}
+                  title="Click to filter by New status"
+                >
                   <span className="summary-label">New</span>
                   <span className="summary-value">{summary.by_status.new}</span>
                 </div>
-                <div className="summary-item status-confirmed">
+                <div 
+                  className="summary-item status-confirmed clickable" 
+                  onClick={() => handleStatusClick('confirmed')}
+                  title="Click to filter by Confirmed status"
+                >
                   <span className="summary-label">Confirmed</span>
                   <span className="summary-value">{summary.by_status.confirmed}</span>
                 </div>
-                <div className="summary-item status-false-positive">
+                <div 
+                  className="summary-item status-false-positive clickable" 
+                  onClick={() => handleStatusClick('false_positive')}
+                  title="Click to filter by False Positive status"
+                >
                   <span className="summary-label">False Positive</span>
                   <span className="summary-value">{summary.by_status.false_positive}</span>
                 </div>
-                <div className="summary-item status-fixed">
+                <div 
+                  className="summary-item status-fixed clickable" 
+                  onClick={() => handleStatusClick('fixed')}
+                  title="Click to filter by Fixed status"
+                >
                   <span className="summary-label">Fixed</span>
                   <span className="summary-value">{summary.by_status.fixed}</span>
                 </div>

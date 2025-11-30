@@ -1,4 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  flexRender,
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+} from '@tanstack/react-table';
 import Layout from './Layout';
 import api from '../services/api';
 import './Reports.css';
@@ -45,21 +55,23 @@ const Reports: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Filters
-  const [filters, setFilters] = useState({
-    provider: '',
-    status: '',
+  // Date filters for costs tab (keep these for server-side filtering)
+  const [dateFilters, setDateFilters] = useState({
     startDate: '',
     endDate: '',
-    limit: 100
   });
+  
+  // TanStack Table state
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [sorting, setSorting] = useState<SortingState>([]);
   
   const [activeTab, setActiveTab] = useState<'logs' | 'summary' | 'costs'>('logs');
   const [selectedLog, setSelectedLog] = useState<ChatLog | null>(null);
 
   useEffect(() => {
     loadData();
-  }, [activeTab, filters]);
+  }, [activeTab, dateFilters]);
 
   const loadData = async () => {
     setLoading(true);
@@ -67,20 +79,29 @@ const Reports: React.FC = () => {
     
     try {
       if (activeTab === 'logs') {
-        const filtersObj: any = {};
-        if (filters.provider) filtersObj.provider = filters.provider;
-        if (filters.status) filtersObj.status = filters.status;
-        if (filters.startDate) filtersObj.start_date = filters.startDate;
-        if (filters.endDate) filtersObj.end_date = filters.endDate;
-        if (filters.limit) filtersObj.limit = filters.limit;
-        
-        const response = await api.getChatLogs(filtersObj);
-        setLogs(response.logs || []);
+        const response = await api.getChatLogs({ limit: 1000 });
+        console.log('🔍 Chat Logs API Response:', response);
+        console.log('🔍 Response structure:', {
+          isArray: Array.isArray(response),
+          hasLogs: 'logs' in response,
+          hasData: 'data' in response,
+          total: response.total,
+          filters: response.filters_applied
+        });
+        // Handle different response formats
+        const logsData = Array.isArray(response) 
+          ? response 
+          : (response.logs || response.data || []);
+        console.log('📊 Number of logs:', logsData.length);
+        if (logsData.length > 0) {
+          console.log('📋 First log sample:', logsData[0]);
+        }
+        setLogs(logsData);
       } else if (activeTab === 'summary') {
         const summaryData = await api.getChatLogsSummary();
         setSummary(summaryData);
       } else if (activeTab === 'costs') {
-        const costs = await api.getChatLogsCosts(filters.startDate || undefined, filters.endDate || undefined);
+        const costs = await api.getChatLogsCosts(dateFilters.startDate || undefined, dateFilters.endDate || undefined);
         setCostSummary(costs);
       }
     } catch (err: any) {
@@ -91,17 +112,20 @@ const Reports: React.FC = () => {
     }
   };
 
-  const handleFilterChange = (key: string, value: string | number) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+  const handleDateFilterChange = (key: string, value: string) => {
+    setDateFilters(prev => ({ ...prev, [key]: value }));
   };
 
   const clearFilters = () => {
-    setFilters({
-      provider: '',
-      status: '',
+    setGlobalFilter('');
+    setColumnFilters([]);
+    setSorting([]);
+  };
+
+  const clearDateFilters = () => {
+    setDateFilters({
       startDate: '',
       endDate: '',
-      limit: 100
     });
   };
 
@@ -125,6 +149,155 @@ const Reports: React.FC = () => {
     if (latency === null) return 'N/A';
     return `${latency.toFixed(0)}ms`;
   };
+
+  const handleViewLog = useCallback((log: ChatLog) => {
+    setSelectedLog(log);
+  }, []);
+
+  // Define column definitions for TanStack Table
+  const columns = useMemo<ColumnDef<ChatLog>[]>(
+    () => [
+      {
+        accessorKey: 'created_at',
+        header: 'Time',
+        cell: (info) => formatDate(info.getValue() as string),
+        enableSorting: true,
+        sortingFn: (rowA, rowB) => {
+          const dateA = new Date(rowA.getValue('created_at') as string).getTime();
+          const dateB = new Date(rowB.getValue('created_at') as string).getTime();
+          return dateA - dateB;
+        },
+      },
+      {
+        accessorKey: 'provider',
+        header: 'Provider',
+        cell: (info) => info.getValue() as string,
+        enableSorting: true,
+        filterFn: (row, id, value) => {
+          return value === '' || row.getValue(id) === value;
+        },
+      },
+      {
+        accessorKey: 'model_name',
+        header: 'Model',
+        cell: (info) => info.getValue() as string || 'N/A',
+        enableSorting: true,
+        enableGlobalFilter: true,
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: (info) => (
+          <span className={`status-badge status-${info.getValue()}`}>
+            {info.getValue() as string}
+          </span>
+        ),
+        enableSorting: true,
+        filterFn: (row, id, value) => {
+          return value === '' || row.getValue(id) === value;
+        },
+      },
+      {
+        accessorKey: 'total_tokens',
+        header: 'Tokens',
+        cell: (info) => formatTokens(info.getValue() as number | null),
+        enableSorting: true,
+        sortingFn: (rowA, rowB) => {
+          const tokensA = rowA.getValue('total_tokens') as number | null ?? 0;
+          const tokensB = rowB.getValue('total_tokens') as number | null ?? 0;
+          return tokensA - tokensB;
+        },
+      },
+      {
+        accessorKey: 'cost_usd',
+        header: 'Cost',
+        cell: (info) => formatCost(info.getValue() as number | null),
+        enableSorting: true,
+        sortingFn: (rowA, rowB) => {
+          const costA = rowA.getValue('cost_usd') as number | null ?? 0;
+          const costB = rowB.getValue('cost_usd') as number | null ?? 0;
+          return costA - costB;
+        },
+      },
+      {
+        accessorKey: 'latency_ms',
+        header: 'Latency',
+        cell: (info) => formatLatency(info.getValue() as number | null),
+        enableSorting: true,
+        sortingFn: (rowA, rowB) => {
+          const latencyA = rowA.getValue('latency_ms') as number | null ?? 0;
+          const latencyB = rowB.getValue('latency_ms') as number | null ?? 0;
+          return latencyA - latencyB;
+        },
+      },
+      {
+        accessorKey: 'user_message',
+        header: 'User Message',
+        cell: (info) => {
+          const message = info.getValue() as string;
+          return (
+            <div className="message-cell" title={message}>
+              {message.length > 50 ? `${message.substring(0, 50)}...` : message}
+            </div>
+          );
+        },
+        enableGlobalFilter: true,
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: (info) => {
+          const log = info.row.original;
+          return (
+            <button
+              className="view-details-btn"
+              onClick={() => handleViewLog(log)}
+            >
+              View
+            </button>
+          );
+        },
+      },
+    ],
+    [handleViewLog]
+  );
+
+  // Configure TanStack Table
+  const table = useReactTable({
+    data: logs || [],
+    columns,
+    state: {
+      columnFilters,
+      globalFilter,
+      sorting,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    globalFilterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      const log = row.original;
+      const searchLower = filterValue.toLowerCase();
+      
+      // Search across multiple fields
+      const searchableFields = [
+        log.provider,
+        log.model_name,
+        log.status,
+        log.user_message,
+        log.assistant_message,
+        log.session_id,
+        log.user_id,
+      ].filter(Boolean);
+      
+      return searchableFields.some(field => 
+        field?.toLowerCase().includes(searchLower)
+      );
+    },
+  });
 
   return (
     <Layout>
@@ -157,125 +330,88 @@ const Reports: React.FC = () => {
 
         {activeTab === 'logs' && (
           <div className="reports-content">
-            <div className="filters-section">
-              <h3>Filters</h3>
-              <div className="filters-grid">
-                <div className="filter-group">
-                  <label>Provider</label>
-                  <select
-                    value={filters.provider}
-                    onChange={(e) => handleFilterChange('provider', e.target.value)}
-                  >
-                    <option value="">All Providers</option>
-                    <option value="openai">OpenAI</option>
-                    <option value="anthropic">Anthropic</option>
-                    <option value="bedrock">Bedrock</option>
-                  </select>
-                </div>
-                <div className="filter-group">
-                  <label>Status</label>
-                  <select
-                    value={filters.status}
-                    onChange={(e) => handleFilterChange('status', e.target.value)}
-                  >
-                    <option value="">All Statuses</option>
-                    <option value="success">Success</option>
-                    <option value="error">Error</option>
-                    <option value="timeout">Timeout</option>
-                  </select>
-                </div>
-                <div className="filter-group">
-                  <label>Start Date</label>
-                  <input
-                    type="date"
-                    value={filters.startDate}
-                    onChange={(e) => handleFilterChange('startDate', e.target.value)}
-                  />
-                </div>
-                <div className="filter-group">
-                  <label>End Date</label>
-                  <input
-                    type="date"
-                    value={filters.endDate}
-                    onChange={(e) => handleFilterChange('endDate', e.target.value)}
-                  />
-                </div>
-                <div className="filter-group">
-                  <label>Limit</label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="1000"
-                    value={filters.limit}
-                    onChange={(e) => handleFilterChange('limit', parseInt(e.target.value) || 100)}
-                  />
-                </div>
-                <div className="filter-group">
-                  <button className="clear-filters-btn" onClick={clearFilters}>
-                    Clear Filters
-                  </button>
-                </div>
-              </div>
-            </div>
-
             {loading ? (
               <div className="loading">Loading logs...</div>
             ) : error ? (
               <div className="error-message">{error}</div>
-            ) : (
-              <div className="logs-table-container">
-                <table className="logs-table">
-                  <thead>
-                    <tr>
-                      <th>Time</th>
-                      <th>Provider</th>
-                      <th>Model</th>
-                      <th>Status</th>
-                      <th>Tokens</th>
-                      <th>Cost</th>
-                      <th>Latency</th>
-                      <th>User Message</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {logs.length === 0 ? (
-                      <tr>
-                        <td colSpan={9} className="no-data">No logs found</td>
-                      </tr>
-                    ) : (
-                      logs.map((log) => (
-                        <tr key={log.id}>
-                          <td>{formatDate(log.created_at)}</td>
-                          <td>{log.provider}</td>
-                          <td>{log.model_name || 'N/A'}</td>
-                          <td>
-                            <span className={`status-badge status-${log.status}`}>
-                              {log.status}
-                            </span>
-                          </td>
-                          <td>{formatTokens(log.total_tokens)}</td>
-                          <td>{formatCost(log.cost_usd)}</td>
-                          <td>{formatLatency(log.latency_ms)}</td>
-                          <td className="message-cell">
-                            {log.user_message.length > 50
-                              ? `${log.user_message.substring(0, 50)}...`
-                              : log.user_message}
-                          </td>
-                          <td>
-                            <button
-                              className="view-details-btn"
-                              onClick={() => setSelectedLog(log)}
-                            >
-                              View
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
+            ) : logs.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🔍</div>
+                <h3>No Logs Found</h3>
+                <p>No chat logs available.</p>
               </div>
+            ) : table.getRowModel().rows.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🔍</div>
+                <h3>No Logs Found</h3>
+                <p>No chat logs match your current search or filters.</p>
+                {(globalFilter || columnFilters.length > 0) && (
+                  <button className="clear-filters-btn" onClick={clearFilters}>
+                    Clear Filters
+                  </button>
+                )}
+              </div>
+            ) : (
+              <>
+                {/* Global Search */}
+                <div className="table-search-wrapper">
+                  <input
+                    type="text"
+                    placeholder="Search logs by provider, model, status, message..."
+                    value={globalFilter ?? ''}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    className="table-search-input"
+                  />
+                  {(globalFilter || columnFilters.length > 0) && (
+                    <button className="clear-filters-btn" onClick={clearFilters} style={{ marginLeft: '10px' }}>
+                      Clear Filters
+                    </button>
+                  )}
+                </div>
+
+                {/* Logs Table */}
+                <div className="logs-table-container tanstack-table-wrapper">
+                  <table className="logs-table tanstack-table">
+                    <thead>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id}>
+                          {headerGroup.headers.map((header) => (
+                            <th
+                              key={header.id}
+                              style={{ width: header.getSize() !== 150 ? header.getSize() : undefined }}
+                              className={header.column.getCanSort() ? 'sortable-header' : ''}
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              <div className="header-content">
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                {header.column.getCanSort() && (
+                                  <span className="sort-indicator">
+                                    {{
+                                      asc: ' ↑',
+                                      desc: ' ↓',
+                                    }[header.column.getIsSorted() as string] ?? ' ⇅'}
+                                  </span>
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      ))}
+                    </thead>
+                    <tbody>
+                      {table.getRowModel().rows.map((row) => (
+                        <tr key={row.id}>
+                          {row.getVisibleCells().map((cell) => (
+                            <td key={cell.id}>
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         )}
@@ -346,17 +482,22 @@ const Reports: React.FC = () => {
                   <label>Start Date</label>
                   <input
                     type="date"
-                    value={filters.startDate}
-                    onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                    value={dateFilters.startDate}
+                    onChange={(e) => handleDateFilterChange('startDate', e.target.value)}
                   />
                 </div>
                 <div className="filter-group">
                   <label>End Date</label>
                   <input
                     type="date"
-                    value={filters.endDate}
-                    onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                    value={dateFilters.endDate}
+                    onChange={(e) => handleDateFilterChange('endDate', e.target.value)}
                   />
+                </div>
+                <div className="filter-group">
+                  <button className="clear-filters-btn" onClick={clearDateFilters}>
+                    Clear Date Filters
+                  </button>
                 </div>
               </div>
             </div>

@@ -189,34 +189,35 @@
 .btn-primary,
 .btn-secondary {
   padding: 12px 24px;
-  border: 2px solid transparent;
-  border-radius: var(--camelot-radius-md);
+  border: 1px solid transparent;
+  border-radius: 999px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   font-family: var(--camelot-font-heading);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all var(--camelot-transition-base);
-  box-shadow: var(--camelot-shadow-sm);
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
 }
 
 .btn-primary {
-  background: #38bdf8;
-  color: #0f172a;
-  border-color: #38bdf8;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: #f9fafb;
+  border-color: #b91c1c;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background: #0ea5e9;
+  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
+  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
 }
 
 .btn-secondary {
   background: #334155;
   color: #e2e8f0;
   border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:hover {
@@ -226,43 +227,43 @@
 }
 
 .btn-submit {
-  background: rgba(34, 197, 94, 0.3);
-  color: #4ade80;
-  border-color: rgba(34, 197, 94, 0.5);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: #f9fafb;
+  border-color: #b91c1c;
 }
 
 .btn-submit:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
+  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
 }
 
 .btn-add {
   padding: 8px 16px;
-  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
-  color: white;
-  border: 2px solid var(--camelot-navy);
-  border-radius: var(--camelot-radius-sm);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: #f9fafb;
+  border: 1px solid #b91c1c;
+  border-radius: 999px;
   font-size: 14px;
   font-family: var(--camelot-font-heading);
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   cursor: pointer;
-  transition: all var(--camelot-transition-base);
-  box-shadow: var(--camelot-shadow-sm);
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
 }
 
 .btn-add:hover {
-  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
-  transform: translateY(-1px);
-  box-shadow: var(--camelot-shadow-md);
+  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
 }
 
 .btn-remove {
-  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
   color: white;
-  border: 2px solid var(--camelot-crimson-dark);
-  border-radius: var(--camelot-radius-sm);
+  border: 1px solid #b91c1c;
+  border-radius: 50%;
   width: 24px;
   height: 24px;
   display: flex;
@@ -271,14 +272,14 @@
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
-  transition: all var(--camelot-transition-base);
-  box-shadow: var(--camelot-shadow-sm);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(248, 113, 113, 0.5);
 }
 
 .btn-remove:hover {
-  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #a00030 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
   transform: scale(1.1);
-  box-shadow: var(--camelot-shadow-md);
+  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.8);
 }
 
 /* Sections - Quest Configuration Areas */

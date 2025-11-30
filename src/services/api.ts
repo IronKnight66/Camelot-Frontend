@@ -776,6 +776,17 @@ class ApiService {
     const response = await this.api.post('/api/v1/tenant-config/initialize-defaults');
     return response.data;
   }
+
+  // ============================================================================
+  // Reports
+  // ============================================================================
+
+  async downloadReport(reportUrl: string) {
+    const response = await this.api.get(reportUrl, {
+      responseType: 'blob'
+    });
+    return response.data;
+  }
 }
 
 export default new ApiService();

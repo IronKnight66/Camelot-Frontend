@@ -9,12 +9,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useChatbot } from '../../contexts/ChatbotContext';
 import ApiService from '../../services/api';
+import ReportDownload from '../ReportDownload';
 import './ChatbotSidebar.css';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp?: string;
+  reportUrl?: string;
 }
 
 interface ChatAction {
@@ -26,6 +28,7 @@ interface ChatResponse {
   response: string;
   session_id: string;
   action?: ChatAction | null;
+  report_url?: string | null;
 }
 
 const ChatbotSidebar: React.FC = () => {
@@ -57,6 +60,7 @@ const ChatbotSidebar: React.FC = () => {
           role: msg.role,
           content: msg.content,
           timestamp: msg.timestamp,
+          reportUrl: msg.reportUrl || msg.report_url
         }));
         setMessages(loadedMessages);
       } else {
@@ -113,11 +117,28 @@ const ChatbotSidebar: React.FC = () => {
     try {
       const response: ChatResponse = await ApiService.sendChatMessage(input.trim(), sessionId);
       
+      // EXTENSIVE DEBUG LOGGING
+      console.log('🔵 FULL API RESPONSE:', JSON.stringify(response, null, 2));
+      console.log('🔵 report_url field:', response.report_url);
+      console.log('🔵 report_url type:', typeof response.report_url);
+      
+      if (response.report_url) {
+        alert('✅ Report URL IS PRESENT: ' + response.report_url);
+        console.log('📊 Report URL received:', response.report_url);
+        console.log('🎉 REPORT CARD SHOULD APPEAR NOW!');
+      } else {
+        alert('❌ NO report_url field! Response keys: ' + Object.keys(response).join(', '));
+        console.error('⚠️ No report_url in response:', response);
+      }
+      
       const assistantMessage: Message = {
         role: 'assistant',
         content: response.response,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        reportUrl: response.report_url || undefined
       };
+      
+      console.log('🔵 Created message object:', JSON.stringify(assistantMessage, null, 2));
 
       setMessages(prev => [...prev, assistantMessage]);
 
@@ -245,21 +266,49 @@ const ChatbotSidebar: React.FC = () => {
           )}
 
           <div className="chatbot-messages">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`chatbot-message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
-              >
-                <div className="message-content">
-                  {message.content}
-                </div>
-                {message.timestamp && (
-                  <div className="message-timestamp">
-                    {new Date(message.timestamp).toLocaleTimeString()}
+            {messages && messages.length > 0 ? (
+              messages.map((message, index) => {
+                // Debug each message as we render
+                if (message.role === 'assistant') {
+                  console.log(`🔵 Rendering assistant message #${index}:`, {
+                    hasReportUrl: !!message.reportUrl,
+                    reportUrl: message.reportUrl
+                  });
+                }
+                
+                return (
+                  <div
+                    key={index}
+                    className={`chatbot-message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+                  >
+                    <div className="message-content">
+                      {message.content}
+                    </div>
+                    {message.reportUrl && (
+                      <>
+                        {console.log('🎨 RENDERING REPORT DOWNLOAD COMPONENT:', message.reportUrl)}
+                        <ReportDownload 
+                          reportUrl={message.reportUrl}
+                          format="pdf"
+                          generatedAt={message.timestamp}
+                        />
+                      </>
+                    )}
+                    {message.timestamp && (
+                      <div className="message-timestamp">
+                        {new Date(message.timestamp).toLocaleTimeString()}
+                      </div>
+                    )}
                   </div>
-                )}
+                );
+              })
+            ) : (
+              <div className="chatbot-message assistant-message">
+                <div className="message-content">
+                  Loading...
+                </div>
               </div>
-            ))}
+            )}
             
             {loading && (
               <div className="chatbot-message assistant-message">
