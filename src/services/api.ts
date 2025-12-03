@@ -557,6 +557,21 @@ class ApiService {
     return response.data;
   }
 
+  async getChatPresets() {
+    const response = await this.api.get('/api/v1/chatbot/presets');
+    return response.data;
+  }
+
+  async updateChatPreset(presetNumber: number, data: {title: string, message: string, is_active: boolean}) {
+    const response = await this.api.put(`/api/v1/chatbot/presets/${presetNumber}`, data);
+    return response.data;
+  }
+
+  async resetChatPresets() {
+    const response = await this.api.post('/api/v1/chatbot/presets/reset');
+    return response.data;
+  }
+
   // Chatbot Provider Settings
   async getChatbotProvider() {
     const response = await this.api.get('/api/v1/tenant/chatbot-provider');

@@ -221,7 +221,45 @@
   border-radius: 10px;
   flex-shrink: 0;
   color: #38bdf8;
+}
+
+/* Chat Presets Styles */
+.chat-presets-separator {
+  border-top: 1px solid rgba(56, 189, 248, 0.2);
+  margin: 12px 0;
+  padding-top: 8px;
+}
+
+.chat-presets-label {
+  font-size: 11px;
+  color: #6b7280;
+  padding: 0 12px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.chat-preset-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #a78bfa;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--camelot-font-body);
+}
+
+.chat-preset-item:hover {
+  background: rgba(167, 139, 250, 0.1);
+  color: #c4b5fd;
+}
+
+.chat-preset-item svg {
   flex-shrink: 0;
+  color: #a78bfa;
 }
 
 .chat-sidebar-footer {

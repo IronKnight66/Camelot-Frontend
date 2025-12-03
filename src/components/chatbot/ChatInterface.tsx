@@ -48,6 +48,17 @@ interface ChatSession {
   messages: Message[];
 }
 
+interface ChatPreset {
+  id?: number;
+  tenant_id?: number;
+  preset_number: number;
+  title: string;
+  message: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -63,6 +74,7 @@ const ChatInterface: React.FC = () => {
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingSessionName, setEditingSessionName] = useState('');
+  const [chatPresets, setChatPresets] = useState<ChatPreset[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const hasAutoSentRef = useRef(false);
@@ -71,10 +83,11 @@ const ChatInterface: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Create new session on mount and load session history
+    // Create new session on mount and load session history and presets
     const initialize = async () => {
       await createNewSession();
       await loadChatSessions();
+      await loadChatPresets();
     };
     initialize();
   }, []);
@@ -171,6 +184,15 @@ const ChatInterface: React.FC = () => {
       console.error('Failed to load chat sessions:', err);
     } finally {
       setLoadingSessions(false);
+    }
+  };
+
+  const loadChatPresets = async () => {
+    try {
+      const response = await ApiService.getChatPresets();
+      setChatPresets(response.presets || []);
+    } catch (err: any) {
+      console.error('Failed to load chat presets:', err);
     }
   };
 
@@ -355,6 +377,51 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const handlePresetClick = async (preset: ChatPreset) => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Create new session
+      const session = await ApiService.createChatSession();
+      setSessionId(session.session_id);
+      setMessages([]);
+      
+      // Auto-send the preset message
+      const response = await ApiService.sendChatMessage(preset.message, session.session_id);
+      
+      const userMessage: Message = {
+        role: 'user',
+        content: preset.message,
+        timestamp: new Date().toISOString()
+      };
+      
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: response.response,
+        timestamp: new Date().toISOString(),
+        reportUrl: response.report_url || undefined
+      };
+      
+      setMessages([userMessage, assistantMessage]);
+      
+      // Refresh session list
+      await loadChatSessions();
+      
+      // Handle navigation if present
+      if (response.action) {
+        setTimeout(() => {
+          handleNavigation(response.action!);
+        }, 1000);
+      }
+    } catch (err: any) {
+      console.error('Failed to use preset:', err);
+      setError('Failed to send preset message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getSessionTitle = (session: ChatSession): string => {
     // Use custom name if set
     if (session.session_name) {
@@ -499,6 +566,30 @@ const ChatInterface: React.FC = () => {
                     ))}
                   {chatSessions.filter(s => s.message_count > 0).length === 0 && (
                     <div className="chat-history-empty">No chat history yet</div>
+                  )}
+                  
+                  {/* Chat Presets Section */}
+                  {chatPresets.length > 0 && (
+                    <>
+                      <div className="chat-presets-separator"></div>
+                      <div className="chat-presets-label">Quick Start</div>
+                      {chatPresets
+                        .filter(preset => preset.is_active)
+                        .map((preset) => (
+                          <div
+                            key={preset.preset_number}
+                            className="chat-preset-item"
+                            onClick={() => handlePresetClick(preset)}
+                            title={preset.message}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"/>
+                              <path d="M19 12l1 3 3 1-3 1-1 3-1-3-3-1 3-1 1-3z"/>
+                            </svg>
+                            <span>{preset.title}</span>
+                          </div>
+                        ))}
+                    </>
                   )}
                 </div>
               )}

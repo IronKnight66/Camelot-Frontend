@@ -12,7 +12,7 @@ interface SettingsModalProps {
   initialCategory?: SettingsCategory;
 }
 
-type SettingsCategory = 'general' | 'users' | 'api-keys' | 'billing' | 'scanner-tools' | 'findings-config' | 'super-admin';
+type SettingsCategory = 'general' | 'users' | 'api-keys' | 'billing' | 'scanner-tools' | 'findings-config' | 'chat-presets' | 'super-admin';
 
 interface User {
   username: string;
@@ -257,6 +257,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     { id: 'api-keys', label: 'API Keys', icon: '🔑', requiresRole: 'admin' },
     { id: 'billing', label: 'Billing', icon: '💳', requiresRole: 'admin' },
     { id: 'findings-config', label: 'Findings Config', icon: '🏷️', requiresRole: 'admin' },
+    { id: 'chat-presets', label: 'Chat Presets', icon: '✨', requiresRole: 'admin' },
     { id: 'scanner-tools', label: 'Scanner Tools', icon: '🔧', requiresRole: 'tenant-admin' },
     { id: 'super-admin', label: 'Super Admin', icon: '👑', requiresRole: 'super-admin' },
   ];
@@ -2025,6 +2026,221 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     );
   };
 
+  // Chat Presets Configuration Component
+  const ChatPresetsContent: React.FC = () => {
+    const [presets, setPresets] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
+    const [savingAll, setSavingAll] = useState(false);
+    const [success, setSuccess] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [hasChanges, setHasChanges] = useState(false);
+    const [originalPresets, setOriginalPresets] = useState<any[]>([]);
+
+    useEffect(() => {
+      loadPresets();
+    }, []);
+
+    const loadPresets = async () => {
+      try {
+        setLoading(true);
+        const response = await ApiService.getChatPresets();
+        const loadedPresets = response.presets || [];
+        setPresets(loadedPresets);
+        setOriginalPresets(JSON.parse(JSON.stringify(loadedPresets)));
+        setHasChanges(false);
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to load presets');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const handleSaveAll = async () => {
+      try {
+        setSavingAll(true);
+        setError(null);
+        
+        // Save all presets
+        for (const preset of presets) {
+          await ApiService.updateChatPreset(preset.preset_number, {
+            title: preset.title,
+            message: preset.message,
+            is_active: preset.is_active
+          });
+        }
+        
+        setSuccess('All presets saved successfully!');
+        setOriginalPresets(JSON.parse(JSON.stringify(presets)));
+        setHasChanges(false);
+        setTimeout(() => setSuccess(null), 3000);
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to save presets');
+      } finally {
+        setSavingAll(false);
+      }
+    };
+
+    const handleResetToDefaults = async () => {
+      if (!window.confirm('Reset all presets to system defaults? This will overwrite your current settings.')) {
+        return;
+      }
+
+      try {
+        setSaving(true);
+        setError(null);
+        const response = await ApiService.resetChatPresets();
+        const loadedPresets = response.presets || [];
+        setPresets(loadedPresets);
+        setOriginalPresets(JSON.parse(JSON.stringify(loadedPresets)));
+        setHasChanges(false);
+        setSuccess('All presets reset to defaults!');
+        setTimeout(() => setSuccess(null), 3000);
+      } catch (err: any) {
+        setError(err.response?.data?.detail || 'Failed to reset presets');
+      } finally {
+        setSaving(false);
+      }
+    };
+
+    const updatePreset = (presetNumber: number, field: string, value: any) => {
+      setPresets(prev => prev.map(p =>
+        p.preset_number === presetNumber ? { ...p, [field]: value } : p
+      ));
+      setHasChanges(true);
+    };
+
+    const getPresetIcon = (presetNumber: number) => {
+      const icons = ['📊', '❓', '🔧', '📈'];
+      return icons[presetNumber - 1] || '✨';
+    };
+
+    if (loading) {
+      return (
+        <div className="settings-content-section">
+          <h2>Chat Presets</h2>
+          <div className="settings-loading">Loading presets...</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="settings-content-section">
+        <div className="settings-header-with-actions">
+          <div>
+            <h2>Chat Presets</h2>
+            <p className="settings-subtitle">Configure quick-start prompts for the chatbot sidebar</p>
+          </div>
+          <div className="settings-header-buttons">
+            <button
+              className="settings-secondary-btn"
+              onClick={handleResetToDefaults}
+              disabled={saving || savingAll}
+            >
+              Reset to Defaults
+            </button>
+            <button
+              className="settings-primary-btn"
+              onClick={handleSaveAll}
+              disabled={!hasChanges || savingAll}
+              style={{ 
+                opacity: hasChanges ? 1 : 0.5,
+                cursor: hasChanges ? 'pointer' : 'not-allowed'
+              }}
+            >
+              {savingAll ? 'Saving...' : hasChanges ? 'Save All Changes' : 'No Changes'}
+            </button>
+          </div>
+        </div>
+
+        {success && (
+          <div className="settings-success-banner">
+            ✓ {success}
+          </div>
+        )}
+
+        {error && (
+          <div className="settings-error-banner">
+            ✕ {error}
+          </div>
+        )}
+
+        <div className="chat-presets-grid">
+          {presets.map((preset) => (
+            <div key={preset.preset_number} className="chat-preset-card">
+              <div className="chat-preset-header">
+                <div className="chat-preset-title-row">
+                  <span className="chat-preset-icon">{getPresetIcon(preset.preset_number)}</span>
+                  <span className="chat-preset-number">Preset {preset.preset_number}</span>
+                </div>
+                <label className="chat-preset-toggle">
+                  <input
+                    type="checkbox"
+                    checked={preset.is_active}
+                    onChange={(e) => updatePreset(preset.preset_number, 'is_active', e.target.checked)}
+                  />
+                  <span className="toggle-slider"></span>
+                  <span className="toggle-label">{preset.is_active ? 'Active' : 'Inactive'}</span>
+                </label>
+              </div>
+
+              <div className="chat-preset-body">
+                <div className="chat-preset-field">
+                  <label className="chat-preset-label">
+                    <span>Button Title</span>
+                    <span className="char-count">{preset.title.length}/100</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="chat-preset-input"
+                    value={preset.title}
+                    onChange={(e) => updatePreset(preset.preset_number, 'title', e.target.value)}
+                    maxLength={100}
+                    placeholder="e.g., Show me recent scans"
+                  />
+                </div>
+
+                <div className="chat-preset-field">
+                  <label className="chat-preset-label">
+                    <span>Chatbot Message</span>
+                    <span className="char-count">{preset.message.length}/2000</span>
+                  </label>
+                  <textarea
+                    className="chat-preset-textarea"
+                    value={preset.message}
+                    onChange={(e) => updatePreset(preset.preset_number, 'message', e.target.value)}
+                    maxLength={2000}
+                    rows={3}
+                    placeholder="e.g., Can you show me a summary of my most recent security scans?"
+                  />
+                </div>
+              </div>
+
+              {!preset.is_active && (
+                <div className="chat-preset-inactive-badge">
+                  Hidden from users
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="settings-info-card">
+          <div className="info-card-header">
+            <span className="info-icon">💡</span>
+            <h4>How Chat Presets Work</h4>
+          </div>
+          <ul className="info-card-list">
+            <li>Presets appear below recent chats in the chatbot sidebar with a purple sparkle icon ✨</li>
+            <li>Clicking a preset instantly creates a new chat and sends your message</li>
+            <li>Perfect for common questions your team asks frequently</li>
+            <li>Toggle "Active" to hide presets without deleting them</li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   const renderCategoryContent = () => {
     switch (activeCategory) {
       case 'general':
@@ -2082,6 +2298,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
 
       case 'findings-config':
         return <FindingsConfigContent />;
+
+      case 'chat-presets':
+        return <ChatPresetsContent />;
 
       case 'scanner-tools':
         return <ScannerToolsContent />;
