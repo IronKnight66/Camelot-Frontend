@@ -110,17 +110,35 @@
   gap: 4px;
 }
 
+.chat-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+}
+
+.chat-history-loading,
+.chat-history-empty {
+  padding: 20px 12px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  font-family: var(--camelot-font-body);
+}
+
 .chat-history-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 8px;
   padding: 10px 12px;
   border-radius: 8px;
   color: #9ca3af;
   font-size: 14px;
   font-family: var(--camelot-font-body);
-  cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .chat-history-item:hover {
@@ -128,9 +146,82 @@
   color: #e5e7eb;
 }
 
+.chat-history-item:hover .rename-button {
+  opacity: 1;
+}
+
 .chat-history-item.active {
   background: rgba(56, 189, 248, 0.15);
   color: #38bdf8;
+  border-left: 3px solid #38bdf8;
+  padding-left: 9px;
+}
+
+.chat-history-item-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.chat-history-item svg {
+  flex-shrink: 0;
+}
+
+.session-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-name-input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #e5e7eb;
+  font-size: 14px;
+  font-family: var(--camelot-font-body);
+  outline: none;
+}
+
+.session-name-input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1);
+}
+
+.rename-button {
+  opacity: 0;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.rename-button:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+}
+
+.message-count {
+  font-size: 11px;
+  padding: 2px 6px;
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  flex-shrink: 0;
+  color: #38bdf8;
+  flex-shrink: 0;
 }
 
 .chat-sidebar-footer {

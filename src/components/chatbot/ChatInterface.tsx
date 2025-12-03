@@ -35,6 +35,19 @@ interface ChatResponse {
   report_url?: string | null;
 }
 
+interface ChatSession {
+  session_id: string;
+  tenant_id: number;
+  user_id: string;
+  session_name?: string | null;
+  provider: string | null;
+  model_name: string | null;
+  message_count: number;
+  created_at: string;
+  last_message_at: string | null;
+  messages: Message[];
+}
+
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -46,6 +59,10 @@ const ChatInterface: React.FC = () => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [settingsModalCategory, setSettingsModalCategory] = useState<'general' | undefined>(undefined);
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
+  const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
+  const [editingSessionName, setEditingSessionName] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const hasAutoSentRef = useRef(false);
@@ -54,8 +71,12 @@ const ChatInterface: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Create new session on mount
-    createNewSession();
+    // Create new session on mount and load session history
+    const initialize = async () => {
+      await createNewSession();
+      await loadChatSessions();
+    };
+    initialize();
   }, []);
 
   useEffect(() => {
@@ -82,14 +103,19 @@ const ChatInterface: React.FC = () => {
           
           console.log('🔵 AUTO-SEND - FULL API RESPONSE:', JSON.stringify(response, null, 2));
           
-          const assistantMessage: Message = {
-            role: 'assistant',
-            content: response.response,
-            timestamp: new Date().toISOString(),
-            reportUrl: response.report_url || undefined
-          };
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: response.response,
+        timestamp: new Date().toISOString(),
+        reportUrl: response.report_url || undefined
+      };
 
-          setMessages(prev => [...prev, assistantMessage]);
+      setMessages(prev => [...prev, assistantMessage]);
+      
+      // Refresh the session list after sending a message
+      // This ensures the session appears in history with the updated message count
+      console.log('💬 Message sent successfully, refreshing session list...');
+      await loadChatSessions();
 
           // Handle navigation action if present
           if (response.action) {
@@ -128,6 +154,26 @@ const ChatInterface: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const loadChatSessions = async () => {
+    try {
+      setLoadingSessions(true);
+      console.log('🔄 Loading chat sessions...');
+      const response = await ApiService.listChatSessions();
+      console.log('✅ Loaded sessions:', response.sessions?.length, 'total sessions');
+      console.log('📋 Sessions with messages:', response.sessions?.filter((s: ChatSession) => s.message_count > 0).length);
+      console.log('📝 Session details:', response.sessions?.slice(0, 3).map((s: ChatSession) => ({
+        id: s.session_id.substring(0, 8),
+        count: s.message_count,
+        messages: s.messages?.length
+      })));
+      setChatSessions(response.sessions || []);
+    } catch (err: any) {
+      console.error('Failed to load chat sessions:', err);
+    } finally {
+      setLoadingSessions(false);
+    }
+  };
+
   const createNewSession = async () => {
     try {
       const session = await ApiService.createChatSession();
@@ -138,6 +184,9 @@ const ChatInterface: React.FC = () => {
         role: 'assistant',
         content: 'Hello! I\'m Arthur, your security orchestration assistant. I can help you with scans, findings, scanner tools, and navigate you to different parts of the platform. How can I help you today?'
       }]);
+      
+      // Refresh the sessions list
+      await loadChatSessions();
     } catch (err: any) {
       console.error('Failed to create session:', err);
       setError('Failed to initialize chat session. Please refresh the page.');
@@ -176,6 +225,11 @@ const ChatInterface: React.FC = () => {
       console.log('🔵 Created message object:', JSON.stringify(assistantMessage, null, 2));
 
       setMessages(prev => [...prev, assistantMessage]);
+      
+      // Refresh the session list after sending a message
+      // This ensures the session appears in history with the updated message count
+      console.log('💬 Message sent successfully, refreshing session list...');
+      await loadChatSessions();
 
       // Handle navigation action if present
       if (response.action) {
@@ -225,15 +279,98 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleClearSession = async () => {
-    if (!sessionId) return;
-    
+    // Simply create a new session without deleting the current one
+    // The old session will be saved in the history
+    console.log('🆕 Creating new chat, current session has', messages.length, 'messages');
+    await createNewSession();
+  };
+
+  const loadSession = async (session: ChatSession) => {
     try {
-      await ApiService.clearChatSession(sessionId);
-      await createNewSession();
+      setLoading(true);
+      setError(null);
+      console.log('Loading session:', session.session_id);
+      
+      const sessionData = await ApiService.getChatSession(session.session_id);
+      console.log('Session data loaded:', sessionData);
+      
+      setSessionId(sessionData.session_id);
+      
+      // Load messages, or show empty state if no messages
+      if (sessionData.messages && sessionData.messages.length > 0) {
+        setMessages(sessionData.messages);
+      } else {
+        // If no messages in the session, show empty state
+        setMessages([]);
+      }
     } catch (err: any) {
-      console.error('Failed to clear session:', err);
-      setError('Failed to clear session. Please refresh the page.');
+      console.error('Failed to load session:', err);
+      setError('Failed to load chat session. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const startRenaming = (session: ChatSession) => {
+    setEditingSessionId(session.session_id);
+    // Use session_name if available, otherwise use the generated title
+    setEditingSessionName(session.session_name || getSessionTitle(session));
+  };
+
+  const cancelRenaming = () => {
+    setEditingSessionId(null);
+    setEditingSessionName('');
+  };
+
+  const saveSessionName = async (sessionId: string) => {
+    if (!editingSessionName.trim()) {
+      cancelRenaming();
+      return;
+    }
+
+    try {
+      await ApiService.updateChatSession(sessionId, editingSessionName.trim());
+      
+      // Update local state
+      setChatSessions(prevSessions =>
+        prevSessions.map(s =>
+          s.session_id === sessionId
+            ? { ...s, session_name: editingSessionName.trim() }
+            : s
+        )
+      );
+      
+      cancelRenaming();
+    } catch (err: any) {
+      console.error('Failed to rename session:', err);
+      setError('Failed to rename chat session. Please try again.');
+    }
+  };
+
+  const handleRenameKeyPress = (e: React.KeyboardEvent<HTMLInputElement>, sessionId: string) => {
+    if (e.key === 'Enter') {
+      saveSessionName(sessionId);
+    } else if (e.key === 'Escape') {
+      cancelRenaming();
+    }
+  };
+
+  const getSessionTitle = (session: ChatSession): string => {
+    // Use custom name if set
+    if (session.session_name) {
+      return session.session_name;
+    }
+    
+    // Get first user message as title
+    const firstUserMessage = session.messages?.find(m => m.role === 'user');
+    if (firstUserMessage && firstUserMessage.content) {
+      const title = firstUserMessage.content.trim();
+      return title.length > 50 ? title.substring(0, 50) + '...' : title;
+    }
+    
+    // Fallback to formatted date
+    const date = new Date(session.created_at);
+    return `Chat from ${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
   };
 
   // Get user initials for avatar
@@ -313,12 +450,58 @@ const ChatInterface: React.FC = () => {
         {!sidebarCollapsed && (
           <div className="chat-sidebar-content">
             <div className="chat-history-section">
-              <div className="chat-history-item active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                </svg>
-                <span>Current conversation</span>
-              </div>
+              {loadingSessions ? (
+                <div className="chat-history-loading">Loading sessions...</div>
+              ) : (
+                <div className="chat-history-list">
+                  {chatSessions
+                    .filter(session => session.message_count > 0)
+                    .slice(0, 5)
+                    .map((session) => (
+                      <div
+                        key={session.session_id}
+                        className={`chat-history-item ${session.session_id === sessionId ? 'active' : ''}`}
+                      >
+                        <div className="chat-history-item-content" onClick={() => loadSession(session)}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                          </svg>
+                          {editingSessionId === session.session_id ? (
+                            <input
+                              type="text"
+                              className="session-name-input"
+                              value={editingSessionName}
+                              onChange={(e) => setEditingSessionName(e.target.value)}
+                              onKeyDown={(e) => handleRenameKeyPress(e, session.session_id)}
+                              onBlur={() => saveSessionName(session.session_id)}
+                              autoFocus
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          ) : (
+                            <span className="session-title" title={getSessionTitle(session)}>{getSessionTitle(session)}</span>
+                          )}
+                          <span className="message-count">{session.message_count}</span>
+                        </div>
+                        <button
+                          className="rename-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            startRenaming(session);
+                          }}
+                          title="Rename chat"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  {chatSessions.filter(s => s.message_count > 0).length === 0 && (
+                    <div className="chat-history-empty">No chat history yet</div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}

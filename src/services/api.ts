@@ -550,6 +550,13 @@ class ApiService {
     return response.data;
   }
 
+  async updateChatSession(sessionId: string, sessionName: string) {
+    const response = await this.api.patch(`/api/v1/chatbot/session/${sessionId}`, {
+      session_name: sessionName
+    });
+    return response.data;
+  }
+
   // Chatbot Provider Settings
   async getChatbotProvider() {
     const response = await this.api.get('/api/v1/tenant/chatbot-provider');
