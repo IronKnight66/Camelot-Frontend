@@ -46,16 +46,6 @@ const TenantAdminSettings: React.FC = () => {
             </Link>
           </div>
 
-          {/* API Keys - Available to admin and above */}
-          <div className="tenant-settings-hub-card">
-            <div className="tenant-settings-hub-card-icon">🔑</div>
-            <h2>API Keys</h2>
-            <p>Manage API keys for AI providers and external services</p>
-            <Link to="/settings/api-keys" className="tenant-settings-hub-btn">
-              Open API Keys
-            </Link>
-          </div>
-
           {/* Billing & Subscriptions - Available to admin and above */}
           <div className="tenant-settings-hub-card">
             <div className="tenant-settings-hub-card-icon">💳</div>
@@ -86,9 +76,6 @@ const TenantAdminSettings: React.FC = () => {
             <div>
               <div className="info-item">
                 <strong>User Management:</strong> Add, remove, enable/disable users, manage roles, and force password resets.
-              </div>
-              <div className="info-item">
-                <strong>API Keys:</strong> Manage API keys for AI providers (OpenAI, Anthropic, Bedrock) and external services.
               </div>
               <div className="info-item">
                 <strong>Billing & Subscriptions:</strong> Manage subscription plans, payment methods, view invoices, and upgrade/downgrade plans.

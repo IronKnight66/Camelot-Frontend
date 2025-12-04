@@ -43,7 +43,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import apiService from '../services/api';
-import APIKeysSettings from './settings/APIKeysSettings';
 import Layout from './Layout';
 import './Profile.css';
 
@@ -67,7 +66,7 @@ const Profile: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'api-keys'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile'>('profile');
   const [formData, setFormData] = useState({
     name: '',
     email: ''
@@ -186,14 +185,6 @@ const Profile: React.FC = () => {
             >
               Profile
             </button>
-            {isAdmin && (
-              <button 
-                className={`tab ${activeTab === 'api-keys' ? 'active' : ''}`}
-                onClick={() => setActiveTab('api-keys')}
-              >
-                API Keys
-              </button>
-            )}
           </div>
 
           <div className="profile-content">
@@ -307,10 +298,6 @@ const Profile: React.FC = () => {
                 </div>
               </div>
               </>
-            )}
-            
-            {activeTab === 'api-keys' && (
-              <APIKeysSettings />
             )}
           </div>
         </div>

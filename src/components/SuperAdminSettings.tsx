@@ -9,9 +9,10 @@ import StripeSettings from './admin/StripeSettings';
 import SubscriptionPlans from './admin/SubscriptionPlans';
 import SystemPrompts from './admin/SystemPrompts';
 import ScanTypes from './admin/ScanTypes';
+import SuperAdminAPIKeys from './admin/SuperAdminAPIKeys';
 import './SuperAdminSettings.css';
 
-type SuperAdminSection = 'tenants' | 'tenant-scanners' | 'scanner-registry' | 'stripe' | 'subscriptions' | 'prompts' | 'scan-types';
+type SuperAdminSection = 'tenants' | 'tenant-scanners' | 'scanner-registry' | 'stripe' | 'subscriptions' | 'prompts' | 'scan-types' | 'api-keys';
 
 // Super Admin Settings Component
 const SuperAdminSettings: React.FC = () => {
@@ -40,6 +41,7 @@ const SuperAdminSettings: React.FC = () => {
     { id: 'tenants', label: 'Tenant Management', icon: '🏢' },
     { id: 'tenant-scanners', label: 'Tenant Scanners', icon: '🛠️' },
     { id: 'scanner-registry', label: 'Global Scanner Registry', icon: '⚙️' },
+    { id: 'api-keys', label: 'API Keys', icon: '🔑' },
     { id: 'stripe', label: 'Stripe Configuration', icon: '💰' },
     { id: 'subscriptions', label: 'Subscription Plans', icon: '📦' },
     { id: 'prompts', label: 'System Prompts', icon: '💬' },
@@ -54,6 +56,8 @@ const SuperAdminSettings: React.FC = () => {
         return <TenantScanners />;
       case 'scanner-registry':
         return <AdminScannerTools />;
+      case 'api-keys':
+        return <SuperAdminAPIKeys />;
       case 'stripe':
         return <StripeSettings />;
       case 'subscriptions':

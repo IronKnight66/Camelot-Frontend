@@ -18,7 +18,6 @@ import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
 import TenantAdminSettings from './components/TenantAdminSettings';
 import SuperAdminSettings from './components/SuperAdminSettings';
-import APIKeys from './components/settings/APIKeys';
 import TenantScanners from './components/settings/TenantScanners';
 import Billing from './components/settings/Billing';
 import FindingsConfiguration from './components/settings/FindingsConfiguration';
@@ -129,18 +128,6 @@ function App() {
                   </RoleBasedRoute>
                 </ProtectedRoute>
               }
-            />
-
-            {/* API Keys - Admin Only */}
-            <Route 
-              path="/settings/api-keys" 
-              element={
-                <ProtectedRoute>
-                  <RoleBasedRoute requiredRole="admin">
-                    <APIKeys />
-                  </RoleBasedRoute>
-                </ProtectedRoute>
-              } 
             />
 
             {/* Findings Configuration - Admin Only */}
