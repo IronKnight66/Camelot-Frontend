@@ -343,33 +343,34 @@ class ApiService {
     return response.data;
   }
 
+  // COMMENTED OUT - Bedrock uses IAM authentication (December 2024)
   // Tenant API Keys API
-  async getTenantAPIKeys() {
-    const response = await this.api.get('/api/v1/tenant/api-keys');
-    return response.data;
-  }
+  // async getTenantAPIKeys() {
+  //   const response = await this.api.get('/api/v1/tenant/api-keys');
+  //   return response.data;
+  // }
 
-  async addTenantAPIKey(provider: string, apiKey: string, description?: string) {
-    const response = await this.api.post('/api/v1/tenant/api-keys', {
-      provider,
-      api_key: apiKey,
-      description
-    });
-    return response.data;
-  }
+  // async addTenantAPIKey(provider: string, apiKey: string, description?: string) {
+  //   const response = await this.api.post('/api/v1/tenant/api-keys', {
+  //     provider,
+  //     api_key: apiKey,
+  //     description
+  //   });
+  //   return response.data;
+  // }
 
-  async updateTenantAPIKey(provider: string, apiKey: string, description?: string) {
-    const response = await this.api.put(`/api/v1/tenant/api-keys/${provider}`, {
-      api_key: apiKey,
-      description
-    });
-    return response.data;
-  }
+  // async updateTenantAPIKey(provider: string, apiKey: string, description?: string) {
+  //   const response = await this.api.put(`/api/v1/tenant/api-keys/${provider}`, {
+  //     api_key: apiKey,
+  //     description
+  //   });
+  //   return response.data;
+  // }
 
-  async deleteTenantAPIKey(provider: string) {
-    const response = await this.api.delete(`/api/v1/tenant/api-keys/${provider}`);
-    return response.data;
-  }
+  // async deleteTenantAPIKey(provider: string) {
+  //   const response = await this.api.delete(`/api/v1/tenant/api-keys/${provider}`);
+  //   return response.data;
+  // }
 
   // Tenant Management API (Super Admin Only)
   async getTenants() {
@@ -412,10 +413,11 @@ class ApiService {
     return response.data;
   }
 
-  async testAPIKey(provider: string) {
-    const response = await this.api.post(`/api/v1/tenant/api-keys/${provider}/test`);
-    return response.data;
-  }
+  // COMMENTED OUT - Bedrock uses IAM authentication (December 2024)
+  // async testAPIKey(provider: string) {
+  //   const response = await this.api.post(`/api/v1/tenant/api-keys/${provider}/test`);
+  //   return response.data;
+  // }
 
   // User Management API
   async getUsers() {
@@ -520,10 +522,28 @@ class ApiService {
   }
 
   // Chatbot API
-  async sendChatMessage(message: string, sessionId?: string) {
+  async sendChatMessage(message: string, sessionId?: string, modelId?: string) {
     const response = await this.api.post('/api/v1/chatbot/chat', {
       message,
-      session_id: sessionId
+      session_id: sessionId,
+      model_id: modelId
+    });
+    return response.data;
+  }
+  
+  async getAvailableModels() {
+    const response = await this.api.get('/api/v1/chatbot/models');
+    return response.data;
+  }
+  
+  async getTenantModelConfig() {
+    const response = await this.api.get('/api/v1/chatbot/models/config');
+    return response.data;
+  }
+  
+  async updateTenantModelConfig(models: Array<{model_id: string, is_enabled: boolean}>) {
+    const response = await this.api.put('/api/v1/chatbot/models/config', {
+      models
     });
     return response.data;
   }

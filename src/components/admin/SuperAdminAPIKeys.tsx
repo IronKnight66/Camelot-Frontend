@@ -1,33 +1,42 @@
 // src/components/admin/SuperAdminAPIKeys.tsx
-/**
- * Super Admin API Keys Management Component
- * 
- * This component allows super admins to manage tenant API keys for AI providers.
- * This is a super-admin only feature for managing all tenant API keys.
- * 
- * KEY FEATURES:
- * ------------
- * 1. Multi-Provider Support
- *    - OpenAI (GPT-4, GPT-3.5)
- *    - Anthropic (Claude API)
- *    - Ollama (Local models)
- *    - Note: Bedrock uses IAM, no keys needed
- * 
- * 2. Key Management Operations
- *    - Add: Store new API key with description
- *    - List: View configured keys (metadata only, no raw values)
- *    - Update: Update existing key
- *    - Delete: Remove key with confirmation
- *    - Test: Validate key connectivity before saving
- * 
- * 3. Security Features
- *    - Never displays raw key values in UI
- *    - Keys stored securely encrypted in database
- *    - Encrypted at rest
- *    - Backend-only access to secrets
- * 
- * 4. User Experience
- *    - Professional, modern UI design
+/*
+================================================================================
+COMMENTED OUT - Bedrock uses IAM, no API keys needed. Kept for reference.
+Date: December 2024
+
+This component has been deprecated because the chatbot now uses Amazon Bedrock,
+which authenticates via IAM roles rather than API keys. All authentication is
+handled server-side through AWS IAM policies.
+
+ORIGINAL DESCRIPTION:
+Super Admin API Keys Management Component
+
+This component allows super admins to manage tenant API keys for AI providers.
+This is a super-admin only feature for managing all tenant API keys.
+
+KEY FEATURES:
+------------
+1. Multi-Provider Support
+   - OpenAI (GPT-4, GPT-3.5)
+   - Anthropic (Claude API)
+   - Ollama (Local models)
+   - Note: Bedrock uses IAM, no keys needed
+
+2. Key Management Operations
+   - Add: Store new API key with description
+   - List: View configured keys (metadata only, no raw values)
+   - Update: Update existing key
+   - Delete: Remove key with confirmation
+   - Test: Validate key connectivity before saving
+
+3. Security Features
+   - Never displays raw key values in UI
+   - Keys stored securely encrypted in database
+   - Encrypted at rest
+   - Backend-only access to secrets
+
+4. User Experience
+   - Professional, modern UI design
  *    - Real-time validation
  *    - Loading states and error handling
  *    - Success/error notifications
@@ -36,7 +45,7 @@
  * Integration Date: December 2025
  * Last Updated: December 2025
  */
-
+/*
 import React, { useState, useEffect } from 'react';
 import apiService from '../../services/api';
 import '../settings/APIKeysSettings.css';
@@ -328,4 +337,12 @@ const SuperAdminAPIKeys: React.FC = () => {
 };
 
 export default SuperAdminAPIKeys;
+*/
+
+// COMMENTED OUT - END OF FILE
+// ================================================================================
+
+// Empty export to satisfy TypeScript --isolatedModules
+export {};
+
 

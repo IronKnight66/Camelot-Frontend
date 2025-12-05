@@ -16,6 +16,7 @@ import SystemPrompts from './components/admin/SystemPrompts';
 import ScanTypes from './components/admin/ScanTypes';
 import ScannerHub from './components/ScannerHub';
 import TenantSettingsHub from './components/TenantSettingsHub';
+import TenantModelSettings from './components/settings/TenantModelSettings';
 import TenantAdminSettings from './components/TenantAdminSettings';
 import SuperAdminSettings from './components/SuperAdminSettings';
 import TenantScanners from './components/settings/TenantScanners';
@@ -188,6 +189,18 @@ function App() {
             <Route 
               path="/tenant-tools" 
               element={<Navigate to="/settings/tenant-tools" replace />} 
+            />
+
+            {/* Tenant Model Configuration - Admin */}
+            <Route 
+              path="/settings/tenant-models" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <TenantModelSettings />
+                  </RoleBasedRoute>
+                </ProtectedRoute>
+              } 
             />
 
             {/* Regular Users - My Scanners */}

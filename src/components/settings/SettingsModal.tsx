@@ -12,7 +12,7 @@ interface SettingsModalProps {
   initialCategory?: SettingsCategory;
 }
 
-type SettingsCategory = 'general' | 'users' | 'billing' | 'scanner-tools' | 'findings-config' | 'chat-presets' | 'super-admin';
+type SettingsCategory = 'general' | 'users' | 'billing' | 'scanner-tools' | 'findings-config' | 'chat-presets' | 'ai-models' | 'super-admin';
 
 interface User {
   username: string;
@@ -257,6 +257,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     { id: 'billing', label: 'Billing', icon: '💳', requiresRole: 'admin' },
     { id: 'findings-config', label: 'Findings Config', icon: '🏷️', requiresRole: 'admin' },
     { id: 'chat-presets', label: 'Chat Presets', icon: '✨', requiresRole: 'admin' },
+    { id: 'ai-models', label: 'AI Models', icon: '🤖', requiresRole: 'admin' },
     { id: 'scanner-tools', label: 'Scanner Tools', icon: '🔧', requiresRole: 'tenant-admin' },
     { id: 'super-admin', label: 'Super Admin', icon: '👑', requiresRole: 'super-admin' },
   ];
@@ -1748,6 +1749,211 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
     );
   };
 
+  // AI Models Configuration Component
+  const AIModelsContent: React.FC = () => {
+    interface BedrockModel {
+      id: string;
+      name: string;
+      provider: string;
+      description: string;
+      context_window: number;
+      supports_tools: boolean;
+      is_enabled: boolean;
+      enabled_at?: string;
+      enabled_by?: string;
+      disabled_at?: string;
+      disabled_by?: string;
+    }
+
+    const [models, setModels] = useState<BedrockModel[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+    const [hasChanges, setHasChanges] = useState(false);
+    const [originalModels, setOriginalModels] = useState<BedrockModel[]>([]);
+
+    useEffect(() => {
+      loadModelConfig();
+    }, []);
+
+    const loadModelConfig = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await ApiService.getTenantModelConfig();
+        const loadedModels = response.models || [];
+        setModels(loadedModels);
+        setOriginalModels(JSON.parse(JSON.stringify(loadedModels)));
+        setHasChanges(false);
+      } catch (err: any) {
+        console.error('Failed to load model configuration:', err);
+        setError(err.response?.data?.detail || 'Failed to load model configuration');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const toggleModel = (modelId: string) => {
+      setModels(prevModels =>
+        prevModels.map(model =>
+          model.id === modelId
+            ? { ...model, is_enabled: !model.is_enabled }
+            : model
+        )
+      );
+      setHasChanges(true);
+      setSuccess(null);
+    };
+
+    const handleSave = async () => {
+      setSaving(true);
+      setError(null);
+      setSuccess(null);
+
+      try {
+        const updates = models.map(model => ({
+          model_id: model.id,
+          is_enabled: model.is_enabled
+        }));
+
+        const response = await ApiService.updateTenantModelConfig(updates);
+        
+        setSuccess(`Successfully updated ${response.enabled_count} enabled and ${response.disabled_count} disabled models.`);
+        setHasChanges(false);
+        
+        // Reload to get fresh data with timestamps
+        await loadModelConfig();
+        setTimeout(() => setSuccess(null), 3000);
+      } catch (err: any) {
+        console.error('Failed to save model configuration:', err);
+        setError(err.response?.data?.detail || 'Failed to save configuration');
+      } finally {
+        setSaving(false);
+      }
+    };
+
+    const enabledCount = models.filter(m => m.is_enabled).length;
+
+    if (loading) {
+      return (
+        <div className="settings-content-section">
+          <h2>AI Models</h2>
+          <div className="settings-loading">Loading AI models...</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="settings-content-section">
+        <div className="settings-header-with-actions">
+          <div>
+            <h2>AI Model Configuration</h2>
+            <p className="settings-subtitle">
+              Enable and manage AI models available to your team
+            </p>
+          </div>
+          <button
+            className="settings-primary-btn"
+            onClick={handleSave}
+            disabled={!hasChanges || saving}
+            style={{ 
+              opacity: hasChanges ? 1 : 0.5,
+              cursor: hasChanges ? 'pointer' : 'not-allowed'
+            }}
+          >
+            {saving ? 'Saving...' : hasChanges ? 'Save Changes' : 'No Changes'}
+          </button>
+        </div>
+
+        {success && (
+          <div className="settings-success-banner">
+            ✓ {success}
+          </div>
+        )}
+
+        {error && (
+          <div className="settings-error-banner">
+            ✕ {error}
+          </div>
+        )}
+
+        <div className="settings-model-summary-mini">
+          <div className="mini-stat">
+            <span className="mini-stat-value">{models.length}</span>
+            <span className="mini-stat-label">Total Models</span>
+          </div>
+          <div className="mini-stat enabled">
+            <span className="mini-stat-value">{enabledCount}</span>
+            <span className="mini-stat-label">Enabled</span>
+          </div>
+          <div className="mini-stat disabled">
+            <span className="mini-stat-value">{models.length - enabledCount}</span>
+            <span className="mini-stat-label">Disabled</span>
+          </div>
+        </div>
+
+        <div className="settings-models-list">
+          {models.map(model => (
+            <div key={model.id} className={`settings-model-card ${model.is_enabled ? 'enabled' : 'disabled'}`}>
+              <div className="settings-model-header">
+                <div className="settings-model-info">
+                  <h3>{model.name}</h3>
+                  <span className="settings-model-provider">{model.provider}</span>
+                </div>
+                <label className="settings-toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={model.is_enabled}
+                    onChange={() => toggleModel(model.id)}
+                    disabled={saving}
+                  />
+                  <span className="settings-slider"></span>
+                </label>
+              </div>
+              
+              <p className="settings-model-description">{model.description}</p>
+              
+              <div className="settings-model-meta">
+                <span className="meta-item">
+                  📊 {(model.context_window / 1000).toFixed(0)}K context
+                </span>
+                {model.supports_tools && (
+                  <span className="meta-item">
+                    🔧 Tool use supported
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {enabledCount === 0 && (
+          <div className="settings-warning-box">
+            <span className="warning-icon">⚠️</span>
+            <div>
+              <strong>No models enabled</strong>
+              <p>Your team will not be able to use the AI chatbot until at least one model is enabled.</p>
+            </div>
+          </div>
+        )}
+
+        <div className="settings-info-card" style={{ marginTop: '20px' }}>
+          <div className="info-card-header">
+            <span className="info-icon">💡</span>
+            <h4>About AI Models</h4>
+          </div>
+          <ul className="info-card-list">
+            <li>Enable models your team can use in the chatbot</li>
+            <li>Different models have different capabilities and costs</li>
+            <li>Llama models are more cost-effective but may have limited tool support</li>
+            <li>Claude models support advanced tool use for complex tasks</li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   // Chat Presets Configuration Component
   const ChatPresetsContent: React.FC = () => {
     const [presets, setPresets] = useState<any[]>([]);
@@ -2020,6 +2226,9 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, initialC
 
       case 'chat-presets':
         return <ChatPresetsContent />;
+
+      case 'ai-models':
+        return <AIModelsContent />;
 
       case 'scanner-tools':
         return <ScannerToolsContent />;

@@ -1,3 +1,16 @@
+/*
+================================================================================
+COMMENTED OUT - Bedrock uses IAM, no API keys needed. Kept for reference.
+Date: December 2024
+
+This wrapper component has been deprecated because the chatbot now uses Amazon
+Bedrock, which authenticates via IAM roles rather than API keys.
+
+See APIKeysSettings.tsx for the main component that has also been commented out.
+================================================================================
+*/
+
+/*
 import React from 'react';
 import Layout from '../Layout';
 import APIKeysSettings from './APIKeysSettings';
@@ -18,4 +31,10 @@ const APIKeys: React.FC = () => {
 };
 
 export default APIKeys;
+*/
 
+// COMMENTED OUT - END OF FILE
+// ================================================================================
+
+// Empty export to satisfy TypeScript --isolatedModules
+export {};

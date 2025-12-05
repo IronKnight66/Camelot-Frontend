@@ -58,6 +58,18 @@ const TenantSettingsHub: React.FC = () => {
               </Link>
             </div>
           )}
+
+          {/* AI Model Configuration - Available to admin and above */}
+          {hasAccess('admin') && (
+            <div className="tenant-settings-hub-card">
+              <div className="tenant-settings-hub-card-icon">🤖</div>
+              <h2>AI Model Configuration</h2>
+              <p>Enable and manage AI models available to your team</p>
+              <Link to="/settings/tenant-models" className="tenant-settings-hub-btn">
+                Configure AI Models
+              </Link>
+            </div>
+          )}
         </div>
 
         {hasAccess('super-admin') && (

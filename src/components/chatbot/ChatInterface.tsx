@@ -10,6 +10,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { hasRole } from '../../utils/roleHelpers';
 import ApiService from '../../services/api';
 import SettingsModal from '../settings/SettingsModal';
 import ProfileModal from '../profile/ProfileModal';
@@ -26,6 +27,15 @@ interface Message {
 interface ChatAction {
   type: string;
   url: string;
+}
+
+interface BedrockModel {
+  id: string;
+  name: string;
+  provider: string;
+  description: string;
+  context_window: number;
+  supports_tools: boolean;
 }
 
 interface ChatResponse {
@@ -75,6 +85,9 @@ const ChatInterface: React.FC = () => {
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editingSessionName, setEditingSessionName] = useState('');
   const [chatPresets, setChatPresets] = useState<ChatPreset[]>([]);
+  const [availableModels, setAvailableModels] = useState<BedrockModel[]>([]);
+  const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
+  const [showModelSelector, setShowModelSelector] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const hasAutoSentRef = useRef(false);
@@ -83,11 +96,12 @@ const ChatInterface: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Create new session on mount and load session history and presets
+    // Create new session on mount and load session history, presets, and models
     const initialize = async () => {
       await createNewSession();
       await loadChatSessions();
       await loadChatPresets();
+      await loadAvailableModels();
     };
     initialize();
   }, []);
@@ -112,9 +126,10 @@ const ChatInterface: React.FC = () => {
         setError(null);
 
         try {
-          const response: ChatResponse = await ApiService.sendChatMessage(state.initialPrompt!.trim(), sessionId);
+          const response: ChatResponse = await ApiService.sendChatMessage(state.initialPrompt!.trim(), sessionId, selectedModelId || undefined);
           
           console.log('🔵 AUTO-SEND - FULL API RESPONSE:', JSON.stringify(response, null, 2));
+          console.log('🤖 Using model:', selectedModelId);
           
       const assistantMessage: Message = {
         role: 'assistant',
@@ -196,6 +211,15 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const loadAvailableModels = async () => {
+    try {
+      const response = await ApiService.getAvailableModels();
+      setAvailableModels(response.models || []);
+    } catch (err: any) {
+      console.error('Failed to load available models:', err);
+    }
+  };
+
   const createNewSession = async () => {
     try {
       const session = await ApiService.createChatSession();
@@ -216,7 +240,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || loading || !sessionId) return;
+    if (!input.trim() || loading || !sessionId || !selectedModelId) return;
 
     const userMessage: Message = {
       role: 'user',
@@ -230,10 +254,11 @@ const ChatInterface: React.FC = () => {
     setError(null);
 
     try {
-      const response: ChatResponse = await ApiService.sendChatMessage(input.trim(), sessionId);
+      const response: ChatResponse = await ApiService.sendChatMessage(input.trim(), sessionId, selectedModelId || undefined);
       
       // EXTENSIVE DEBUG LOGGING
       console.log('🔵 FULL API RESPONSE:', JSON.stringify(response, null, 2));
+      console.log('🤖 Using model:', selectedModelId);
       console.log('🔵 report_url field:', response.report_url);
       console.log('🔵 report_url type:', typeof response.report_url);
       
@@ -777,6 +802,61 @@ const ChatInterface: React.FC = () => {
         </div>
 
         <div className="chat-input-area">
+          {/* Show warning if no models are available */}
+          {availableModels.length === 0 ? (
+            <div className="no-models-warning">
+              <div className="warning-icon">⚠️</div>
+              <div className="warning-content">
+                <strong>No AI models available</strong>
+                <p>Please contact your administrator to enable models.</p>
+                {hasRole(user, 'admin') && (
+                  <a href="/settings/tenant-models" className="configure-link">
+                    Configure AI Models →
+                  </a>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Model Selector */}
+              <div className="model-selector-container">
+                <button 
+                  className="model-selector-toggle"
+                  onClick={() => setShowModelSelector(!showModelSelector)}
+                  title="Select AI Model"
+                >
+                  <span className="model-icon">🤖</span>
+                  <span className="model-name">
+                    {selectedModelId ? availableModels.find(m => m.id === selectedModelId)?.name : 'Please select a model'}
+                  </span>
+                  <span className="dropdown-arrow">{showModelSelector ? '▲' : '▼'}</span>
+                </button>
+                
+                {showModelSelector && (
+                  <div className="model-selector-dropdown">
+                    {availableModels.map((model) => (
+                      <button
+                        key={model.id}
+                        className={`model-option ${selectedModelId === model.id ? 'selected' : ''}`}
+                        onClick={() => {
+                          setSelectedModelId(model.id);
+                          setShowModelSelector(false);
+                        }}
+                      >
+                        <div className="model-option-header">
+                          <span className="model-option-name">{model.name}</span>
+                          {selectedModelId === model.id && <span className="checkmark">✓</span>}
+                        </div>
+                        <div className="model-option-description">{model.description}</div>
+                        <div className="model-option-meta">
+                          {model.provider} • {(model.context_window / 1000).toFixed(0)}K context
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
           <div className="chat-input-wrapper">
             <textarea
               className="chat-input-field"
@@ -785,12 +865,12 @@ const ChatInterface: React.FC = () => {
               onKeyPress={handleKeyPress}
               placeholder="Message Arthur..."
               rows={1}
-              disabled={loading || !sessionId}
+                  disabled={loading || !sessionId || !selectedModelId || availableModels.length === 0}
             />
             <button
               className="send-button-modern"
               onClick={handleSend}
-              disabled={!input.trim() || loading || !sessionId}
+                  disabled={!input.trim() || loading || !sessionId || !selectedModelId || availableModels.length === 0}
               title="Send message"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -799,6 +879,8 @@ const ChatInterface: React.FC = () => {
               </svg>
             </button>
           </div>
+            </>
+          )}
         </div>
       </div>
 

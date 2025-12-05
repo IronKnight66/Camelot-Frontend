@@ -1,33 +1,42 @@
 // src/components/settings/APIKeysSettings.tsx
-/**
- * API Keys Settings Component
- * 
- * This component allows tenant admins to manage their AI provider API keys.
- * Implements the Bring Your Own Key (BYOK) model for multi-tenant SaaS.
- * 
- * KEY FEATURES:
- * ------------
- * 1. Multi-Provider Support
- *    - OpenAI (GPT-4, GPT-3.5)
- *    - Anthropic (Claude API)
- *    - Ollama (Local models)
- *    - Note: Bedrock uses IAM, no keys needed
- * 
- * 2. Key Management Operations
- *    - Add: Store new API key with description
- *    - List: View configured keys (metadata only, no raw values)
- *    - Update: Update existing key
- *    - Delete: Remove key with confirmation
- *    - Test: Validate key connectivity before saving
- * 
- * 3. Security Features
- *    - Never displays raw key values in UI
- *    - Keys stored securely in AWS Secrets Manager (backend)
- *    - Encrypted at rest with AWS KMS
- *    - Backend-only access to secrets
- * 
- * 4. User Experience
- *    - Professional, modern UI design
+/*
+================================================================================
+COMMENTED OUT - Bedrock uses IAM, no API keys needed. Kept for reference.
+Date: December 2024
+
+This component has been deprecated because the chatbot now uses Amazon Bedrock,
+which authenticates via IAM roles rather than API keys. All authentication is
+handled server-side through AWS IAM policies.
+
+ORIGINAL DESCRIPTION:
+API Keys Settings Component
+
+This component allows tenant admins to manage their AI provider API keys.
+Implements the Bring Your Own Key (BYOK) model for multi-tenant SaaS.
+
+KEY FEATURES:
+------------
+1. Multi-Provider Support
+   - OpenAI (GPT-4, GPT-3.5)
+   - Anthropic (Claude API)
+   - Ollama (Local models)
+   - Note: Bedrock uses IAM, no keys needed
+
+2. Key Management Operations
+   - Add: Store new API key with description
+   - List: View configured keys (metadata only, no raw values)
+   - Update: Update existing key
+   - Delete: Remove key with confirmation
+   - Test: Validate key connectivity before saving
+
+3. Security Features
+   - Never displays raw key values in UI
+   - Keys stored securely in AWS Secrets Manager (backend)
+   - Encrypted at rest with AWS KMS
+   - Backend-only access to secrets
+
+4. User Experience
+   - Professional, modern UI design
  *    - Real-time validation
  *    - Loading states and error handling
  *    - Success/error notifications
@@ -50,7 +59,7 @@
  * Integration Date: October 2025
  * Last Updated: October 2025
  */
-
+/*
 import React, { useState, useEffect } from 'react';
 import apiService from '../../services/api';
 import './APIKeysSettings.css';
@@ -342,4 +351,11 @@ const APIKeysSettings: React.FC = () => {
 };
 
 export default APIKeysSettings;
+*/
+
+// COMMENTED OUT - END OF FILE
+// ================================================================================
+
+// Empty export to satisfy TypeScript --isolatedModules
+export {};
 
