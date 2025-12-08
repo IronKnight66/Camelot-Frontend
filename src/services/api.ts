@@ -154,7 +154,7 @@ class ApiService {
       });
     }
     const queryString = queryParams.toString();
-    const url = `/api/v1/findings${queryString ? `?${queryString}` : ''}`;
+    const url = `/api/v1/findings/${queryString ? `?${queryString}` : ''}`;
     const response = await this.api.get(url);
     return response.data;
   }
