@@ -280,7 +280,7 @@ const ScanTypes: React.FC = () => {
     try {
       setLoading(true);
       const response = await apiService.getScanTypes();
-      setScanTypes(response.scan_types);
+      setScanTypes(response.scan_types || []);
       setError(null);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to load scan types');
