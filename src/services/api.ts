@@ -97,7 +97,7 @@ class ApiService {
   }
 
   async createScan(scanData: any) {
-    const response = await this.api.post('/api/v1/scans', scanData);
+    const response = await this.api.post('/api/v1/scans/assessment', scanData);
     return response.data;
   }
 
