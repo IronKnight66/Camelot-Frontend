@@ -156,7 +156,7 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       const result = await apiService.discoverEndpoints(domain, 'network');
       console.log('Discovery scan started:', result);
 
-      const scanId = result.scan_id;
+      const scanId = result.job_id;
       let pollCount = 0;
       const maxPolls = 30; // 1 minute max (poll every 2 seconds)
 
