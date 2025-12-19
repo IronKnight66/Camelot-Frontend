@@ -40,6 +40,20 @@ interface Finding {
   tenant_id: string;
   poc_status?: string;
   poc_confidence_score?: number;
+  
+  // Verification fields
+  verification_status?: string;
+  verification_started_at?: string;
+  verification_completed_at?: string;
+  verification_evidence?: {
+    payloads?: string[];
+    responses?: any[];
+    screenshots?: string[];
+    exploitation_steps?: string[];
+    confidence_score?: number;
+    false_positive_reason?: string;
+  };
+  verification_lambda_request_id?: string;
 }
 
 interface FindingsResponse {
