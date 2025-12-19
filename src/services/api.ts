@@ -69,7 +69,20 @@ class ApiService {
 
     // Add response interceptor for error handling
     this.api.interceptors.response.use(
-      (response: AxiosResponse) => response,
+      (response: AxiosResponse) => {
+        // Log findings API responses for debugging
+        if (response.config.url?.includes('/api/v1/findings') && !response.config.url?.includes('/stats/summary')) {
+          console.log('🔍 Findings API Raw Response:', {
+            url: response.config.url,
+            status: response.status,
+            data: response.data,
+            dataKeys: Object.keys(response.data || {}),
+            findingsLength: response.data?.findings?.length,
+            total: response.data?.total
+          });
+        }
+        return response;
+      },
       async (error) => {
         // Handle timeout errors specifically
         if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {

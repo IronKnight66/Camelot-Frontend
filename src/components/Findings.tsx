@@ -153,14 +153,36 @@ const Findings: React.FC = () => {
         page_size: pageSize
       };
       
+      console.log('🔍 Loading findings with params:', params);
       const response: FindingsResponse = await api.getFindings(params);
-      console.log('🔍 Findings API Response:', response);
-      console.log('📊 Number of findings:', response.findings?.length || 0);
-      setFindings(response.findings || []);
+      console.log('🔍 Full API Response:', JSON.stringify(response, null, 2));
+      console.log('📊 Response structure:', {
+        hasFindings: !!response.findings,
+        findingsLength: response.findings?.length || 0,
+        total: response.total,
+        page: response.page,
+        page_size: response.page_size,
+        total_pages: response.total_pages
+      });
+      
+      // Handle case where response might be wrapped differently
+      const findings = response.findings || [];
+      const total = response.total || 0;
+      
+      console.log('📊 Processed findings:', findings.length, 'out of', total);
+      
+      if (total > 0 && findings.length === 0) {
+        console.warn('⚠️ Warning: Total indicates findings exist but array is empty!');
+        console.warn('⚠️ This might indicate a pagination or response parsing issue');
+      }
+      
+      setFindings(findings);
       setTotalPages(response.total_pages || 1);
     } catch (err: any) {
+      console.error('❌ Error loading findings:', err);
+      console.error('❌ Error response:', err.response?.data);
+      console.error('❌ Error status:', err.response?.status);
       setError(err.response?.data?.detail || err.message || 'Failed to load findings');
-      console.error('Error loading findings:', err);
     } finally {
       setLoading(false);
     }
