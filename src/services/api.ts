@@ -213,6 +213,11 @@ class ApiService {
     return response.data;
   }
 
+  async verifyFinding(findingId: number, request?: { timeout?: number; intensity?: string }) {
+    const response = await this.api.post(`/api/v1/findings/${findingId}/verify`, request || {});
+    return response.data;
+  }
+
   async getFindingsSummary(scanId?: number) {
     const params = scanId ? `?scan_id=${scanId}` : '';
     const response = await this.api.get(`/api/v1/findings/stats/summary${params}`);

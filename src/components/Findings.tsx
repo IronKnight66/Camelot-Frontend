@@ -247,6 +247,18 @@ const Findings: React.FC = () => {
     }
   }, [selectedFinding]);
 
+  const handleVerifyFinding = useCallback(async (findingId: number) => {
+    try {
+      const result = await api.verifyFinding(findingId);
+      alert(result.message || 'Verification started successfully');
+      // Refresh findings to show updated status
+      loadFindings();
+    } catch (err: any) {
+      console.error('Error verifying finding:', err);
+      alert('Failed to start verification: ' + (err.response?.data?.detail || err.message));
+    }
+  }, []);
+
   const getSeverityClass = (severity: string) => {
     return `severity-${severity.toLowerCase()}`;
   };
@@ -466,12 +478,29 @@ const Findings: React.FC = () => {
         cell: (info) => {
           const finding = info.row.original;
           return (
-            <button
-              className="view-details-btn"
-              onClick={() => handleViewDetails(finding)}
-            >
-              View Details
-            </button>
+            <div className="actions-cell">
+              <button
+                className="view-details-btn"
+                onClick={() => handleViewDetails(finding)}
+              >
+                View Details
+              </button>
+              {finding.target_url && (
+                <button
+                  className={`verify-btn ${finding.verification_status === 'in_progress' ? 'disabled' : ''}`}
+                  onClick={() => handleVerifyFinding(finding.id)}
+                  disabled={finding.verification_status === 'in_progress'}
+                  title="Verify vulnerability exploitability"
+                >
+                  {finding.verification_status === 'in_progress' ? 'Verifying...' : 'Verify'}
+                </button>
+              )}
+              {finding.verification_status && finding.verification_status !== 'pending' && (
+                <span className={`verification-status-badge ${finding.verification_status}`}>
+                  {finding.verification_status.replace('_', ' ')}
+                </span>
+              )}
+            </div>
           );
         },
       },
@@ -892,6 +921,73 @@ const Findings: React.FC = () => {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                )}
+
+                {/* Verification Section */}
+                {selectedFinding.verification_status && selectedFinding.verification_status !== 'pending' && (
+                  <div className="detail-section verification-section">
+                    <h4>Vulnerability Verification</h4>
+                    <div className="verification-status-display">
+                      <span className={`verification-status-badge ${selectedFinding.verification_status}`}>
+                        {selectedFinding.verification_status.replace('_', ' ').toUpperCase()}
+                      </span>
+                      {selectedFinding.verification_started_at && (
+                        <span className="verification-timestamp">
+                          Started: {formatDate(selectedFinding.verification_started_at)}
+                        </span>
+                      )}
+                      {selectedFinding.verification_completed_at && (
+                        <span className="verification-timestamp">
+                          Completed: {formatDate(selectedFinding.verification_completed_at)}
+                        </span>
+                      )}
+                    </div>
+
+                    {selectedFinding.verification_evidence && (
+                      <div className="verification-evidence">
+                        <h5>Evidence</h5>
+                        
+                        {selectedFinding.verification_evidence.exploitation_steps && selectedFinding.verification_evidence.exploitation_steps.length > 0 && (
+                          <div className="exploitation-steps">
+                            <strong>Exploitation Steps:</strong>
+                            <ol>
+                              {selectedFinding.verification_evidence.exploitation_steps.map((step, i) => (
+                                <li key={i}>{step}</li>
+                              ))}
+                            </ol>
+                          </div>
+                        )}
+                        
+                        {selectedFinding.verification_evidence.payloads && selectedFinding.verification_evidence.payloads.length > 0 && (
+                          <div className="payloads">
+                            <strong>Payloads Used:</strong>
+                            <ul>
+                              {selectedFinding.verification_evidence.payloads.map((payload, i) => (
+                                <li key={i}><code>{payload}</code></li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        
+                        {selectedFinding.verification_evidence.screenshots && selectedFinding.verification_evidence.screenshots.length > 0 && (
+                          <div className="screenshots">
+                            <strong>Screenshots:</strong>
+                            <div className="screenshot-grid">
+                              {selectedFinding.verification_evidence.screenshots.map((screenshot, i) => (
+                                <img key={i} src={screenshot} alt={`Evidence ${i + 1}`} className="evidence-screenshot" />
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {selectedFinding.verification_evidence.confidence_score !== undefined && (
+                          <div className="confidence">
+                            <strong>Confidence Score:</strong> {(selectedFinding.verification_evidence.confidence_score * 100).toFixed(1)}%
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
 
