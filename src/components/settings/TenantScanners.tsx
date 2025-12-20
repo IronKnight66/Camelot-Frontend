@@ -96,17 +96,27 @@ const TenantScanners: React.FC = () => {
   };
 
   const handleAddTool = async (toolId: string) => {
+    console.log('[TenantScanners] handleAddTool called:', { toolId, selectedTenant });
     if (!selectedTenant) {
+      console.error('[TenantScanners] No tenant selected');
       setError('Please select a tenant first');
       return;
     }
     try {
-      await apiService.enableTenantToolForSpecificTenant(toolId, selectedTenant);
-      loadData();
-      setActiveTab('added');
-      setShowAddModal(false);
+      console.log('[TenantScanners] Calling API to enable tool...');
+      const result = await apiService.enableTenantToolForSpecificTenant(toolId, selectedTenant);
+      console.log('[TenantScanners] Tool enabled successfully:', result);
+
+      setError(''); // Clear any previous errors
+      await loadData(); // Reload to show the new tool
+      setActiveTab('added'); // Switch to "Already Added" tab
+      setShowAddModal(false); // Close modal
+
+      console.log('[TenantScanners] UI updated after adding tool');
     } catch (err: any) {
-      setError(err.message || 'Failed to add scanner to tenant');
+      console.error('[TenantScanners] Error adding tool:', err);
+      console.error('[TenantScanners] Error response:', err.response?.data);
+      setError(err.response?.data?.detail || err.message || 'Failed to add scanner to tenant');
     }
   };
 
@@ -129,6 +139,10 @@ const TenantScanners: React.FC = () => {
   const tenantToolIds = new Set(tenantTools.map(t => t.scanner_tool_id || t.scanner_tool?.id).filter(Boolean));
   const availableToAdd = availableTools.filter(tool => !tenantToolIds.has(tool.id));
   const addedTools = tenantTools.map(t => t.scanner_tool).filter(Boolean);
+
+  console.log('[TenantScanners] Available tools:', availableTools.length);
+  console.log('[TenantScanners] Tenant tool IDs:', Array.from(tenantToolIds));
+  console.log('[TenantScanners] Available to add:', availableToAdd.length, availableToAdd.map(t => ({id: t.id, name: t.name})));
 
   // Show loading while checking auth
   if (authLoading) {
