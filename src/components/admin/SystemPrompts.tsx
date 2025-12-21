@@ -3,7 +3,7 @@ import apiService from '../../services/api';
 import Layout from '../Layout';
 import './SystemPrompts.css';
 
-type PromptType = 'chatbot' | 'scanner_selection' | 'start_scan' | 'recon';
+type PromptType = 'chatbot' | 'scanner_selection' | 'start_scan' | 'recon' | 'verification_injection' | 'verification_xss' | 'verification_auth' | 'verification_authz' | 'verification_ssrf';
 
 interface SystemPrompt {
   id: number;
@@ -44,6 +44,36 @@ const PROMPT_TYPE_INFO: Record<PromptType, { label: string; description: string;
     description: 'Prompt for reconnaissance planning and tool recommendations',
     color: '#6f42c1',
     placeholders: ['{target}']
+  },
+  verification_injection: {
+    label: 'Verification: Injection',
+    description: 'Prompt for verifying SQL/Command/Code Injection vulnerabilities',
+    color: '#dc3545',
+    placeholders: ['{title}', '{description}', '{target_url}', '{severity}']
+  },
+  verification_xss: {
+    label: 'Verification: XSS',
+    description: 'Prompt for verifying Cross-Site Scripting vulnerabilities',
+    color: '#e83e8c',
+    placeholders: ['{title}', '{description}', '{target_url}', '{severity}']
+  },
+  verification_auth: {
+    label: 'Verification: Authentication',
+    description: 'Prompt for verifying Authentication vulnerabilities',
+    color: '#fd7e14',
+    placeholders: ['{title}', '{description}', '{target_url}', '{severity}']
+  },
+  verification_authz: {
+    label: 'Verification: Authorization',
+    description: 'Prompt for verifying Authorization/Access Control vulnerabilities',
+    color: '#ffc107',
+    placeholders: ['{title}', '{description}', '{target_url}', '{severity}']
+  },
+  verification_ssrf: {
+    label: 'Verification: SSRF',
+    description: 'Prompt for verifying Server-Side Request Forgery vulnerabilities',
+    color: '#17a2b8',
+    placeholders: ['{title}', '{description}', '{target_url}', '{severity}']
   }
 };
 
