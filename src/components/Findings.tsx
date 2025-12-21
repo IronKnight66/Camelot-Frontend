@@ -289,10 +289,59 @@ const Findings: React.FC = () => {
       alert(result.message || 'Verification started successfully');
       // Refresh findings to show updated status
       loadFindings();
+      
+      // Start polling for verification completion
+      startVerificationPolling(findingId);
     } catch (err: any) {
       console.error('Error verifying finding:', err);
       alert('Failed to start verification: ' + (err.response?.data?.detail || err.message));
     }
+  }, []);
+
+  const startVerificationPolling = useCallback((findingId: number) => {
+    let pollCount = 0;
+    const maxPolls = 90; // Poll for up to 3 minutes (every 2 seconds)
+    
+    const pollInterval = setInterval(async () => {
+      try {
+        pollCount++;
+        console.log(`🔄 Polling verification status for finding ${findingId} (${pollCount}/${maxPolls})...`);
+        
+        // Fetch the specific finding to check its verification status
+        const response = await api.getFinding(findingId.toString());
+        const finding = response;
+        
+        console.log(`📊 Verification status: ${finding.verification_status}`);
+        
+        // Check if verification is complete (no longer in_progress)
+        if (finding.verification_status && finding.verification_status !== 'in_progress') {
+          console.log(`✅ Verification completed with status: ${finding.verification_status}`);
+          clearInterval(pollInterval);
+          
+          // Refresh the findings list to show updated status
+          loadFindings();
+          
+          // Show completion notification
+          const statusMessage = finding.verification_status === 'verified' 
+            ? '✅ Vulnerability verified successfully!' 
+            : finding.verification_status === 'not_exploitable'
+            ? '❌ Vulnerability could not be exploited'
+            : `Verification completed: ${finding.verification_status}`;
+          
+          alert(statusMessage);
+        } else if (pollCount >= maxPolls) {
+          console.log('⏱️ Polling timeout reached');
+          clearInterval(pollInterval);
+          loadFindings(); // Refresh one last time
+        }
+      } catch (err: any) {
+        console.error('Error polling verification status:', err);
+        // Don't clear interval on error - might be transient
+        if (pollCount >= maxPolls) {
+          clearInterval(pollInterval);
+        }
+      }
+    }, 2000); // Poll every 2 seconds
   }, []);
 
   const getSeverityClass = (severity: string) => {
