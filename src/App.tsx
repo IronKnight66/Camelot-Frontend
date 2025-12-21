@@ -29,6 +29,7 @@ import Assessment from './components/Assessment';
 import Metrics from './components/Metrics';
 import Reports from './components/Reports';
 import Findings from './components/Findings';
+import Scans from './components/Scans';
 import './aws-config';
 import './App.css';
 
@@ -317,6 +318,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Findings />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Scans Page */}
+            <Route 
+              path="/scans" 
+              element={
+                <ProtectedRoute>
+                  <Scans />
                 </ProtectedRoute>
               } 
             />

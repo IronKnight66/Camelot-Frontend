@@ -54,6 +54,12 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
                 Findings
               </Link>
               <Link 
+                to="/scans" 
+                className={`nav-link ${location.pathname === '/scans' ? 'active' : ''}`}
+              >
+                Scans
+              </Link>
+              <Link 
                 to="/metrics" 
                 className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
               >

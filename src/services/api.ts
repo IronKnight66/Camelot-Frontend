@@ -149,6 +149,53 @@ class ApiService {
     return response.data;
   }
 
+  // Scan Parents API
+  async getScanParentsWithScans(params?: {
+    page?: number;
+    page_size?: number;
+    status?: string;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    const queryString = queryParams.toString();
+    const url = `/api/v1/scan-parents/with-scans${queryString ? `?${queryString}` : ''}`;
+    const response = await this.api.get(url);
+    return response.data;
+  }
+
+  async getScanParentWithScans(parentId: number) {
+    const response = await this.api.get(`/api/v1/scan-parents/${parentId}/scans`);
+    return response.data;
+  }
+
+  // Orphaned Scans API
+  async getOrphanedScans(params?: {
+    page?: number;
+    page_size?: number;
+    status?: string;
+  }) {
+    const queryParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    // Add orphaned_only=true to filter for scans without a parent
+    queryParams.append('orphaned_only', 'true');
+    const queryString = queryParams.toString();
+    const url = `/api/v1/scans${queryString ? `?${queryString}` : ''}`;
+    const response = await this.api.get(url);
+    return response.data;
+  }
+
   // Findings API
   async getFindings(params?: {
     page?: number;
