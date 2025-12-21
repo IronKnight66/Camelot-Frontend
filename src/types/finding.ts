@@ -10,11 +10,54 @@ export enum VerificationStatus {
   FALSE_POSITIVE = 'false_positive'
 }
 
+export interface ToolUse {
+  id: string;
+  name: string;
+  input: any;
+}
+
+export interface ContentBlock {
+  text?: string;
+  toolUse?: {
+    toolUseId: string;
+    name: string;
+    input: any;
+  };
+}
+
+export interface ConversationTraceEntry {
+  iteration: number;
+  timestamp: string;
+  request: {
+    messages_count: number;
+    tools_available: number;
+  };
+  response: {
+    stop_reason: string;
+    tool_uses: ToolUse[];
+    content: ContentBlock[];
+  };
+  token_usage: {
+    inputTokens: number;
+    outputTokens: number;
+    totalTokens: number;
+  };
+}
+
+export interface TokenUsageByIteration {
+  iteration: number;
+  input_tokens: number;
+  output_tokens: number;
+  total_tokens: number;
+}
+
 export interface VerificationEvidence {
   payloads?: string[];
   responses?: any[];
   screenshots?: string[];
   exploitation_steps?: string[];
+  conversation_trace?: ConversationTraceEntry[];
+  token_usage_by_iteration?: TokenUsageByIteration[];
   confidence_score?: number;
   false_positive_reason?: string;
 }

@@ -1469,3 +1469,159 @@ body .modal-body .detail-item {
   font-weight: 600;
 }
 
+/* Conversation Trace Timeline */
+.conversation-trace-section {
+  margin-top: 1.5rem;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.conversation-trace-section h5 {
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.trace-timeline {
+  max-height: 600px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  padding-right: 0.5rem;
+}
+
+.trace-timeline::-webkit-scrollbar {
+  width: 8px;
+}
+
+.trace-timeline::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.trace-timeline::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+.trace-timeline::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+.trace-entry {
+  background: #1e293b;
+  border-left: 3px solid #3b82f6;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.trace-header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.iteration-badge {
+  background: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.token-badge {
+  background: #10b981;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.trace-timestamp {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.trace-body {
+  color: #cbd5e1;
+}
+
+.trace-request,
+.trace-response {
+  margin: 0.75rem 0;
+}
+
+.trace-request strong,
+.trace-response strong {
+  color: #e2e8f0;
+}
+
+.content-block {
+  margin: 0.5rem 0;
+}
+
+.text-content pre,
+.tool-use-content pre {
+  background: #0a0f1e;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  color: #cbd5e1;
+  margin: 0.5rem 0;
+}
+
+.tool-use-content {
+  background: #0a0f1e;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+  border: 1px solid #1e293b;
+}
+
+.tool-header {
+  color: #fbbf24;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.tool-header code {
+  background: #1e293b;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.token-usage {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #334155;
+}
+
+.token-summary {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #1e293b;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  text-align: center;
+  border: 1px solid #334155;
+}
+
+.token-summary strong {
+  color: #10b981;
+}
+

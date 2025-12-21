@@ -50,6 +50,37 @@ interface Finding {
     responses?: any[];
     screenshots?: string[];
     exploitation_steps?: string[];
+    conversation_trace?: Array<{
+      iteration: number;
+      timestamp: string;
+      request: {
+        messages_count: number;
+        tools_available: number;
+      };
+      response: {
+        stop_reason: string;
+        tool_uses: any[];
+        content: Array<{
+          text?: string;
+          toolUse?: {
+            toolUseId: string;
+            name: string;
+            input: any;
+          };
+        }>;
+      };
+      token_usage: {
+        inputTokens: number;
+        outputTokens: number;
+        totalTokens: number;
+      };
+    }>;
+    token_usage_by_iteration?: Array<{
+      iteration: number;
+      input_tokens: number;
+      output_tokens: number;
+      total_tokens: number;
+    }>;
     confidence_score?: number;
     false_positive_reason?: string;
   };
@@ -1069,6 +1100,70 @@ const Findings: React.FC = () => {
                         {selectedFinding.verification_evidence.confidence_score !== undefined && (
                           <div className="confidence">
                             <strong>Confidence Score:</strong> {(selectedFinding.verification_evidence.confidence_score * 100).toFixed(1)}%
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {selectedFinding.verification_evidence?.conversation_trace && 
+                     selectedFinding.verification_evidence.conversation_trace.length > 0 && (
+                      <div className="conversation-trace-section">
+                        <h5>LLM Conversation Trace</h5>
+                        <div className="trace-timeline">
+                          {selectedFinding.verification_evidence.conversation_trace.map((entry, idx) => (
+                            <div key={idx} className="trace-entry">
+                              <div className="trace-header">
+                                <span className="iteration-badge">Iteration {entry.iteration}</span>
+                                <span className="trace-timestamp">{formatDate(entry.timestamp)}</span>
+                                <span className="token-badge">
+                                  {entry.token_usage.totalTokens} tokens
+                                </span>
+                              </div>
+                              
+                              <div className="trace-body">
+                                {/* Request info */}
+                                <div className="trace-request">
+                                  <strong>Request:</strong> {entry.request.messages_count} messages, {entry.request.tools_available} tools available
+                                </div>
+                                
+                                {/* Response content */}
+                                <div className="trace-response">
+                                  <strong>Response ({entry.response.stop_reason}):</strong>
+                                  {entry.response.content.map((block, blockIdx) => (
+                                    <div key={blockIdx} className="content-block">
+                                      {block.text && (
+                                        <div className="text-content">
+                                          <pre>{block.text}</pre>
+                                        </div>
+                                      )}
+                                      {block.toolUse && (
+                                        <div className="tool-use-content">
+                                          <div className="tool-header">
+                                            Tool: <code>{block.toolUse.name}</code>
+                                          </div>
+                                          <pre>{JSON.stringify(block.toolUse.input, null, 2)}</pre>
+                                        </div>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                                
+                                {/* Token usage */}
+                                <div className="token-usage">
+                                  Input: {entry.token_usage.inputTokens} | Output: {entry.token_usage.outputTokens} | Total: {entry.token_usage.totalTokens}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        {/* Token usage summary */}
+                        {selectedFinding.verification_evidence.token_usage_by_iteration && (
+                          <div className="token-summary">
+                            <strong>Total Tokens:</strong> {
+                              selectedFinding.verification_evidence.token_usage_by_iteration
+                                .reduce((sum, t) => sum + t.total_tokens, 0)
+                            }
                           </div>
                         )}
                       </div>
