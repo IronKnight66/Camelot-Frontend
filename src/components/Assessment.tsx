@@ -55,9 +55,9 @@ const Assessment: React.FC = () => {
 
       // Prepare scan data for backend API
       const scanData = {
-        name: `${formData.testType} - ${formData.websiteUrl}`,
+        name: `${formData.testType.trim()} - ${formData.websiteUrl}`,
         description: `Assessment for ${formData.websiteUrl}`,
-        scan_type: formData.testType,
+        scan_type: formData.testType.trim(),  // Remove trailing/leading spaces
         target_url: formData.websiteUrl,
         scan_config: {
           endpoints: selectedEndpoints,
@@ -70,18 +70,17 @@ const Assessment: React.FC = () => {
 
       console.log('Creating scan with data:', scanData);
 
-      // Step 1: Create the scan
-      const createdScan = await apiService.createScan(scanData);
-      console.log('Scan created:', createdScan);
+      // Submit assessment - scan starts automatically in background
+      const assessmentResponse = await apiService.createScan(scanData);
+      console.log('Assessment submitted:', assessmentResponse);
 
-      // Step 2: Start the scan immediately
-      const startedScan = await apiService.startScan(createdScan.id);
-      console.log('Scan started:', startedScan);
+      // Assessment endpoint returns: {job_id, campaign_name, scan_parent_id, status}
+      // The scan already starts in background, no need to call startScan
 
       // Show success message
-      alert(`Assessment submitted successfully!\nScan ID: ${createdScan.id}\nStatus: ${startedScan.status}`);
+      alert(`Assessment submitted successfully!\nJob ID: ${assessmentResponse.job_id}\nCampaign: ${assessmentResponse.campaign_name}\nStatus: ${assessmentResponse.status}\n\nThe scan is running in the background. Check the Scans page for results.`);
 
-      // Navigate to scans page or scan detail page
+      // Navigate to scans page
       navigate(`/scans`);
 
     } catch (error: any) {
