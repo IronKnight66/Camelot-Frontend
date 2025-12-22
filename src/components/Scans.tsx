@@ -50,6 +50,8 @@ interface Scan {
   scan_parent_id: number | null;
   scan_config?: any;
   scanner_tools?: string[];
+  mcp_job_id?: string | null;
+  selected_tool?: string | null;
 }
 
 interface ScanParentsResponse {
@@ -144,7 +146,7 @@ const Scans: React.FC = () => {
 
   const handleDownloadScan = async (scan: Scan) => {
     try {
-      const response = await apiService.downloadScanResults(scan.id);
+      const response = await api.downloadScanResults(scan.id);
       const blob = new Blob([response], { type: 'application/json' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -159,7 +161,7 @@ const Scans: React.FC = () => {
 
   const handleDownloadParentScans = async (parentId: number, parentName: string) => {
     try {
-      const response = await apiService.downloadParentScanResults(parentId);
+      const response = await api.downloadParentScanResults(parentId);
       const blob = new Blob([response], { type: 'application/zip' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -345,7 +347,7 @@ const Scans: React.FC = () => {
         cell: (info) => {
           const parent = info.row.original;
           const hasChildScans = parent.scans && parent.scans.length > 0;
-          const hasResults = hasChildScans && parent.scans.some(scan => scan.mcp_job_id && scan.selected_tool);
+          const hasResults = hasChildScans && parent.scans?.some(scan => scan.mcp_job_id && scan.selected_tool);
           
           return hasResults ? (
             <div className="actions-cell">
