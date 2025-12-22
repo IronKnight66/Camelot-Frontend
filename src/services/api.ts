@@ -139,6 +139,13 @@ class ApiService {
     return response.data;
   }
 
+  async downloadScanResults(scanId: number): Promise<Blob> {
+    const response = await this.api.get(`/api/v1/scans/${scanId}/download`, {
+      responseType: 'blob'
+    });
+    return response.data;
+  }
+
   // Endpoint Discovery (Subfinder scanner trigger)
   async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'subfinder') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
@@ -171,6 +178,13 @@ class ApiService {
 
   async getScanParentWithScans(parentId: number) {
     const response = await this.api.get(`/api/v1/scan-parents/${parentId}/scans`);
+    return response.data;
+  }
+
+  async downloadParentScanResults(parentId: number): Promise<Blob> {
+    const response = await this.api.get(`/api/v1/scan-parents/${parentId}/download`, {
+      responseType: 'blob'
+    });
     return response.data;
   }
 

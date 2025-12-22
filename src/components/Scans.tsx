@@ -142,6 +142,36 @@ const Scans: React.FC = () => {
     window.location.href = `/findings?scan_id=${scanId}`;
   };
 
+  const handleDownloadScan = async (scan: Scan) => {
+    try {
+      const response = await apiService.downloadScanResults(scan.id);
+      const blob = new Blob([response], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `scan_${scan.id}_${scan.name}_results.json`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      setError(err.message || 'Failed to download scan results');
+    }
+  };
+
+  const handleDownloadParentScans = async (parentId: number, parentName: string) => {
+    try {
+      const response = await apiService.downloadParentScanResults(parentId);
+      const blob = new Blob([response], { type: 'application/zip' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `parent_scan_${parentId}_${parentName}_results.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err: any) {
+      setError(err.message || 'Failed to download parent scan results');
+    }
+  };
+
   const getScanStatusClass = (status: string) => {
     return `scan-status-${status.toLowerCase()}`;
   };
@@ -308,6 +338,27 @@ const Scans: React.FC = () => {
         header: 'Created',
         cell: (info) => new Date(info.getValue() as string).toLocaleDateString(),
         enableSorting: true,
+      },
+      {
+        id: 'actions',
+        header: 'Actions',
+        cell: (info) => {
+          const parent = info.row.original;
+          const hasChildScans = parent.scans && parent.scans.length > 0;
+          const hasResults = hasChildScans && parent.scans.some(scan => scan.mcp_job_id && scan.selected_tool);
+          
+          return hasResults ? (
+            <div className="actions-cell">
+              <button
+                className="download-all-btn"
+                onClick={() => handleDownloadParentScans(parent.id, parent.name)}
+                title="Download all child scan results as ZIP"
+              >
+                Download All
+              </button>
+            </div>
+          ) : null;
+        },
       },
     ],
     []
@@ -529,6 +580,15 @@ const Scans: React.FC = () => {
                         onClick={() => handleViewFindings(scan.id)}
                       >
                         Findings
+                      </button>
+                    )}
+                    {scan.mcp_job_id && scan.selected_tool && (
+                      <button
+                        className="download-btn"
+                        onClick={() => handleDownloadScan(scan)}
+                        title="Download scan results from S3"
+                      >
+                        Download
                       </button>
                     )}
                   </div>
