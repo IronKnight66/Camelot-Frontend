@@ -469,12 +469,21 @@ const Scans: React.FC = () => {
                   Findings
                 </button>
               )}
+              {scan.mcp_job_id && scan.selected_tool && (
+                <button
+                  className="download-btn"
+                  onClick={() => handleDownloadScan(scan)}
+                  title="Download scan results from S3"
+                >
+                  Download
+                </button>
+              )}
             </div>
           );
         },
       },
     ],
-    [handleViewScanDetails]
+    [handleViewScanDetails, handleDownloadScan]
   );
 
   // Configure TanStack Table for Parent Scans
@@ -1019,6 +1028,15 @@ const Scans: React.FC = () => {
                     onClick={() => handleViewFindings(selectedScan.id)}
                   >
                     View Findings ({selectedScan.findings_count})
+                  </button>
+                )}
+                {selectedScan.mcp_job_id && selectedScan.selected_tool && (
+                  <button 
+                    className="download-btn" 
+                    onClick={() => handleDownloadScan(selectedScan)}
+                    title="Download scan results from S3"
+                  >
+                    Download Results
                   </button>
                 )}
                 <button className="btn-secondary" onClick={closeDetailsModal}>
