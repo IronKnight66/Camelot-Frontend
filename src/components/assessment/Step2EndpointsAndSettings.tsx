@@ -157,6 +157,7 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       console.log('Discovery scan started:', result);
 
       const scanId = result.job_id;
+      const scanParentId = result.scan_parent_id;
       let pollCount = 0;
       const maxPolls = 30; // 1 minute max (poll every 2 seconds)
 
@@ -172,53 +173,34 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           if (status.status === 'completed') {
             clearInterval(pollInterval);
 
-            // Get scan results
-            const results = await apiService.getScanResults(scanId);
-            console.log('📊 Scan results:', results);
+            // Fetch discovered endpoints from aggregated findings
+            try {
+              console.log('📊 Fetching discovered endpoints from aggregated findings...');
+              const endpointUrls = await apiService.getDiscoveredEndpoints(scanParentId);
+              console.log('Discovered endpoint URLs:', endpointUrls);
 
-            // Transform results into endpoint format
-            // Assuming results contain a list of discovered subdomains
-            const discoveredEndpoints: any[] = [];
+              // Transform URLs into Endpoint format
+              const discoveredEndpoints = endpointUrls.map((url: string) => ({
+                url: url,
+                selected: true,
+                isAttackable: true
+              }));
 
-            // Check various possible result formats
-            if (results.findings && Array.isArray(results.findings)) {
-              results.findings.forEach((finding: any) => {
-                if (finding.title || finding.url) {
-                  discoveredEndpoints.push({
-                    url: finding.url || `https://${finding.title}`,
-                    selected: true,
-                    isAttackable: true
-                  });
-                }
-              });
-            } else if (results.endpoints && Array.isArray(results.endpoints)) {
-              results.endpoints.forEach((endpoint: any) => {
-                discoveredEndpoints.push({
-                  url: typeof endpoint === 'string' ? endpoint : endpoint.url,
-                  selected: true,
-                  isAttackable: true
-                });
-              });
-            } else if (results.results && typeof results.results === 'string') {
-              // Parse text results (one subdomain per line)
-              const lines = results.results.split('\n').filter((line: string) => line.trim());
-              lines.forEach((line: string) => {
-                if (line.trim()) {
-                  discoveredEndpoints.push({
-                    url: line.startsWith('http') ? line : `https://${line.trim()}`,
-                    selected: true,
-                    isAttackable: true
-                  });
-                }
-              });
-            }
-
-            if (discoveredEndpoints.length > 0) {
-              setEndpoints(discoveredEndpoints);
-              onChange({ endpoints: discoveredEndpoints });
-              alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
-            } else {
-              setDiscoveryError('No endpoints discovered. Try manual entry.');
+              if (discoveredEndpoints.length > 0) {
+                setEndpoints(discoveredEndpoints);
+                onChange({ endpoints: discoveredEndpoints });
+                alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
+              } else {
+                setDiscoveryError('No endpoints discovered. Try manual entry.');
+              }
+            } catch (endpointError: any) {
+              console.error('Failed to fetch discovered endpoints:', endpointError);
+              // If aggregated findings not available yet, show helpful message
+              if (endpointError?.response?.status === 404) {
+                setDiscoveryError('Aggregated findings not yet available. Scan may still be processing. Please wait and try again.');
+              } else {
+                setDiscoveryError('Failed to retrieve discovered endpoints. Try manual entry.');
+              }
             }
 
             setIsDiscoveringEndpoints(false);

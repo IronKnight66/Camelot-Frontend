@@ -1625,3 +1625,22 @@ body .modal-body .detail-item {
   color: #10b981;
 }
 
+
+/* Asset Cell Styling */
+.asset-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.asset-name {
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.no-asset {
+  color: #64748b;
+  font-style: italic;
+}
+

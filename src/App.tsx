@@ -26,10 +26,10 @@ import StripeSettings from './components/admin/StripeSettings';
 import SubscriptionPlans from './components/admin/SubscriptionPlans';
 import ChatInterface from './components/chatbot/ChatInterface';
 import Assessment from './components/Assessment';
-import Metrics from './components/Metrics';
 import Reports from './components/Reports';
 import Findings from './components/Findings';
 import Scans from './components/Scans';
+import Assets from './components/Assets';
 import './aws-config';
 import './App.css';
 
@@ -292,16 +292,6 @@ function App() {
               } 
             />
 
-            {/* Metrics & Dashboards Page */}
-            <Route 
-              path="/metrics" 
-              element={
-                <ProtectedRoute>
-                  <Metrics />
-                </ProtectedRoute>
-              } 
-            />
-
             {/* Reports Page */}
             <Route 
               path="/reports" 
@@ -328,6 +318,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Scans />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Assets Page */}
+            <Route 
+              path="/assets" 
+              element={
+                <ProtectedRoute>
+                  <Assets />
                 </ProtectedRoute>
               } 
             />

@@ -307,9 +307,6 @@ const ChatInterface: React.FC = () => {
       case 'navigate_settings':
         navigate('/settings');
         break;
-      case 'navigate_metrics':
-        navigate('/metrics');
-        break;
       case 'navigate_scanner_config':
         navigate('/settings');
         break;
@@ -677,17 +674,6 @@ const ChatInterface: React.FC = () => {
                     <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
                   </svg>
                   <span>Assessments</span>
-                </button>
-                <button 
-                  className="user-menu-item"
-                  onClick={() => handleMenuClick('/metrics')}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="20" x2="18" y2="10"/>
-                    <line x1="12" y1="20" x2="12" y2="4"/>
-                    <line x1="6" y1="20" x2="6" y2="14"/>
-                  </svg>
-                  <span>Metrics</span>
                 </button>
                 <button 
                   className="user-menu-item"

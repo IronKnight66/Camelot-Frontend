@@ -188,6 +188,11 @@ class ApiService {
     return response.data;
   }
 
+  async getDiscoveredEndpoints(parentId: number): Promise<string[]> {
+    const response = await this.api.get(`/api/v1/scan-parents/${parentId}/discovered-endpoints`);
+    return response.data.endpoints;
+  }
+
   // Orphaned Scans API
   async getOrphanedScans(params?: {
     page?: number;
@@ -906,6 +911,62 @@ class ApiService {
     const response = await this.api.get(reportUrl, {
       responseType: 'blob'
     });
+    return response.data;
+  }
+
+  // ============================================================================
+  // Assets
+  // ============================================================================
+
+  async getAssets(params?: {
+    page?: number;
+    page_size?: number;
+    asset_type?: string;
+    status?: string;
+    criticality?: string;
+    environment?: string;
+    search?: string;
+  }) {
+    const response = await this.api.get('/api/v1/assets', { params });
+    return response.data;
+  }
+
+  async getAsset(assetId: number) {
+    const response = await this.api.get(`/api/v1/assets/${assetId}`);
+    return response.data;
+  }
+
+  async createAsset(assetData: any) {
+    const response = await this.api.post('/api/v1/assets', assetData);
+    return response.data;
+  }
+
+  async updateAsset(assetId: number, updates: any) {
+    const response = await this.api.put(`/api/v1/assets/${assetId}`, updates);
+    return response.data;
+  }
+
+  async deleteAsset(assetId: number) {
+    const response = await this.api.delete(`/api/v1/assets/${assetId}`);
+    return response.data;
+  }
+
+  async getAssetScans(assetId: number, limit: number = 10) {
+    const response = await this.api.get(`/api/v1/assets/${assetId}/scans`, {
+      params: { limit }
+    });
+    return response.data;
+  }
+
+  async getAssetFindings(assetId: number, limit: number = 10) {
+    const response = await this.api.get(`/api/v1/assets/${assetId}/findings`, {
+      params: { limit }
+    });
+    return response.data;
+  }
+
+  async getAssetStatistics(assetId: number) {
+    const response = await this.api.get(`/api/v1/assets/${assetId}/statistics`);
     return response.data;
   }
 }

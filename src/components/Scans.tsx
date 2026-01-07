@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import {
   useReactTable,
   getCoreRowModel,
@@ -52,6 +53,8 @@ interface Scan {
   scanner_tools?: string[];
   mcp_job_id?: string | null;
   selected_tool?: string | null;
+  asset_id?: number | null;
+  asset_name?: string | null;
 }
 
 interface ScanParentsResponse {
@@ -419,6 +422,26 @@ const Scans: React.FC = () => {
         enableSorting: true,
       },
       {
+        accessorKey: 'asset_name',
+        header: 'Asset',
+        cell: (info) => {
+          const scan = info.row.original;
+          if (scan.asset_name && scan.asset_id) {
+            return (
+              <Link to={`/assets/${scan.asset_id}`} className="asset-link" title={`View Asset: ${scan.asset_name}`}>
+                {scan.asset_name}
+              </Link>
+            );
+          }
+          return <span className="no-asset">—</span>;
+        },
+        enableSorting: true,
+        enableGlobalFilter: true,
+        filterFn: (row, id, value) => {
+          return value === '' || (row.original.asset_name?.toLowerCase() || '').includes(value.toLowerCase());
+        },
+      },
+      {
         id: 'findings',
         header: 'Findings',
         cell: (info) => {
@@ -544,6 +567,7 @@ const Scans: React.FC = () => {
               <th>Name</th>
               <th>Status</th>
               <th>Target</th>
+              <th>Asset</th>
               <th>Findings</th>
               <th>Timing</th>
               <th>Actions</th>
@@ -561,6 +585,15 @@ const Scans: React.FC = () => {
                 </td>
                 <td>{renderStatusBadge(scan.status)}</td>
                 <td>{renderTarget(scan)}</td>
+                <td>
+                  {scan.asset_name && scan.asset_id ? (
+                    <Link to={`/assets/${scan.asset_id}`} className="asset-link" title={`View Asset: ${scan.asset_name}`}>
+                      {scan.asset_name}
+                    </Link>
+                  ) : (
+                    <span className="no-asset">—</span>
+                  )}
+                </td>
                 <td>
                   <div className="findings-breakdown">
                     {scan.critical_findings > 0 && <span className="critical">{scan.critical_findings}C</span>}

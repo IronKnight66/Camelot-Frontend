@@ -21,6 +21,8 @@ interface Finding {
   category: string;
   status: string;
   scan_id: number;
+  asset_id?: number | null;
+  asset_name?: string | null;
   vulnerability_type: string | null;
   cve_id: string | null;
   cwe_id: string | null;
@@ -576,6 +578,24 @@ const Findings: React.FC = () => {
         // Custom accessor for sorting
         accessorFn: (row) => row.target_url || row.target_ip || '',
         enableSorting: true,
+      },
+      {
+        id: 'asset',
+        header: 'Asset',
+        cell: (info) => {
+          const finding = info.row.original;
+          if (finding.asset_name) {
+            return (
+              <div className="asset-cell" title={`Asset ID: ${finding.asset_id}`}>
+                <span className="asset-name">{finding.asset_name}</span>
+              </div>
+            );
+          }
+          return <span className="no-asset">—</span>;
+        },
+        accessorFn: (row) => row.asset_name || '',
+        enableSorting: true,
+        enableGlobalFilter: true,
       },
       {
         accessorKey: 'created_at',

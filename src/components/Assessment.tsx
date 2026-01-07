@@ -19,6 +19,8 @@ const Assessment: React.FC = () => {
     endpoints: [],
     toolSettings: {},
     globalToolSettings: {},
+    assetId: null,
+    useExistingAsset: false,
   });
 
   const handleFormDataChange = (data: Partial<AssessmentFormData>) => {
@@ -54,7 +56,7 @@ const Assessment: React.FC = () => {
         .map(ep => ep.url);
 
       // Prepare scan data for backend API
-      const scanData = {
+      const scanData: any = {
         name: `${formData.testType.trim()} - ${formData.websiteUrl}`,
         description: `Assessment for ${formData.websiteUrl}`,
         scan_type: formData.testType.trim(),  // Remove trailing/leading spaces
@@ -67,6 +69,11 @@ const Assessment: React.FC = () => {
         scanner_tools: enabledScanners.length > 0 ? enabledScanners : undefined,
         ai_analysis_enabled: true
       };
+
+      // Include asset_id if an existing asset was selected
+      if (formData.assetId) {
+        scanData.asset_id = formData.assetId;
+      }
 
       console.log('Creating scan with data:', scanData);
 

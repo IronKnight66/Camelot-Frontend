@@ -4,6 +4,16 @@ import { AssessmentFormData, TestType, ScanType } from '../../types/assessment';
 import ApiService from '../../services/api';
 import './AssessmentWizard.css';
 
+interface Asset {
+  id: number;
+  name: string;
+  asset_type: string;
+  url?: string;
+  ip_address?: string;
+  domain?: string;
+  status: string;
+}
+
 interface Step1ConfigurationProps {
   formData: AssessmentFormData;
   onChange: (data: Partial<AssessmentFormData>) => void;
@@ -15,9 +25,12 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
   onChange,
   onNext,
 }) => {
-  const [errors, setErrors] = useState<{ websiteUrl?: string; testType?: string }>({});
+  const [errors, setErrors] = useState<{ websiteUrl?: string; testType?: string; asset?: string }>({});
   const [scanTypes, setScanTypes] = useState<ScanType[]>([]);
   const [loadingScanTypes, setLoadingScanTypes] = useState<boolean>(true);
+  const [assets, setAssets] = useState<Asset[]>([]);
+  const [loadingAssets, setLoadingAssets] = useState<boolean>(false);
+  const [useExistingAsset, setUseExistingAsset] = useState<boolean>(formData.useExistingAsset || false);
 
   useEffect(() => {
     const fetchScanTypes = async () => {
@@ -36,6 +49,25 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
 
     fetchScanTypes();
   }, []);
+
+  useEffect(() => {
+    const fetchAssets = async () => {
+      if (!useExistingAsset) return;
+      
+      try {
+        setLoadingAssets(true);
+        const response = await ApiService.getAssets({ page: 1, page_size: 100, status: 'active' });
+        setAssets(response.assets || []);
+      } catch (error) {
+        console.error('Error fetching assets:', error);
+        setAssets([]);
+      } finally {
+        setLoadingAssets(false);
+      }
+    };
+
+    fetchAssets();
+  }, [useExistingAsset]);
 
   const validateUrl = (input: string): boolean => {
     if (!input.trim()) {
@@ -67,9 +99,33 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
     return domainRegex.test(trimmed);
   };
 
+  const handleAssetModeChange = (useExisting: boolean) => {
+    setUseExistingAsset(useExisting);
+    onChange({ 
+      useExistingAsset: useExisting,
+      assetId: null,
+      websiteUrl: ''
+    });
+    setErrors({});
+  };
+
+  const handleAssetChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const assetId = e.target.value ? parseInt(e.target.value) : null;
+    const selectedAsset = assets.find(a => a.id === assetId);
+    
+    onChange({ 
+      assetId,
+      websiteUrl: selectedAsset ? (selectedAsset.url || selectedAsset.domain || selectedAsset.ip_address || '') : ''
+    });
+    
+    if (errors.asset || errors.websiteUrl) {
+      setErrors({ ...errors, asset: undefined, websiteUrl: undefined });
+    }
+  };
+
   const handleWebsiteUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
-    onChange({ websiteUrl: url });
+    onChange({ websiteUrl: url, assetId: null });
     if (errors.websiteUrl) {
       setErrors({ ...errors, websiteUrl: undefined });
     }
@@ -84,12 +140,18 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
   };
 
   const handleNext = () => {
-    const newErrors: { websiteUrl?: string; testType?: string } = {};
+    const newErrors: { websiteUrl?: string; testType?: string; asset?: string } = {};
 
-    if (!formData.websiteUrl.trim()) {
-      newErrors.websiteUrl = 'Target is required';
-    } else if (!validateUrl(formData.websiteUrl)) {
-      newErrors.websiteUrl = 'Please enter a valid URL, domain, or IP address';
+    if (useExistingAsset) {
+      if (!formData.assetId) {
+        newErrors.asset = 'Please select an asset';
+      }
+    } else {
+      if (!formData.websiteUrl.trim()) {
+        newErrors.websiteUrl = 'Target is required';
+      } else if (!validateUrl(formData.websiteUrl)) {
+        newErrors.websiteUrl = 'Please enter a valid URL, domain, or IP address';
+      }
     }
 
     if (!formData.testType) {
@@ -108,25 +170,77 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
     <div className="step-container">
       <div className="step-header">
         <h2>Assessment Configuration</h2>
-        <p>Enter the website URL and select the type of test you want to perform.</p>
+        <p>Select an existing asset or enter a new target to test.</p>
       </div>
 
       <div className="form-group">
-        <label htmlFor="websiteUrl">
-          What is the website we want to test? <span className="required">*</span>
-        </label>
-        <input
-          type="text"
-          id="websiteUrl"
-          value={formData.websiteUrl}
-          onChange={handleWebsiteUrlChange}
-          placeholder="https://example.com, example.com, or 192.168.1.1"
-          className={errors.websiteUrl ? 'input-error' : ''}
-        />
-        {errors.websiteUrl && (
-          <span className="error-message">{errors.websiteUrl}</span>
-        )}
+        <label>Target Selection <span className="required">*</span></label>
+        <div className="asset-mode-toggle">
+          <button
+            type="button"
+            className={`toggle-btn ${!useExistingAsset ? 'active' : ''}`}
+            onClick={() => handleAssetModeChange(false)}
+          >
+            Enter New Target
+          </button>
+          <button
+            type="button"
+            className={`toggle-btn ${useExistingAsset ? 'active' : ''}`}
+            onClick={() => handleAssetModeChange(true)}
+          >
+            Select Existing Asset
+          </button>
+        </div>
       </div>
+
+      {useExistingAsset ? (
+        <div className="form-group">
+          <label htmlFor="assetSelect">
+            Select Asset <span className="required">*</span>
+          </label>
+          <select
+            id="assetSelect"
+            value={formData.assetId || ''}
+            onChange={handleAssetChange}
+            className={errors.asset ? 'input-error' : ''}
+            disabled={loadingAssets}
+          >
+            <option value="">
+              {loadingAssets ? 'Loading assets...' : 'Select an asset...'}
+            </option>
+            {assets.map((asset) => (
+              <option key={asset.id} value={asset.id}>
+                {asset.name} - {asset.asset_type} {asset.url ? `(${asset.url})` : asset.ip_address ? `(${asset.ip_address})` : ''}
+              </option>
+            ))}
+          </select>
+          {errors.asset && (
+            <span className="error-message">{errors.asset}</span>
+          )}
+          {formData.websiteUrl && (
+            <div className="selected-target-info">
+              <strong>Target:</strong> {formData.websiteUrl}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="form-group">
+          <label htmlFor="websiteUrl">
+            What is the website we want to test? <span className="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="websiteUrl"
+            value={formData.websiteUrl}
+            onChange={handleWebsiteUrlChange}
+            placeholder="https://example.com, example.com, or 192.168.1.1"
+            className={errors.websiteUrl ? 'input-error' : ''}
+          />
+          {errors.websiteUrl && (
+            <span className="error-message">{errors.websiteUrl}</span>
+          )}
+        </div>
+      )}
 
       <div className="form-group">
         <label htmlFor="testType">

@@ -39,6 +39,8 @@ export interface AssessmentFormData {
   endpoints: Endpoint[];
   toolSettings: { [toolId: string]: ToolSetting };
   globalToolSettings: GlobalToolSettings;
+  assetId?: number | null;
+  useExistingAsset?: boolean;
 }
 
 export interface ChatbotAssessmentData {

@@ -171,9 +171,6 @@ const ChatbotSidebar: React.FC = () => {
       case 'navigate_settings':
         navigate('/settings/tenant');
         break;
-      case 'navigate_metrics':
-        navigate('/metrics');
-        break;
       case 'navigate_scanner_config':
         navigate('/settings/tenant');
         break;

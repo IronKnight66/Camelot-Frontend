@@ -3,8 +3,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getUserRole } from '../utils/roleHelpers';
-import { useChatbot } from '../contexts/ChatbotContext';
-import ChatbotSidebar from './chatbot/ChatbotSidebar';
 import './Layout.css';
 
 interface LayoutProps {
@@ -18,10 +16,6 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
   const { user, signOut } = useAuth();
   const location = useLocation();
   const userRole = getUserRole(user);
-  
-  // Get chatbot state - ChatbotProvider wraps Router, so this should always be available
-  const chatbot = useChatbot();
-  const isOpen = chatbot.isOpen;
 
 
   const handleSignOut = async () => {
@@ -60,10 +54,10 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
                 Scans
               </Link>
               <Link 
-                to="/metrics" 
-                className={`nav-link ${location.pathname === '/metrics' ? 'active' : ''}`}
+                to="/assets" 
+                className={`nav-link ${location.pathname === '/assets' ? 'active' : ''}`}
               >
-                Metrics
+                Assets
               </Link>
               <Link 
                 to="/reports" 
@@ -97,7 +91,7 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
         </div>
       </header>
 
-      <main className={`layout-main ${isOpen && !minimal ? 'with-sidebar' : ''} ${minimal ? 'layout-main-hero' : ''}`}>
+      <main className={`layout-main ${minimal ? 'layout-main-hero' : ''}`}>
         {title && (
           <div className="page-title">
             <h2>{title}</h2>
@@ -106,8 +100,8 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
         {children}
       </main>
 
-      {/* Persistent Chatbot Sidebar - hidden on minimal hero pages to keep focus on central prompt */}
-      {!minimal && <ChatbotSidebar />}
+      {/* Persistent Chatbot Sidebar - REMOVED per user request */}
+      {/* {!minimal && <ChatbotSidebar />} */}
 
       {/* Footer with attribution */}
       <footer className="layout-footer">
