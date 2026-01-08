@@ -159,7 +159,7 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       const scanId = result.job_id;
       const scanParentId = result.scan_parent_id;
       let pollCount = 0;
-      const maxPolls = 30; // 1 minute max (poll every 2 seconds)
+      const maxPolls = 90; // 3 minutes max (poll every 2 seconds)
 
       // Poll for scan completion
       const pollInterval = setInterval(async () => {
