@@ -173,37 +173,57 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           if (status.status === 'completed') {
             clearInterval(pollInterval);
 
-            // Fetch discovered endpoints from aggregated findings
-            try {
-              console.log('📊 Fetching discovered endpoints from aggregated findings...');
-              const endpointUrls = await apiService.getDiscoveredEndpoints(scanParentId);
-              console.log('Discovered endpoint URLs:', endpointUrls);
+            // Wait for aggregation to complete, then fetch discovered endpoints
+            console.log('📊 Scan completed. Waiting for aggregation to finish...');
 
-              // Transform URLs into Endpoint format
-              const discoveredEndpoints = endpointUrls.map((url: string) => ({
-                url: url,
-                selected: true,
-                isAttackable: true
-              }));
+            // Retry fetching aggregated findings with exponential backoff
+            let aggregationRetries = 0;
+            const maxAggregationRetries = 10;
 
-              if (discoveredEndpoints.length > 0) {
-                setEndpoints(discoveredEndpoints);
-                onChange({ endpoints: discoveredEndpoints });
-                alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
-              } else {
-                setDiscoveryError('No endpoints discovered. Try manual entry.');
+            const fetchWithRetry = async () => {
+              try {
+                console.log(`Fetching discovered endpoints (attempt ${aggregationRetries + 1}/${maxAggregationRetries})...`);
+                const endpointUrls = await apiService.getDiscoveredEndpoints(scanParentId);
+                console.log('Discovered endpoint URLs:', endpointUrls);
+
+                // Transform URLs into Endpoint format
+                const discoveredEndpoints = endpointUrls.map((url: string) => ({
+                  url: url,
+                  selected: true,
+                  isAttackable: true
+                }));
+
+                if (discoveredEndpoints.length > 0) {
+                  setEndpoints(discoveredEndpoints);
+                  onChange({ endpoints: discoveredEndpoints });
+                  alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
+                } else {
+                  setDiscoveryError('No endpoints discovered. Try manual entry.');
+                }
+                setIsDiscoveringEndpoints(false);
+              } catch (endpointError: any) {
+                aggregationRetries++;
+                console.error(`Failed to fetch discovered endpoints (attempt ${aggregationRetries}):`, endpointError);
+
+                // If 404 and still have retries, wait and try again
+                if (endpointError?.response?.status === 404 && aggregationRetries < maxAggregationRetries) {
+                  const waitTime = 2000 + (aggregationRetries * 1000); // 2s, 3s, 4s, 5s...
+                  console.log(`Aggregation not ready yet. Retrying in ${waitTime}ms...`);
+                  setTimeout(fetchWithRetry, waitTime);
+                } else {
+                  // Max retries reached or other error
+                  if (endpointError?.response?.status === 404) {
+                    setDiscoveryError('Aggregation timeout. Findings may not be ready yet. Check Scans page later.');
+                  } else {
+                    setDiscoveryError('Failed to retrieve discovered endpoints. Try manual entry.');
+                  }
+                  setIsDiscoveringEndpoints(false);
+                }
               }
-            } catch (endpointError: any) {
-              console.error('Failed to fetch discovered endpoints:', endpointError);
-              // If aggregated findings not available yet, show helpful message
-              if (endpointError?.response?.status === 404) {
-                setDiscoveryError('Aggregated findings not yet available. Scan may still be processing. Please wait and try again.');
-              } else {
-                setDiscoveryError('Failed to retrieve discovered endpoints. Try manual entry.');
-              }
-            }
+            };
 
-            setIsDiscoveringEndpoints(false);
+            // Start fetching with initial delay to give aggregation time to start
+            setTimeout(fetchWithRetry, 3000); // Wait 3 seconds before first attempt
           } else if (status.status === 'failed') {
             clearInterval(pollInterval);
             setDiscoveryError('Endpoint discovery failed. Please try again.');
