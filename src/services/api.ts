@@ -502,6 +502,16 @@ class ApiService {
     return response.data;
   }
 
+  async getTenantScannerToolsForTenant(tenantId: number) {
+    const response = await this.api.get(`/api/v1/tenants/${tenantId}/scanner-tools`);
+    return response.data;
+  }
+
+  async deleteTenantToolForTenant(tenantId: number, tenantToolId: string) {
+    const response = await this.api.delete(`/api/v1/tenants/${tenantId}/scanner-tools/${tenantToolId}`);
+    return response.data;
+  }
+
   // COMMENTED OUT - Bedrock uses IAM authentication (December 2024)
   // async testAPIKey(provider: string) {
   //   const response = await this.api.post(`/api/v1/tenant/api-keys/${provider}/test`);

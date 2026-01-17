@@ -17,6 +17,12 @@ interface TenantTool {
   current_usage_count?: number;
 }
 
+interface Tenant {
+  id: number;
+  name: string;
+  slug?: string;
+}
+
 const TenantScanners: React.FC = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -24,125 +30,196 @@ const TenantScanners: React.FC = () => {
   
   const [availableTools, setAvailableTools] = useState<ScannerTool[]>([]);
   const [tenantTools, setTenantTools] = useState<TenantTool[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'available' | 'added'>('available');
   const [selectedTenant, setSelectedTenant] = useState<number | null>(null);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [toolToAdd, setToolToAdd] = useState<ScannerTool | null>(null);
-  const [tenants, setTenants] = useState<any[]>([]);
+  const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [selectedAvailableTools, setSelectedAvailableTools] = useState<Set<string>>(new Set());
+  const [selectedCurrentTools, setSelectedCurrentTools] = useState<Set<string>>(new Set());
+  const [bulkActionLoading, setBulkActionLoading] = useState(false);
 
+  // Load tenants on mount
   useEffect(() => {
-    loadData();
     loadTenants();
-  }, [activeTab]);
+  }, []);
 
-  const loadData = async () => {
+  // Load global tools on mount
+  useEffect(() => {
+    loadGlobalTools();
+  }, []);
+
+  // Load tenant-specific tools when tenant is selected
+  useEffect(() => {
+    if (selectedTenant) {
+      loadTenantTools();
+    } else {
+      setTenantTools([]);
+    }
+  }, [selectedTenant]);
+
+  const loadGlobalTools = async () => {
     try {
-      setLoading(true);
-      setError('');
-
-      // Load all available global tools
       const globalToolsData = await apiService.getScannerTools();
-      // Handle both direct array and object with tools property
       const globalTools = Array.isArray(globalToolsData) ? globalToolsData : (globalToolsData?.tools || []);
       setAvailableTools(globalTools);
-
-      // Load tenant's current tools
-      const tenantToolsData = await apiService.getTenantScannerTools();
-      const toolsData = tenantToolsData?.tools || tenantToolsData || [];
-
-      // Ensure toolsData is always an array
-      const toolsArray = Array.isArray(toolsData) ? toolsData : [];
-
-      // Handle both nested and flat structures
-      const tools = toolsArray.map((item: any) => {
-        if (item.scanner_tool) {
-          return {
-            id: item.id.toString(),
-            scanner_tool_id: item.scanner_tool?.id || item.scanner_tool?.id || item.id,
-            scanner_tool: item.scanner_tool,
-            is_enabled: item.is_enabled,
-            max_scans_per_month: item.max_scans_per_month,
-            current_usage_count: item.current_usage_count || 0
-          };
-        }
-        return item;
-      });
-      
-      console.log('Available tools:', globalTools.length, 'Tenant tools:', tools.length);
-      
-      setTenantTools(tools);
     } catch (err: any) {
-      setError(err.message || 'Failed to load scanner tools');
-    } finally {
-      setLoading(false);
+      console.error('Failed to load global tools:', err);
+      setError(err.message || 'Failed to load global scanner tools');
     }
   };
 
   const loadTenants = async () => {
     try {
       const tenantsData = await apiService.getTenants();
-      // Ensure tenantsData is always an array
       const tenantsArray = Array.isArray(tenantsData) ? tenantsData : [];
       setTenants(tenantsArray);
-      // Set first tenant as default if available
-      if (tenantsArray.length > 0 && !selectedTenant) {
-        setSelectedTenant(tenantsArray[0].id);
-      }
     } catch (err: any) {
       console.error('Failed to load tenants:', err);
+      setError(err.message || 'Failed to load tenants');
     }
   };
 
-  const handleAddTool = async (toolId: string) => {
-    console.log('[TenantScanners] handleAddTool called:', { toolId, selectedTenant });
-    if (!selectedTenant) {
-      console.error('[TenantScanners] No tenant selected');
-      setError('Please select a tenant first');
+  const loadTenantTools = async () => {
+    if (!selectedTenant) return;
+    
+    try {
+      setLoading(true);
+      setError('');
+      
+      const tenantToolsData = await apiService.getTenantScannerToolsForTenant(selectedTenant);
+      const toolsData = tenantToolsData?.tools || tenantToolsData || [];
+      const toolsArray = Array.isArray(toolsData) ? toolsData : [];
+
+      const tools = toolsArray.map((item: any) => ({
+        id: item.id.toString(),
+        scanner_tool_id: item.scanner_tool?.id || item.scanner_tool_id || item.id,
+        scanner_tool: item.scanner_tool,
+        is_enabled: item.is_enabled,
+        max_scans_per_month: item.max_scans_per_month,
+        current_usage_count: item.current_usage_count || 0
+      }));
+      
+      setTenantTools(tools);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load tenant scanner tools');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTenantChange = (tenantId: number) => {
+    setSelectedTenant(tenantId);
+    setSelectedAvailableTools(new Set());
+    setSelectedCurrentTools(new Set());
+    setError('');
+  };
+
+  const handleBulkAdd = async () => {
+    if (!selectedTenant || selectedAvailableTools.size === 0) return;
+    
+    setBulkActionLoading(true);
+    setError('');
+    
+    try {
+      const promises = Array.from(selectedAvailableTools).map(toolId =>
+        apiService.enableTenantToolForSpecificTenant(toolId, selectedTenant)
+      );
+      
+      await Promise.all(promises);
+      
+      // Reload tenant tools
+      await loadTenantTools();
+      setSelectedAvailableTools(new Set());
+    } catch (err: any) {
+      setError(err.response?.data?.detail || err.message || 'Failed to add scanners to tenant');
+    } finally {
+      setBulkActionLoading(false);
+    }
+  };
+
+  const handleBulkRemove = async () => {
+    if (!selectedTenant || selectedCurrentTools.size === 0) return;
+    
+    if (!window.confirm(`Are you sure you want to remove ${selectedCurrentTools.size} scanner(s) from this tenant?`)) {
       return;
     }
+    
+    setBulkActionLoading(true);
+    setError('');
+    
     try {
-      console.log('[TenantScanners] Calling API to enable tool...');
-      const result = await apiService.enableTenantToolForSpecificTenant(toolId, selectedTenant);
-      console.log('[TenantScanners] Tool enabled successfully:', result);
-
-      setError(''); // Clear any previous errors
-      await loadData(); // Reload to show the new tool
-      setActiveTab('added'); // Switch to "Already Added" tab
-      setShowAddModal(false); // Close modal
-
-      console.log('[TenantScanners] UI updated after adding tool');
+      const promises = Array.from(selectedCurrentTools).map(toolId =>
+        apiService.deleteTenantToolForTenant(selectedTenant, toolId)
+      );
+      
+      await Promise.all(promises);
+      
+      // Reload tenant tools
+      await loadTenantTools();
+      setSelectedCurrentTools(new Set());
     } catch (err: any) {
-      console.error('[TenantScanners] Error adding tool:', err);
-      console.error('[TenantScanners] Error response:', err.response?.data);
-      setError(err.response?.data?.detail || err.message || 'Failed to add scanner to tenant');
+      setError(err.response?.data?.detail || err.message || 'Failed to remove scanners from tenant');
+    } finally {
+      setBulkActionLoading(false);
     }
   };
 
-  const openAddModal = (tool: ScannerTool) => {
-    setToolToAdd(tool);
-    setShowAddModal(true);
+  const toggleAvailableToolSelection = (toolId: string) => {
+    const newSelection = new Set(selectedAvailableTools);
+    if (newSelection.has(toolId)) {
+      newSelection.delete(toolId);
+    } else {
+      newSelection.add(toolId);
+    }
+    setSelectedAvailableTools(newSelection);
   };
 
-  const handleRemoveTool = async (toolId: string) => {
-    if (window.confirm('Are you sure you want to remove this scanner from your tenant?')) {
-      try {
-        await apiService.deleteTenantTool(toolId);
-        loadData();
-      } catch (err: any) {
-        setError(err.message || 'Failed to remove scanner from tenant');
-      }
+  const toggleCurrentToolSelection = (toolId: string) => {
+    const newSelection = new Set(selectedCurrentTools);
+    if (newSelection.has(toolId)) {
+      newSelection.delete(toolId);
+    } else {
+      newSelection.add(toolId);
+    }
+    setSelectedCurrentTools(newSelection);
+  };
+
+  const toggleSelectAllAvailable = () => {
+    if (selectedAvailableTools.size === availableToAdd.length) {
+      setSelectedAvailableTools(new Set());
+    } else {
+      setSelectedAvailableTools(new Set(availableToAdd.map(t => t.id)));
     }
   };
 
-  const tenantToolIds = new Set(tenantTools.map(t => t.scanner_tool_id || t.scanner_tool?.id).filter(Boolean));
-  const availableToAdd = availableTools.filter(tool => !tenantToolIds.has(tool.id));
-  const addedTools = tenantTools.map(t => t.scanner_tool).filter(Boolean);
+  const toggleSelectAllCurrent = () => {
+    if (selectedCurrentTools.size === tenantTools.length) {
+      setSelectedCurrentTools(new Set());
+    } else {
+      setSelectedCurrentTools(new Set(tenantTools.map(t => t.id)));
+    }
+  };
 
-  console.log('[TenantScanners] Available tools:', availableTools.length);
-  console.log('[TenantScanners] Tenant tool IDs:', Array.from(tenantToolIds));
-  console.log('[TenantScanners] Available to add:', availableToAdd.length, availableToAdd.map(t => ({id: t.id, name: t.name})));
+  // Calculate available tools (global tools minus tenant tools)
+  // Create a set of scanner_tool_ids that are already added to this tenant
+  const tenantToolIds = new Set(
+    tenantTools
+      .map(t => {
+        // Get the scanner_tool_id from various possible locations
+        const id = t.scanner_tool_id || t.scanner_tool?.id;
+        // Convert to string for consistent comparison
+        return id ? String(id) : null;
+      })
+      .filter(Boolean)
+  );
+  
+  // Filter out tools that are already added
+  const availableToAdd = availableTools.filter(tool => {
+    const toolId = String(tool.id);
+    return !tenantToolIds.has(toolId);
+  });
+
+  const selectedTenantObj = tenants.find(t => t.id === selectedTenant);
 
   // Show loading while checking auth
   if (authLoading) {
@@ -182,212 +259,194 @@ const TenantScanners: React.FC = () => {
           <div>
             <Link to="/settings" className="back-link">← Back to Settings</Link>
             <h1>Manage Tenant Scanners</h1>
-            <p>Add scanner tools to your tenant from the global registry</p>
+            <p>Add or remove scanner tools for tenants from the global registry</p>
           </div>
         </div>
 
         {error && (
           <div className="error-banner">
             <p>{error}</p>
-            <button onClick={loadData}>Retry</button>
+            <button onClick={() => setError('')}>Dismiss</button>
           </div>
         )}
 
-        <div className="tabs">
-          <button
-            className={`tab ${activeTab === 'available' ? 'active' : ''}`}
-            onClick={() => setActiveTab('available')}
+        {/* Tenant Selector */}
+        <div className="tenant-select-block">
+          <label htmlFor="tenant-selector">Select Tenant:</label>
+          <select
+            id="tenant-selector"
+            value={selectedTenant || ''}
+            onChange={(e) => handleTenantChange(Number(e.target.value))}
+            className="tenant-selector"
           >
-            Available to Add ({availableToAdd.length})
-          </button>
-          <button
-            className={`tab ${activeTab === 'added' ? 'active' : ''}`}
-            onClick={() => setActiveTab('added')}
-          >
-            Already Added ({tenantTools.length})
-          </button>
+            <option value="">-- Select a tenant --</option>
+            {tenants.map(tenant => (
+              <option key={tenant.id} value={tenant.id}>
+                {tenant.name} {tenant.slug && `(${tenant.slug})`}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {loading ? (
+        {!selectedTenant ? (
+          <div className="empty-state">
+            <p>Please select a tenant to manage their scanner tools.</p>
+          </div>
+        ) : loading ? (
           <div className="loading">
             <div className="spinner"></div>
             <p>Loading scanner tools...</p>
           </div>
-        ) : activeTab === 'available' ? (
-          <div className="tools-container">
-            <h2>Available Scanner Tools</h2>
-            {availableToAdd.length > 0 ? (
-              <div className="table-wrapper">
-                <table className="tenant-scanners-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Category</th>
-                      <th>Version</th>
-                      <th>Docker Image</th>
-                      <th>Pricing</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {availableToAdd.map(tool => (
-                      <tr key={tool.id}>
-                        <td>
-                          <strong>{tool.displayName || tool.name}</strong>
-                        </td>
-                        <td>
-                          <span className={`category-badge ${tool.category}`}>
-                            {tool.category || 'N/A'}
-                          </span>
-                        </td>
-                        <td>{tool.version || 'Unknown'}</td>
-                        <td>
-                          <code className="docker-image">{tool.dockerImage || 'N/A'}</code>
-                        </td>
-                        <td>{tool.pricingTier || 'Free'}</td>
-                        <td>
-                          <button
-                            className="btn-primary btn-sm"
-                            onClick={() => openAddModal(tool)}
-                          >
-                            + Add to Tenant
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="empty-state">
-                <p>All available scanner tools have been added to your tenant.</p>
-              </div>
-            )}
-          </div>
         ) : (
-          <div className="tools-container">
-            <h2>Scanners Added to Tenant</h2>
-            {tenantTools.length > 0 ? (
-              <div className="table-wrapper">
-                <table className="tenant-scanners-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Category</th>
-                      <th>Status</th>
-                      <th>Usage</th>
-                      <th>Version</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {tenantTools.map(tool => (
-                      <tr key={tool.id}>
-                        <td>
-                          <strong>{tool.scanner_tool?.displayName || tool.scanner_tool?.name}</strong>
-                        </td>
-                        <td>
-                          <span className={`category-badge ${tool.scanner_tool?.category}`}>
-                            {tool.scanner_tool?.category || 'N/A'}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`status-badge ${tool.is_enabled ? 'enabled' : 'disabled'}`}>
-                            {tool.is_enabled ? 'Enabled' : 'Disabled'}
-                          </span>
-                        </td>
-                        <td>
-                          {tool.max_scans_per_month ? (
-                            <span>
-                              {tool.current_usage_count || 0} / {tool.max_scans_per_month} per month
-                            </span>
-                          ) : (
-                            <span>No limit</span>
-                          )}
-                        </td>
-                        <td>{tool.scanner_tool?.version || 'Unknown'}</td>
-                        <td>
-                          <div className="tool-actions">
-                            <Link to="/settings/tenant-tools" className="btn-secondary btn-sm">
-                              Manage
-                            </Link>
-                            <button
-                              className="btn-danger btn-sm"
-                              onClick={() => handleRemoveTool(tool.id)}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="empty-state">
-                <p>No scanners have been added to your tenant yet. Add some from the "Available to Add" tab.</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Add Tool Modal */}
-        {showAddModal && toolToAdd && (
-          <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
-                <h2>Add Scanner to Tenant</h2>
-                <button className="modal-close" onClick={() => setShowAddModal(false)}>×</button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label htmlFor="tool-name">Scanner Tool:</label>
-                  <input
-                    type="text"
-                    id="tool-name"
-                    value={toolToAdd.displayName || toolToAdd.name}
-                    disabled
-                    className="form-input"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="tenant-select">Select Tenant:</label>
-                  <select
-                    id="tenant-select"
-                    value={selectedTenant || ''}
-                    onChange={(e) => setSelectedTenant(Number(e.target.value))}
-                    className="form-input"
-                  >
-                    <option value="">Select a tenant...</option>
-                    {tenants.map(tenant => (
-                      <option key={tenant.id} value={tenant.id}>
-                        {tenant.name} ({tenant.slug || tenant.name.toLowerCase().replace(/\s+/g, '-')})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {error && (
-                  <div className="error-message" style={{ color: '#dc3545', marginTop: '1rem' }}>
-                    {error}
-                  </div>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn-secondary"
-                  onClick={() => setShowAddModal(false)}
-                >
-                  Cancel
-                </button>
+          <div className="tenant-scanners-panels">
+            {/* Available to Add Panel */}
+            <div className="panel panel-available">
+              <div className="panel-header">
+                <h2>Available to Add</h2>
                 <button
                   className="btn-primary"
-                  onClick={() => handleAddTool(toolToAdd.id)}
-                  disabled={!selectedTenant}
+                  onClick={handleBulkAdd}
+                  disabled={selectedAvailableTools.size === 0 || bulkActionLoading}
                 >
-                  Add to Tenant
+                  {bulkActionLoading ? 'Adding...' : `Add Selected (${selectedAvailableTools.size})`}
                 </button>
               </div>
+              
+              {availableToAdd.length > 0 ? (
+                <div className="table-wrapper">
+                  <table className="tenant-scanners-table">
+                    <thead>
+                      <tr>
+                        <th className="checkbox-col">
+                          <input
+                            type="checkbox"
+                            checked={selectedAvailableTools.size === availableToAdd.length && availableToAdd.length > 0}
+                            onChange={toggleSelectAllAvailable}
+                            title="Select all"
+                          />
+                        </th>
+                        <th>Scanner Tool</th>
+                        <th>Category</th>
+                        <th className="hide-mobile">Version</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {availableToAdd.map(tool => (
+                        <tr key={tool.id}>
+                          <td className="checkbox-col">
+                            <input
+                              type="checkbox"
+                              checked={selectedAvailableTools.has(tool.id)}
+                              onChange={() => toggleAvailableToolSelection(tool.id)}
+                            />
+                          </td>
+                          <td>
+                            <div className="tool-name-cell">
+                              <strong>{tool.displayName || tool.name}</strong>
+                              <span className="tool-meta-inline hide-desktop">{tool.version || 'Unknown'}</span>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`category-badge ${tool.category}`}>
+                              {tool.category || 'N/A'}
+                            </span>
+                          </td>
+                          <td className="hide-mobile">{tool.version || 'Unknown'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="empty-state">
+                  <p>All available scanner tools have been added to this tenant.</p>
+                </div>
+              )}
+            </div>
+
+            {/* Current Tools Panel */}
+            <div className="panel panel-current">
+              <div className="panel-header">
+                <h2>Current Tools for {selectedTenantObj?.name || 'Tenant'}</h2>
+                <button
+                  className="btn-danger"
+                  onClick={handleBulkRemove}
+                  disabled={selectedCurrentTools.size === 0 || bulkActionLoading}
+                >
+                  {bulkActionLoading ? 'Removing...' : `Remove Selected (${selectedCurrentTools.size})`}
+                </button>
+              </div>
+              
+              {tenantTools.length > 0 ? (
+                <div className="table-wrapper">
+                  <table className="tenant-scanners-table">
+                    <thead>
+                      <tr>
+                        <th className="checkbox-col">
+                          <input
+                            type="checkbox"
+                            checked={selectedCurrentTools.size === tenantTools.length && tenantTools.length > 0}
+                            onChange={toggleSelectAllCurrent}
+                            title="Select all"
+                          />
+                        </th>
+                        <th>Scanner Tool</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th className="hide-mobile">Usage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tenantTools.map(tool => (
+                        <tr key={tool.id}>
+                          <td className="checkbox-col">
+                            <input
+                              type="checkbox"
+                              checked={selectedCurrentTools.has(tool.id)}
+                              onChange={() => toggleCurrentToolSelection(tool.id)}
+                            />
+                          </td>
+                          <td>
+                            <div className="tool-name-cell">
+                              <strong>{tool.scanner_tool?.displayName || tool.scanner_tool?.name}</strong>
+                              <span className="tool-meta-inline hide-desktop">
+                                {tool.max_scans_per_month ? (
+                                  `${tool.current_usage_count || 0} / ${tool.max_scans_per_month}`
+                                ) : (
+                                  'No limit'
+                                )}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <span className={`category-badge ${tool.scanner_tool?.category}`}>
+                              {tool.scanner_tool?.category || 'N/A'}
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`status-badge ${tool.is_enabled ? 'enabled' : 'disabled'}`}>
+                              {tool.is_enabled ? 'Enabled' : 'Disabled'}
+                            </span>
+                          </td>
+                          <td className="hide-mobile">
+                            {tool.max_scans_per_month ? (
+                              <span>
+                                {tool.current_usage_count || 0} / {tool.max_scans_per_month}
+                              </span>
+                            ) : (
+                              <span>No limit</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="empty-state">
+                  <p>No scanners have been added to this tenant yet. Select tools from "Available to Add" and click "Add Selected".</p>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -397,4 +456,3 @@ const TenantScanners: React.FC = () => {
 };
 
 export default TenantScanners;
-
