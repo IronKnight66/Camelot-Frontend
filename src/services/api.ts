@@ -341,6 +341,11 @@ class ApiService {
     return response.data;
   }
 
+  async syncScannerToolsFromAgentCore() {
+    const response = await this.api.post('/api/v1/admin/scanner-tools/sync-from-agentcore');
+    return response.data;
+  }
+
   // Scanner Tools API - Tenant Admin
   async getTenantScannerTools(isEnabled?: boolean) {
     const response = await this.api.get('/api/v1/scanner-tools', { 

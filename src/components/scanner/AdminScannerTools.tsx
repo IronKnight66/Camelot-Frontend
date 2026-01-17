@@ -21,6 +21,8 @@ const AdminScannerTools: React.FC = () => {
   const [selectedTool, setSelectedTool] = useState<ScannerTool | null>(null);
   const [modalMode, setModalMode] = useState<'view' | 'edit' | 'create'>('view');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
 
   // Filters
   const [filters, setFilters] = useState<ScannerToolsListParams>({
@@ -101,6 +103,53 @@ const AdminScannerTools: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  const handleSyncFromAgentCore = async () => {
+    try {
+      setSyncing(true);
+      setSyncMessage(null);
+      setError('');
+      
+      const result = await apiService.syncScannerToolsFromAgentCore();
+      
+      // Show success message
+      const addedCount = result.total_added || 0;
+      const restoredCount = result.total_restored || 0;
+      const skippedCount = result.skipped?.length || 0;
+      const errorCount = result.errors?.length || 0;
+      
+      let message = `Sync completed: ${addedCount} tool(s) added`;
+      if (restoredCount > 0) {
+        message += `, ${restoredCount} restored`;
+      }
+      if (skippedCount > 0) {
+        message += `, ${skippedCount} skipped`;
+      }
+      if (errorCount > 0) {
+        message += `, ${errorCount} error(s)`;
+      }
+      
+      setSyncMessage({
+        type: errorCount > 0 ? 'error' : 'success',
+        text: message
+      });
+      
+      // Reload tools to show newly added or restored ones
+      if (addedCount > 0 || restoredCount > 0) {
+        await loadTools();
+      }
+      
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.detail || err.message || 'Failed to sync from AgentCore Gateway';
+      setSyncMessage({
+        type: 'error',
+        text: errorMsg
+      });
+      setError(errorMsg);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const handleSave = async (data: any) => {
     try {
       if (selectedTool) {
@@ -174,12 +223,26 @@ const AdminScannerTools: React.FC = () => {
           <button className="btn-primary" onClick={handleCreate}>
             + Create New Tool
           </button>
+          <button 
+            className="btn-secondary" 
+            onClick={handleSyncFromAgentCore}
+            disabled={syncing}
+          >
+            {syncing ? '⏳ Syncing...' : '🔄 Sync from AgentCore'}
+          </button>
         </div>
 
       {error && (
         <div className="error-banner">
           <p>{error}</p>
           <button onClick={loadTools}>Retry</button>
+        </div>
+      )}
+
+      {syncMessage && (
+        <div className={`${syncMessage.type === 'success' ? 'success-banner' : 'error-banner'}`}>
+          <p>{syncMessage.text}</p>
+          <button onClick={() => setSyncMessage(null)}>Dismiss</button>
         </div>
       )}
 
