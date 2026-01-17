@@ -25,7 +25,7 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
   onChange,
   onNext,
 }) => {
-  const [errors, setErrors] = useState<{ websiteUrl?: string; testType?: string; asset?: string }>({});
+  const [errors, setErrors] = useState<{ websiteUrl?: string; testType?: string; asset?: string; authorizationAccepted?: string }>({});
   const [scanTypes, setScanTypes] = useState<ScanType[]>([]);
   const [loadingScanTypes, setLoadingScanTypes] = useState<boolean>(true);
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -139,8 +139,15 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
     }
   };
 
+  const handleAuthorizationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange({ authorizationAccepted: e.target.checked });
+    if (errors.authorizationAccepted) {
+      setErrors({ ...errors, authorizationAccepted: undefined });
+    }
+  };
+
   const handleNext = () => {
-    const newErrors: { websiteUrl?: string; testType?: string; asset?: string } = {};
+    const newErrors: { websiteUrl?: string; testType?: string; asset?: string; authorizationAccepted?: string } = {};
 
     if (useExistingAsset) {
       if (!formData.assetId) {
@@ -156,6 +163,10 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
 
     if (!formData.testType) {
       newErrors.testType = 'Test type is required';
+    }
+
+    if (!formData.authorizationAccepted) {
+      newErrors.authorizationAccepted = 'You must accept the authorization statement to continue.';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -264,6 +275,36 @@ const Step1Configuration: React.FC<Step1ConfigurationProps> = ({
         </select>
         {errors.testType && (
           <span className="error-message">{errors.testType}</span>
+        )}
+      </div>
+
+      <div className="form-group">
+        <label>Authorization and Responsibility <span className="required">*</span></label>
+        <div className="acceptance-statement">
+          <p>
+            I confirm that I have the legal authority and permission to perform security scans 
+            (including vulnerability assessments) against the target(s) specified. I own or control 
+            the systems/domains listed, or have obtained written permission from the owner(s). 
+            I warrant that the scanning I request is lawful, within scope, and will not violate 
+            any contracts, third-party rights, or applicable laws. I understand that scans may 
+            cause disruption or expose vulnerabilities and accept responsibility for all outcomes. 
+            I agree to hold harmless and indemnify Camelot from any third-party claims, damages, 
+            or losses arising from scanning without appropriate authorization or beyond agreed scope.
+          </p>
+        </div>
+        <div className="acceptance-checkbox">
+          <input
+            type="checkbox"
+            id="authorizationAccepted"
+            checked={formData.authorizationAccepted || false}
+            onChange={handleAuthorizationChange}
+          />
+          <label htmlFor="authorizationAccepted">
+            I have read, understood, and accept the above statement, and I authorize these scans under the stated terms.
+          </label>
+        </div>
+        {errors.authorizationAccepted && (
+          <span className="error-message">{errors.authorizationAccepted}</span>
         )}
       </div>
 

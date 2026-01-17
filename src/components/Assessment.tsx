@@ -21,6 +21,7 @@ const Assessment: React.FC = () => {
     globalToolSettings: {},
     assetId: null,
     useExistingAsset: false,
+    authorizationAccepted: false,
   });
 
   const handleFormDataChange = (data: Partial<AssessmentFormData>) => {
@@ -67,7 +68,9 @@ const Assessment: React.FC = () => {
           tool_settings: formData.toolSettings
         },
         scanner_tools: enabledScanners.length > 0 ? enabledScanners : undefined,
-        ai_analysis_enabled: true
+        ai_analysis_enabled: true,
+        authorization_accepted: formData.authorizationAccepted === true,
+        authorization_accepted_at: formData.authorizationAccepted === true ? new Date().toISOString() : undefined
       };
 
       // Include asset_id if an existing asset was selected

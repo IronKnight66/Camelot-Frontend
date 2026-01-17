@@ -41,6 +41,7 @@ export interface AssessmentFormData {
   globalToolSettings: GlobalToolSettings;
   assetId?: number | null;
   useExistingAsset?: boolean;
+  authorizationAccepted?: boolean;
 }
 
 export interface ChatbotAssessmentData {
