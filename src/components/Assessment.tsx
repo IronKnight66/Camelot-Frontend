@@ -135,10 +135,10 @@ const Assessment: React.FC = () => {
       // The scan already starts in background, no need to call startScan
 
       // Show success message
-      alert(`Assessment submitted successfully!\nJob ID: ${assessmentResponse.job_id}\nCampaign: ${assessmentResponse.campaign_name}\nStatus: ${assessmentResponse.status}\n\nThe scan is running in the background. Check the Scans page for results.`);
+      alert(`Assessment submitted successfully!\nJob ID: ${assessmentResponse.job_id}\nCampaign: ${assessmentResponse.campaign_name}\nStatus: ${assessmentResponse.status}\n\nThe scan is running in the background.`);
 
-      // Navigate to scans page
-      navigate(`/scans`);
+      // Navigate to campaign details page
+      navigate(`/campaigns/${assessmentResponse.scan_parent_id}`);
 
     } catch (error: any) {
       console.error('Error submitting assessment:', error);

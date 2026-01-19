@@ -195,6 +195,11 @@ class ApiService {
     return response.data.endpoints;
   }
 
+  async getCampaignDetails(parentId: number) {
+    const response = await this.api.get(`/api/v1/scan-parents/${parentId}/details`);
+    return response.data;
+  }
+
   // Orphaned Scans API
   async getOrphanedScans(params?: {
     page?: number;

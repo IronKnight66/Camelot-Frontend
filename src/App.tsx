@@ -30,6 +30,7 @@ import Reports from './components/Reports';
 import Findings from './components/Findings';
 import Scans from './components/Scans';
 import Assets from './components/Assets';
+import CampaignDetails from './components/CampaignDetails';
 import './aws-config';
 import './App.css';
 
@@ -318,6 +319,16 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Scans />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* Campaign Details Page */}
+            <Route 
+              path="/campaigns/:id" 
+              element={
+                <ProtectedRoute>
+                  <CampaignDetails />
                 </ProtectedRoute>
               } 
             />

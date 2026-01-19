@@ -352,17 +352,26 @@ const Scans: React.FC = () => {
           const hasChildScans = parent.scans && parent.scans.length > 0;
           const hasResults = hasChildScans && parent.scans?.some(scan => scan.mcp_job_id && scan.selected_tool);
           
-          return hasResults ? (
+          return (
             <div className="actions-cell">
-              <button
-                className="download-all-btn"
-                onClick={() => handleDownloadParentScans(parent.id, parent.name)}
-                title="Download all child scan results as ZIP"
+              <Link
+                to={`/campaigns/${parent.id}`}
+                className="view-details-btn"
+                title="View campaign details"
               >
-                Download All
-              </button>
+                View Details
+              </Link>
+              {hasResults && (
+                <button
+                  className="download-all-btn"
+                  onClick={() => handleDownloadParentScans(parent.id, parent.name)}
+                  title="Download all child scan results as ZIP"
+                >
+                  Download All
+                </button>
+              )}
             </div>
-          ) : null;
+          );
         },
       },
     ],

@@ -1,9 +1,25 @@
 /* App.css - Shell container. Global visuals now come from theme CSS. */
 .App {
   min-height: 100vh;
-  background-color: #020617;
-  background-image: none;
+  background-color: #020617 !important;
+  background-image: none !important;
   position: relative;
+}
+
+/* Global dark theme enforcement */
+html, body, #root {
+  background-color: #020617 !important;
+  background-image: none !important;
+}
+
+/* Force dark theme on all tables */
+table, thead, tbody, tr, th, td {
+  background-image: none !important;
+}
+
+/* Ensure table headers don't have light backgrounds */
+thead, th {
+  background-color: transparent !important;
 }
 
 /* Optional: Add actual castle background image when available */

@@ -1,0 +1,594 @@
+/* Campaign Details Page Styles */
+
+.campaign-details-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.breadcrumb a {
+  color: #8b5cf6;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: #7c3aed;
+  text-decoration: underline;
+}
+
+.breadcrumb .separator {
+  color: #9ca3af;
+}
+
+/* Loading and Error States */
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.error-state h2 {
+  color: #dc2626;
+  margin-bottom: 1rem;
+}
+
+.error-state p {
+  color: #991b1b;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Campaign Overview Section */
+.campaign-overview-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.campaign-overview-section .section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.campaign-overview-section h1 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.campaign-description {
+  font-size: 1.1rem;
+  margin: 1rem 0 1.5rem 0;
+  opacity: 0.95;
+}
+
+.campaign-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-item label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.info-item > div {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.target-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.target-url, .target-ip, .target-domain {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.progress-info {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.findings-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.findings-total {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.findings-breakdown {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: #6b7280;
+  color: white;
+}
+
+.status-running, .status-active {
+  background: #3b82f6;
+  color: white;
+}
+
+.status-completed {
+  background: #10b981;
+  color: white;
+}
+
+.status-failed {
+  background: #ef4444;
+  color: white;
+}
+
+.status-cancelled {
+  background: #f97316;
+  color: white;
+}
+
+/* Chat History Section */
+.chat-history-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chat-history-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chat-history-section .section-header:hover {
+  background: #f9fafb;
+}
+
+.chat-history-section h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.chat-history-content {
+  padding: 1.5rem;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.chat-message.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.chat-message.assistant {
+  align-self: flex-start;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.message-role {
+  font-weight: 600;
+}
+
+.message-timestamp {
+  font-size: 0.75rem;
+}
+
+.message-content {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Scan Execution Section */
+.scan-execution-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.scan-execution-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.scan-execution-section h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.scan-count {
+  font-size: 0.9rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+}
+
+.scans-table-container {
+  overflow-x: auto;
+  padding: 1.5rem;
+}
+
+.scans-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.scans-table thead {
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.scans-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.scans-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.scans-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.scan-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.findings-link {
+  color: #8b5cf6;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.findings-link:hover {
+  color: #7c3aed;
+  text-decoration: underline;
+}
+
+.no-findings {
+  color: #9ca3af;
+}
+
+.error-row td {
+  padding: 0.75rem 1rem;
+  background: #fef2f2;
+  border-bottom: 1px solid #fecaca;
+}
+
+.error-message {
+  color: #991b1b;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  border-left: 3px solid #dc2626;
+  padding-left: 1rem;
+}
+
+.success-row td {
+  padding: 0.75rem 1rem;
+  background: #f0fdf4;
+  border-bottom: 1px solid #bbf7d0;
+}
+
+.success-message {
+  color: #166534;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  border-left: 3px solid #10b981;
+  padding-left: 1rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-findings {
+  background: #8b5cf6;
+  color: white;
+}
+
+.btn-findings:hover {
+  background: #7c3aed;
+}
+
+.btn-download {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-download:hover {
+  background: #2563eb;
+}
+
+.btn-stop {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-stop:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.btn-stop:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Confirmation Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.modal-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.modal-content p {
+  margin: 0.5rem 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.warning-text {
+  color: #ef4444 !important;
+  font-weight: 600;
+  margin-top: 1rem !important;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.btn-danger {
+  padding: 0.75rem 1.5rem;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Actions Footer */
+.actions-footer {
+  display: flex;
+  justify-content: flex-start;
+  padding: 1rem 0;
+}
+
+.btn-back {
+  padding: 0.75rem 1.5rem;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-back:hover {
+  background: #4b5563;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .campaign-details-container {
+    padding: 1rem;
+  }
+
+  .campaign-overview-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .campaign-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .chat-message {
+    max-width: 95%;
+  }
+
+  .scans-table {
+    font-size: 0.8rem;
+  }
+
+  .scans-table th,
+  .scans-table td {
+    padding: 0.5rem;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .btn-action {
+    width: 100%;
+  }
+}
