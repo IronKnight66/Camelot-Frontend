@@ -1,7 +1,7 @@
 // src/components/assessment/Step2EndpointsAndSettings.tsx
 import React, { useState, useEffect } from 'react';
 import { AssessmentFormData, Endpoint, ToolSetting } from '../../types/assessment';
-import { mockEndpoints, mockTools } from './mockData';
+import { mockTools } from './mockData';
 import apiService from '../../services/api';
 import './AssessmentWizard.css';
 
@@ -18,12 +18,11 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
   onNext,
   onBack,
 }) => {
+  // Initialize endpoints from formData (if previously discovered) or empty array
   const [endpoints, setEndpoints] = useState<Endpoint[]>(() => {
-    // Initialize endpoints with selected state from formData
-    return mockEndpoints.map(ep => ({
-      ...ep,
-      selected: formData.endpoints.find(e => e.url === ep.url)?.selected || false,
-    }));
+    return formData.endpoints && formData.endpoints.length > 0 
+      ? formData.endpoints 
+      : [];
   });
   const [expandedToolSettings, setExpandedToolSettings] = useState<{ [toolId: string]: boolean }>({});
   const [isDiscoveringEndpoints, setIsDiscoveringEndpoints] = useState<boolean>(false);
@@ -204,18 +203,25 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
               } catch (endpointError: any) {
                 aggregationRetries++;
                 console.error(`Failed to fetch discovered endpoints (attempt ${aggregationRetries}):`, endpointError);
+                
+                const errorStatus = endpointError?.response?.status;
+                const errorDetail = endpointError?.response?.data?.detail || endpointError?.message || 'Unknown error';
 
                 // If 404 and still have retries, wait and try again
-                if (endpointError?.response?.status === 404 && aggregationRetries < maxAggregationRetries) {
+                if (errorStatus === 404 && aggregationRetries < maxAggregationRetries) {
                   const waitTime = 2000 + (aggregationRetries * 1000); // 2s, 3s, 4s, 5s...
                   console.log(`Aggregation not ready yet. Retrying in ${waitTime}ms...`);
                   setTimeout(fetchWithRetry, waitTime);
                 } else {
                   // Max retries reached or other error
-                  if (endpointError?.response?.status === 404) {
+                  if (errorStatus === 404) {
                     setDiscoveryError('Aggregation timeout. Findings may not be ready yet. Check Scans page later.');
+                  } else if (errorStatus === 400) {
+                    // Handle 400 errors (e.g., invalid campaign ID)
+                    setDiscoveryError(`Configuration error: ${errorDetail}. Please try again or use manual entry.`);
                   } else {
-                    setDiscoveryError('Failed to retrieve discovered endpoints. Try manual entry.');
+                    // Show the actual error message from backend
+                    setDiscoveryError(`Failed to retrieve discovered endpoints: ${errorDetail}. Try manual entry.`);
                   }
                   setIsDiscoveringEndpoints(false);
                 }
@@ -285,35 +291,41 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           </div>
         )}
 
-        <div className="endpoints-list">
-          {endpoints.map((endpoint) => (
-            <div key={endpoint.url} className="endpoint-item">
-              <div className="endpoint-row">
-                <label className="endpoint-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={endpoint.selected || false}
-                    onChange={() => handleEndpointToggle(endpoint.url)}
-                  />
-                  <span className="endpoint-url">{endpoint.url}</span>
-                </label>
-                <div className="endpoint-attackable-select">
-                  <select
-                    id={`attackable-${endpoint.url}`}
-                    value={endpoint.isAttackable ? 'true' : 'false'}
-                    onChange={(e) =>
-                      handleAttackableChange(endpoint.url, e.target.value === 'true')
-                    }
-                    className="attackable-dropdown"
-                  >
-                    <option value="true">Attackable</option>
-                    <option value="false">Not Attackable</option>
-                  </select>
+        {endpoints.length > 0 ? (
+          <div className="endpoints-list">
+            {endpoints.map((endpoint) => (
+              <div key={endpoint.url} className="endpoint-item">
+                <div className="endpoint-row">
+                  <label className="endpoint-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={endpoint.selected || false}
+                      onChange={() => handleEndpointToggle(endpoint.url)}
+                    />
+                    <span className="endpoint-url">{endpoint.url}</span>
+                  </label>
+                  <div className="endpoint-attackable-select">
+                    <select
+                      id={`attackable-${endpoint.url}`}
+                      value={endpoint.isAttackable ? 'true' : 'false'}
+                      onChange={(e) =>
+                        handleAttackableChange(endpoint.url, e.target.value === 'true')
+                      }
+                      className="attackable-dropdown"
+                    >
+                      <option value="true">Attackable</option>
+                      <option value="false">Not Attackable</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ padding: '1rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
+            No endpoints discovered yet. Click "Discover Endpoints" to find endpoints automatically, or manually add them below.
+          </div>
+        )}
       </div>
 
       {/* Global Tool Settings Section */}

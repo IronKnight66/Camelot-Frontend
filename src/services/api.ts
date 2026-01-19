@@ -147,11 +147,13 @@ class ApiService {
   }
 
   // Endpoint Discovery (Subfinder scanner trigger)
-  async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'subfinder') {
+  async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'dnsx-scanner') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
       target,
       scan_type: scanType,
       tool_name: toolName
+    }, {
+      timeout: 300000 // 5 minutes - AgentCore Runtime can take longer than 60s
     });
     return response.data;
   }
