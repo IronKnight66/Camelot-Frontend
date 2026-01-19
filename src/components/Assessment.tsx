@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import Step1Configuration from './assessment/Step1Configuration';
 import Step2EndpointsAndSettings from './assessment/Step2EndpointsAndSettings';
 import Step3Review from './assessment/Step3Review';
-import { AssessmentFormData } from '../types/assessment';
+import { AssessmentFormData, ScannerTool } from '../types/assessment';
 import apiService from '../services/api';
 import './Assessment.css';
 import './assessment/AssessmentWizard.css';
@@ -13,6 +13,8 @@ const Assessment: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [scannerTools, setScannerTools] = useState<ScannerTool[]>([]);
+  const [toolsLoading, setToolsLoading] = useState<boolean>(true);
   const [formData, setFormData] = useState<AssessmentFormData>({
     websiteUrl: '',
     testType: '',
@@ -23,6 +25,46 @@ const Assessment: React.FC = () => {
     useExistingAsset: false,
     authorizationAccepted: false,
   });
+
+  useEffect(() => {
+    const fetchScannerTools = async () => {
+      try {
+        console.log('Fetching tenant scanner tools...');
+        const response = await apiService.getTenantScannerTools(true);
+        console.log('Scanner tools response:', response);
+        
+        // Transform the API response to flatten the nested scanner_tool structure
+        const tools = (response.tools || []).map((tool: any) => {
+          const scannerTool = tool.scanner_tool || {};
+          return {
+            id: tool.id,
+            tenantId: tool.tenant_id,
+            scannerToolId: tool.scanner_tool_id,
+            isEnabled: tool.is_enabled,
+            name: scannerTool.name || '',
+            displayName: scannerTool.display_name || scannerTool.name || '',
+            description: scannerTool.description || '',
+            category: scannerTool.category || '',
+            dockerImage: scannerTool.docker_image || '',
+            dockerTag: scannerTool.docker_tag || '',
+            version: scannerTool.version || scannerTool.latest_version,
+            isActive: scannerTool.is_active || false,
+            pricingTier: scannerTool.pricing_tier || '',
+            supportedScanTypes: scannerTool.supported_scan_types || []
+          };
+        });
+        
+        setScannerTools(tools);
+      } catch (error) {
+        console.error('Failed to fetch scanner tools:', error);
+        // Set empty array on error so the UI still works
+        setScannerTools([]);
+      } finally {
+        setToolsLoading(false);
+      }
+    };
+    fetchScannerTools();
+  }, []);
 
   const handleFormDataChange = (data: Partial<AssessmentFormData>) => {
     setFormData(prev => ({ ...prev, ...data }));
@@ -51,10 +93,15 @@ const Assessment: React.FC = () => {
         .filter(([_, settings]: [string, any]) => settings.enabled !== false)
         .map(([toolId, _]: [string, any]) => toolId);
 
-      // Extract selected endpoints
+      // Extract selected endpoints, default to website URL if none selected
       const selectedEndpoints = formData.endpoints
         .filter(ep => ep.selected)
         .map(ep => ep.url);
+      
+      // If no endpoints are selected, use the website URL as the default endpoint
+      const endpointsToSubmit = selectedEndpoints.length > 0 
+        ? selectedEndpoints 
+        : [formData.websiteUrl];
 
       // Prepare scan data for backend API
       const scanData: any = {
@@ -63,7 +110,7 @@ const Assessment: React.FC = () => {
         scan_type: formData.testType.trim(),  // Remove trailing/leading spaces
         target_url: formData.websiteUrl,
         scan_config: {
-          endpoints: selectedEndpoints,
+          endpoints: endpointsToSubmit,
           global_settings: formData.globalToolSettings,
           tool_settings: formData.toolSettings
         },
@@ -126,14 +173,17 @@ const Assessment: React.FC = () => {
             onChange={handleFormDataChange}
             onNext={handleNext}
             onBack={handleBack}
+            scannerTools={scannerTools}
           />
         );
       case 3:
         return (
           <Step3Review
             formData={formData}
+            onChange={handleFormDataChange}
             onBack={handleBack}
             onSubmit={handleSubmit}
+            scannerTools={scannerTools}
           />
         );
       default:
@@ -170,9 +220,15 @@ const Assessment: React.FC = () => {
           </div>
 
           {/* Step Content */}
-          <div className="wizard-content">
-            {renderStep()}
-          </div>
+          {toolsLoading ? (
+            <div className="wizard-content" style={{ textAlign: 'center', padding: '2rem' }}>
+              <p>Loading scanner tools...</p>
+            </div>
+          ) : (
+            <div className="wizard-content">
+              {renderStep()}
+            </div>
+          )}
         </div>
       </div>
     </Layout>

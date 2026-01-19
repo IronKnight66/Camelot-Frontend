@@ -1,7 +1,6 @@
 // src/components/assessment/Step2EndpointsAndSettings.tsx
 import React, { useState, useEffect } from 'react';
-import { AssessmentFormData, Endpoint, ToolSetting } from '../../types/assessment';
-import { mockTools } from './mockData';
+import { AssessmentFormData, Endpoint, ToolSetting, ScannerTool } from '../../types/assessment';
 import apiService from '../../services/api';
 import './AssessmentWizard.css';
 
@@ -10,6 +9,7 @@ interface Step2EndpointsAndSettingsProps {
   onChange: (data: Partial<AssessmentFormData>) => void;
   onNext: () => void;
   onBack: () => void;
+  scannerTools: ScannerTool[];
 }
 
 const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
@@ -17,6 +17,7 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
   onChange,
   onNext,
   onBack,
+  scannerTools,
 }) => {
   // Initialize endpoints from formData (if previously discovered) or empty array
   const [endpoints, setEndpoints] = useState<Endpoint[]>(() => {
@@ -28,7 +29,13 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
   const [isDiscoveringEndpoints, setIsDiscoveringEndpoints] = useState<boolean>(false);
   const [discoveryError, setDiscoveryError] = useState<string | null>(null);
 
-  const availableTools = formData.testType ? mockTools[formData.testType as keyof typeof mockTools] || [] : [];
+  // Transform database scanner tools to match expected format
+  const availableTools = scannerTools.map(tool => ({
+    id: tool.name, // Use tool name as ID for consistency with backend
+    name: tool.displayName || tool.name,
+    description: tool.description || '',
+    category: tool.category
+  }));
 
   // Initialize all tools as enabled by default when test type is set or changes
   useEffect(() => {

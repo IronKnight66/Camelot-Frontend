@@ -44,6 +44,23 @@ export interface AssessmentFormData {
   authorizationAccepted?: boolean;
 }
 
+export interface ScannerTool {
+  id: string;
+  tenantId: string;
+  scannerToolId: number;
+  isEnabled: boolean;
+  name: string;
+  displayName: string;
+  description: string;
+  category: string;
+  dockerImage: string;
+  dockerTag: string;
+  version?: string;
+  isActive: boolean;
+  pricingTier: string;
+  supportedScanTypes?: string[];
+}
+
 export interface ChatbotAssessmentData {
   websiteUrl: string;
   testType: TestType;

@@ -1,16 +1,17 @@
 // src/components/assessment/Step3Review.tsx
-import React, { useState } from 'react';
-import { AssessmentFormData } from '../../types/assessment';
-import { mockTools } from './mockData';
+import React, { useState, useEffect } from 'react';
+import { AssessmentFormData, ScannerTool } from '../../types/assessment';
 import './AssessmentWizard.css';
 
 interface Step3ReviewProps {
   formData: AssessmentFormData;
   onBack: () => void;
   onSubmit: () => void;
+  onChange?: (data: Partial<AssessmentFormData>) => void;
+  scannerTools: ScannerTool[];
 }
 
-const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit }) => {
+const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit, onChange, scannerTools }) => {
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     globalSettings: false,
     toolSettings: false,
@@ -23,12 +24,47 @@ const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit })
     }));
   };
 
-  const selectedEndpoints = formData.endpoints.filter(ep => ep.selected);
+  // Transform database scanner tools to match expected format
+  const availableTools = scannerTools.map(tool => ({
+    id: tool.name, // Use tool name as ID for consistency with backend
+    name: tool.displayName || tool.name,
+    description: tool.description || '',
+    category: tool.category
+  }));
   
-  // Get enabled tools based on test type
-  const availableTools = formData.testType ? mockTools[formData.testType as keyof typeof mockTools] || [] : [];
+  // Initialize tools if not already set (fallback for when Step 2 useEffect didn't run)
+  useEffect(() => {
+    if (availableTools.length > 0 && onChange) {
+      const updatedToolSettings: { [toolId: string]: any } = { ...formData.toolSettings };
+      let hasChanges = false;
+
+      availableTools.forEach(tool => {
+        if (!updatedToolSettings[tool.id]) {
+          updatedToolSettings[tool.id] = { enabled: true };
+          hasChanges = true;
+        } else if (updatedToolSettings[tool.id].enabled === undefined) {
+          updatedToolSettings[tool.id] = { ...updatedToolSettings[tool.id], enabled: true };
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        onChange({ toolSettings: updatedToolSettings });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scannerTools.length]);
+
+  // If no endpoints are selected, default to the website URL
+  const selectedEndpoints = (formData.endpoints || []).filter(ep => ep.selected);
+  const endpointsToDisplay = selectedEndpoints.length > 0 
+    ? selectedEndpoints 
+    : formData.websiteUrl 
+      ? [{ url: formData.websiteUrl, isAttackable: true, selected: true }] 
+      : [];
+  
   const enabledTools = availableTools.filter(tool => {
-    const settings = formData.toolSettings[tool.id];
+    const settings = formData.toolSettings?.[tool.id];
     return settings?.enabled !== false; // Default to enabled if not set
   });
 
@@ -93,12 +129,12 @@ const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit })
         <div className="review-section">
           <div className="review-section-header">
             <h3>Selected Endpoints</h3>
-            <span className="review-count">{selectedEndpoints.length} endpoint(s)</span>
+            <span className="review-count">{endpointsToDisplay.length} endpoint(s)</span>
           </div>
           <div className="review-section-content">
-            {selectedEndpoints.length > 0 ? (
+            {endpointsToDisplay.length > 0 ? (
               <ul className="review-list">
-                {selectedEndpoints.map((endpoint, index) => (
+                {endpointsToDisplay.map((endpoint, index) => (
                   <li key={index} className="endpoint-review-item">
                     <span>{endpoint.url}</span>
                     <span
