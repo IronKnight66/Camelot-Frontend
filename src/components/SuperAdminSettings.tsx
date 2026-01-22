@@ -69,7 +69,7 @@ const SuperAdminSettings: React.FC = () => {
       case 'prompts':
         return <SystemPrompts />;
       case 'scan-types':
-        return <ScanTypes />;
+        return <ScanTypes noLayout />;
       default:
         return <TenantManagement />;
     }

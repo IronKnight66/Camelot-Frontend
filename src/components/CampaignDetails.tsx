@@ -86,6 +86,24 @@ const CampaignDetails: React.FC = () => {
     loadCampaignDetails();
   }, [id]);
 
+  // Auto-refresh when there are running or pending scans
+  useEffect(() => {
+    if (!campaign) return;
+
+    const hasActiveScans = campaign.scans.some(
+      scan => scan.status === 'running' || scan.status === 'pending'
+    );
+
+    if (hasActiveScans) {
+      // Poll every 3 seconds when there are active scans
+      const intervalId = setInterval(() => {
+        refreshCampaignStatus();
+      }, 3000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [campaign, id]);
+
   const loadCampaignDetails = async () => {
     if (!id) return;
     
@@ -105,6 +123,20 @@ const CampaignDetails: React.FC = () => {
       setError(err.response?.data?.detail || err.message || 'Failed to load campaign details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshCampaignStatus = async () => {
+    if (!id) return;
+    
+    try {
+      // Silent refresh - don't show loading state
+      const data = await api.getCampaignDetails(parseInt(id));
+      setCampaign(data);
+      // Don't reload chat history on refresh to avoid flickering
+    } catch (err: any) {
+      console.error('Error refreshing campaign status:', err);
+      // Don't show error on silent refresh
     }
   };
 

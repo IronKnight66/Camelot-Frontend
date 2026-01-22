@@ -124,11 +124,15 @@
   display: none !important;
 }
 
-/* Hide page headers and titles */
-.super-admin-content .page-header,
+/* Hide page headers and titles (except scan-types which needs the buttons) */
 .super-admin-content .tenant-management-header,
 .super-admin-content .page-title,
 .super-admin-content .page-title h2 {
+  display: none !important;
+}
+
+/* Hide page-header for specific components, but NOT scan-types */
+.super-admin-content .tenant-management-container > .page-header {
   display: none !important;
 }
 

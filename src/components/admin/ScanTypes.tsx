@@ -13,6 +13,12 @@ interface ScanType {
   updated_at?: string;
 }
 
+interface ScanTypeSuggestion {
+  name: string;
+  display_name: string;
+  description: string;
+}
+
 interface CreateScanTypeModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,6 +30,14 @@ interface EditScanTypeModalProps {
   isOpen: boolean;
   onClose: () => void;
   onScanTypeUpdated: () => void;
+}
+
+interface AISuggestionsModalProps {
+  suggestions: ScanTypeSuggestion[];
+  isOpen: boolean;
+  onClose: () => void;
+  onCreateSelected: (selected: ScanTypeSuggestion[]) => void;
+  loading: boolean;
 }
 
 const CreateScanTypeModal: React.FC<CreateScanTypeModalProps> = ({ isOpen, onClose, onScanTypeCreated }) => {
@@ -142,6 +156,120 @@ const CreateScanTypeModal: React.FC<CreateScanTypeModalProps> = ({ isOpen, onClo
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  );
+};
+
+const AISuggestionsModal: React.FC<AISuggestionsModalProps> = ({ suggestions, isOpen, onClose, onCreateSelected, loading }) => {
+  const [selectedSuggestions, setSelectedSuggestions] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (isOpen) {
+      // Select all suggestions by default
+      setSelectedSuggestions(new Set(suggestions.map(s => s.name)));
+    }
+  }, [isOpen, suggestions]);
+
+  const toggleSelection = (name: string) => {
+    const newSelected = new Set(selectedSuggestions);
+    if (newSelected.has(name)) {
+      newSelected.delete(name);
+    } else {
+      newSelected.add(name);
+    }
+    setSelectedSuggestions(newSelected);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedSuggestions.size === suggestions.length) {
+      setSelectedSuggestions(new Set());
+    } else {
+      setSelectedSuggestions(new Set(suggestions.map(s => s.name)));
+    }
+  };
+
+  const handleCreate = () => {
+    const selected = suggestions.filter(s => selectedSuggestions.has(s.name));
+    onCreateSelected(selected);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-container ai-suggestions-modal">
+        <div className="modal-header">
+          <h2>AI-Generated Scan Type Suggestions</h2>
+          <button onClick={onClose} className="modal-close">&times;</button>
+        </div>
+        <div className="modal-body">
+          {suggestions.length === 0 ? (
+            <div className="empty-state">
+              <p>No new scan type suggestions generated. All possible scan types may already exist.</p>
+            </div>
+          ) : (
+            <>
+              <div className="suggestions-header">
+                <p className="suggestions-description">
+                  Review the AI-generated scan type suggestions below. Select the ones you want to create.
+                </p>
+                <div className="suggestions-actions">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    onClick={toggleSelectAll}
+                  >
+                    {selectedSuggestions.size === suggestions.length ? 'Deselect All' : 'Select All'}
+                  </button>
+                  <span className="selection-count">
+                    {selectedSuggestions.size} of {suggestions.length} selected
+                  </span>
+                </div>
+              </div>
+
+              <div className="suggestions-list">
+                {suggestions.map((suggestion) => (
+                  <div
+                    key={suggestion.name}
+                    className={`suggestion-item ${selectedSuggestions.has(suggestion.name) ? 'selected' : ''}`}
+                    onClick={() => toggleSelection(suggestion.name)}
+                  >
+                    <div className="suggestion-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={selectedSuggestions.has(suggestion.name)}
+                        onChange={() => toggleSelection(suggestion.name)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                    <div className="suggestion-content">
+                      <div className="suggestion-header">
+                        <strong className="suggestion-display-name">{suggestion.display_name}</strong>
+                        <code className="suggestion-name">{suggestion.name}</code>
+                      </div>
+                      <p className="suggestion-description">{suggestion.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button type="button" onClick={onClose} className="btn btn-secondary" disabled={loading}>
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleCreate}
+            className="btn btn-primary"
+            disabled={loading || selectedSuggestions.size === 0}
+          >
+            {loading ? 'Creating...' : `Create Selected (${selectedSuggestions.size})`}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -267,7 +395,11 @@ const EditScanTypeModal: React.FC<EditScanTypeModalProps> = ({ scanType, isOpen,
   );
 };
 
-const ScanTypes: React.FC = () => {
+interface ScanTypesProps {
+  noLayout?: boolean;
+}
+
+const ScanTypes: React.FC<ScanTypesProps> = ({ noLayout = false }) => {
   const [scanTypes, setScanTypes] = useState<ScanType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -275,6 +407,11 @@ const ScanTypes: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedScanType, setSelectedScanType] = useState<ScanType | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [showAISuggestionsModal, setShowAISuggestionsModal] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState<ScanTypeSuggestion[]>([]);
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiCreating, setAiCreating] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const loadScanTypes = async () => {
     try {
@@ -308,23 +445,80 @@ const ScanTypes: React.FC = () => {
     }
   };
 
-  return (
-    <Layout>
+  const handleGenerateWithAI = async () => {
+    try {
+      setAiGenerating(true);
+      setError(null);
+      setSuccessMessage(null);
+      
+      const response = await apiService.generateScanTypesWithAI();
+      setAiSuggestions(response.suggestions || []);
+      setShowAISuggestionsModal(true);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Failed to generate scan type suggestions');
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
+  const handleCreateSelected = async (selected: ScanTypeSuggestion[]) => {
+    try {
+      setAiCreating(true);
+      setError(null);
+      
+      const scanTypesToCreate = selected.map(s => ({
+        name: s.name,
+        display_name: s.display_name,
+        description: s.description,
+        is_active: true
+      }));
+      
+      const response = await apiService.bulkCreateScanTypes(scanTypesToCreate);
+      
+      setShowAISuggestionsModal(false);
+      loadScanTypes();
+      
+      const message = `Created ${response.total_created} scan type(s)` +
+        (response.total_skipped > 0 ? `, skipped ${response.total_skipped} duplicate(s)` : '') +
+        (response.total_errors > 0 ? `, ${response.total_errors} error(s)` : '');
+      
+      setSuccessMessage(message);
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMessage(null), 5000);
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Failed to create scan types');
+    } finally {
+      setAiCreating(false);
+    }
+  };
+
+  const content = (
       <div className="scan-types-container">
         <div className="page-header">
           <div>
             <h1>Scan Types</h1>
             <p className="page-description">Manage available scan types for security assessments</p>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + Create Scan Type
-          </button>
+          <div className="page-header-actions">
+            <button
+              className="btn btn-secondary"
+              onClick={handleGenerateWithAI}
+              disabled={aiGenerating}
+            >
+              {aiGenerating ? '🤖 Generating...' : '🤖 Generate with AI'}
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowCreateModal(true)}
+            >
+              + Create Scan Type
+            </button>
+          </div>
         </div>
 
         {error && <div className="error-message">{error}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
 
         {loading ? (
           <div className="loading-message">Loading scan types...</div>
@@ -428,9 +622,21 @@ const ScanTypes: React.FC = () => {
           }}
           onScanTypeUpdated={loadScanTypes}
         />
+
+        <AISuggestionsModal
+          suggestions={aiSuggestions}
+          isOpen={showAISuggestionsModal}
+          onClose={() => {
+            setShowAISuggestionsModal(false);
+            setAiSuggestions([]);
+          }}
+          onCreateSelected={handleCreateSelected}
+          loading={aiCreating}
+        />
       </div>
-    </Layout>
   );
+
+  return noLayout ? content : <Layout>{content}</Layout>;
 };
 
 export default ScanTypes;

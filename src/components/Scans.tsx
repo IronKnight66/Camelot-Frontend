@@ -97,6 +97,22 @@ const Scans: React.FC = () => {
     loadScans();
   }, [currentParentPage, currentOrphanPage]);
 
+  // Auto-refresh when there are running or pending scans
+  useEffect(() => {
+    const hasActiveScans = scanParents.some(parent =>
+      parent.scans?.some(scan => scan.status === 'running' || scan.status === 'pending')
+    ) || orphanedScans.some(scan => scan.status === 'running' || scan.status === 'pending');
+
+    if (hasActiveScans) {
+      // Poll every 3 seconds when there are active scans
+      const intervalId = setInterval(() => {
+        refreshScansStatus();
+      }, 3000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [scanParents, orphanedScans, currentParentPage, currentOrphanPage]);
+
   const loadScans = async () => {
     setLoading(true);
     setError(null);
@@ -126,6 +142,31 @@ const Scans: React.FC = () => {
       setError(err.response?.data?.detail || err.message || 'Failed to load scans');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshScansStatus = async () => {
+    try {
+      // Silent refresh - don't show loading state
+      const [parentsResponse, orphansResponse] = await Promise.all([
+        api.getScanParentsWithScans({
+          page: currentParentPage,
+          page_size: pageSize
+        }) as Promise<ScanParentsResponse>,
+        api.getOrphanedScans({
+          page: currentOrphanPage,
+          page_size: pageSize
+        }) as Promise<OrphanedScansResponse>
+      ]);
+      
+      setScanParents(parentsResponse.scan_parents || []);
+      setTotalParentPages(parentsResponse.total_pages || 1);
+      
+      setOrphanedScans(orphansResponse.scans || []);
+      setTotalOrphanPages(orphansResponse.total_pages || 1);
+    } catch (err: any) {
+      console.error('❌ Error refreshing scans status:', err);
+      // Don't show error on silent refresh
     }
   };
 

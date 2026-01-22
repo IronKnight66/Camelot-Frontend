@@ -428,6 +428,23 @@ class ApiService {
     return response.data;
   }
 
+  async generateScanTypesWithAI() {
+    const response = await this.api.post('/api/v1/scan-types/generate-with-ai');
+    return response.data;
+  }
+
+  async bulkCreateScanTypes(scanTypes: Array<{
+    name: string;
+    display_name: string;
+    description: string;
+    is_active: boolean;
+  }>) {
+    const response = await this.api.post('/api/v1/scan-types/bulk-create', {
+      scan_types: scanTypes
+    });
+    return response.data;
+  }
+
   // User Profile API
   async getCurrentUser() {
     const response = await this.api.get('/api/v1/auth/me');
