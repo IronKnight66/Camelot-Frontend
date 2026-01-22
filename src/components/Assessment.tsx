@@ -134,6 +134,11 @@ const Assessment: React.FC = () => {
       // Assessment endpoint returns: {job_id, campaign_name, scan_parent_id, status}
       // The scan already starts in background, no need to call startScan
 
+      // Check if we have a valid scan_parent_id
+      if (!assessmentResponse.scan_parent_id) {
+        throw new Error('Assessment response missing scan_parent_id. The assessment may have failed to start.');
+      }
+
       // Show success message
       alert(`Assessment submitted successfully!\nJob ID: ${assessmentResponse.job_id}\nCampaign: ${assessmentResponse.campaign_name}\nStatus: ${assessmentResponse.status}\n\nThe scan is running in the background.`);
 
