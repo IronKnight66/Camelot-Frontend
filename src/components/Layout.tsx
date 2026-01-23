@@ -65,6 +65,14 @@ const Layout: React.FC<LayoutProps> = ({ children, title, minimal = false }) => 
               >
                 Reports
               </Link>
+              {(userRole === 'admin' || userRole === 'tenant-admin' || userRole === 'super-admin') && (
+                <Link 
+                  to="/llm-logs" 
+                  className={`nav-link ${location.pathname === '/llm-logs' ? 'active' : ''}`}
+                >
+                  LLM Logs
+                </Link>
+              )}
               {userRole === 'super-admin' && (
                 <Link 
                   to="/settings/admin" 

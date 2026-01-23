@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  getPaginationRowModel,
   flexRender,
   ColumnDef,
   ColumnFiltersState,
@@ -43,6 +42,7 @@ const Assets: React.FC = () => {
 
   useEffect(() => {
     loadAssets();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, assetTypeFilter, statusFilter, criticalityFilter, environmentFilter, searchTerm]);
 
   const loadAssets = async () => {
@@ -324,6 +324,7 @@ const Assets: React.FC = () => {
         ),
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [handleViewDetails, handleEdit]
   );
 

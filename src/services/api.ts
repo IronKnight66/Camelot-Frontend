@@ -1008,6 +1008,22 @@ class ApiService {
     const response = await this.api.get(`/api/v1/assets/${assetId}/statistics`);
     return response.data;
   }
+
+  // ============================================================================
+  // LLM Logs (Chatbot Logs)
+  // ============================================================================
+
+  async getLLMLogs(params?: {
+    page?: number;
+    page_size?: number;
+    session_id?: string;
+    provider?: string;
+    status?: string;
+  }) {
+    const response = await this.api.get('/api/v1/chatbot/logs', { params });
+    return response.data;
+  }
 }
 
-export default new ApiService();
+const apiServiceInstance = new ApiService();
+export default apiServiceInstance;

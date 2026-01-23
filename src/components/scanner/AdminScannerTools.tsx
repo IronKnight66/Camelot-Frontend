@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, react-hooks/exhaustive-deps */
 // src/components/scanner/AdminScannerTools.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

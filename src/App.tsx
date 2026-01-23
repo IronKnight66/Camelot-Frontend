@@ -15,7 +15,6 @@ import TenantManagement from './components/admin/TenantManagement';
 import SystemPrompts from './components/admin/SystemPrompts';
 import ScanTypes from './components/admin/ScanTypes';
 import ScannerHub from './components/ScannerHub';
-import TenantSettingsHub from './components/TenantSettingsHub';
 import TenantModelSettings from './components/settings/TenantModelSettings';
 import TenantAdminSettings from './components/TenantAdminSettings';
 import SuperAdminSettings from './components/SuperAdminSettings';
@@ -31,6 +30,7 @@ import Findings from './components/Findings';
 import Scans from './components/Scans';
 import Assets from './components/Assets';
 import CampaignDetails from './components/CampaignDetails';
+import LLMLogs from './components/LLMLogs';
 import './aws-config';
 import './App.css';
 
@@ -339,6 +339,18 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Assets />
+                </ProtectedRoute>
+              } 
+            />
+
+            {/* LLM Logs Page - Admin Only */}
+            <Route 
+              path="/llm-logs" 
+              element={
+                <ProtectedRoute>
+                  <RoleBasedRoute requiredRole="admin">
+                    <LLMLogs />
+                  </RoleBasedRoute>
                 </ProtectedRoute>
               } 
             />

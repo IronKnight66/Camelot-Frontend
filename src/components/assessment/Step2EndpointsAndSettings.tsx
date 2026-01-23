@@ -78,9 +78,11 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
 
   const handleToolEnableToggle = (toolId: string) => {
     const currentSettings = formData.toolSettings[toolId] || {};
+    // Explicitly handle the enabled state - default to true if undefined, then toggle
+    const currentEnabled = currentSettings.enabled === true;
     const updatedSettings = {
       ...formData.toolSettings,
-      [toolId]: { ...currentSettings, enabled: !currentSettings.enabled },
+      [toolId]: { ...currentSettings, enabled: !currentEnabled },
     };
     onChange({ toolSettings: updatedSettings });
   };
@@ -256,6 +258,23 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       setDiscoveryError(error?.response?.data?.detail || error?.message || 'Failed to discover endpoints');
       setIsDiscoveringEndpoints(false);
     }
+  };
+
+  const handleToggleAllTools = () => {
+    // Check if all tools are currently enabled
+    const allEnabled = availableTools.every(tool => {
+      const settings = formData.toolSettings[tool.id] || {};
+      return settings.enabled !== false;
+    });
+
+    // Toggle all tools to the opposite state
+    const updatedSettings = { ...formData.toolSettings };
+    availableTools.forEach(tool => {
+      const currentSettings = updatedSettings[tool.id] || {};
+      updatedSettings[tool.id] = { ...currentSettings, enabled: !allEnabled };
+    });
+
+    onChange({ toolSettings: updatedSettings });
   };
 
   const handleNext = () => {
@@ -443,7 +462,20 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       {/* Tool-Specific Settings Section */}
       {availableTools.length > 0 && (
         <div className="section">
-          <h3>Tool-Specific Settings</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3>Tool-Specific Settings</h3>
+            <button
+              type="button"
+              onClick={handleToggleAllTools}
+              className="btn-secondary"
+              style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+            >
+              {availableTools.every(tool => {
+                const settings = formData.toolSettings[tool.id] || {};
+                return settings.enabled !== false;
+              }) ? '☐ Uncheck All' : '☑ Check All'}
+            </button>
+          </div>
           {availableTools.map((tool) => {
             const settings = formData.toolSettings[tool.id] || {};
             const isEnabled = settings.enabled !== false; // Default to true

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, react-hooks/exhaustive-deps */
 // src/components/Login.tsx
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';

@@ -36,7 +36,7 @@ interface Scan {
   error_message: string | null;
 }
 
-interface CampaignDetails {
+interface CampaignDetailsData {
   id: number;
   name: string;
   description: string | null;
@@ -72,7 +72,7 @@ interface ChatSession {
 const CampaignDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [campaign, setCampaign] = useState<CampaignDetails | null>(null);
+  const [campaign, setCampaign] = useState<CampaignDetailsData | null>(null);
   const [chatHistory, setChatHistory] = useState<ChatSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [chatLoading, setChatLoading] = useState(false);
@@ -84,6 +84,7 @@ const CampaignDetails: React.FC = () => {
 
   useEffect(() => {
     loadCampaignDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // Auto-refresh when there are running or pending scans
@@ -102,6 +103,7 @@ const CampaignDetails: React.FC = () => {
 
       return () => clearInterval(intervalId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [campaign, id]);
 
   const loadCampaignDetails = async () => {

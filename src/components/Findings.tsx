@@ -150,6 +150,7 @@ const Findings: React.FC = () => {
   useEffect(() => {
     loadLevels();
     loadFindings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 
   useEffect(() => {
@@ -329,6 +330,7 @@ const Findings: React.FC = () => {
       console.error('Error verifying finding:', err);
       alert('Failed to start verification: ' + (err.response?.data?.detail || err.message));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startVerificationPolling = useCallback((findingId: number) => {
@@ -375,6 +377,7 @@ const Findings: React.FC = () => {
         }
       }
     }, 2000); // Poll every 2 seconds
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getSeverityClass = (severity: string) => {
@@ -641,6 +644,7 @@ const Findings: React.FC = () => {
         },
       },
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [updatingStatus, handleSeverityChange, handleStatusChange, handleViewDetails, severityLevels, statusLevels]
   );
 

@@ -156,7 +156,7 @@ const Profile: React.FC = () => {
     );
   }
 
-  const isAdmin = profile?.groups?.some(g => g === 'admin' || g === 'super-admin') || user?.groups?.some(g => g === 'admin' || g === 'super-admin');
+  // const isAdmin = profile?.groups?.some(g => g === 'admin' || g === 'super-admin') || user?.groups?.some(g => g === 'admin' || g === 'super-admin');
 
   return (
     <Layout title="Profile">

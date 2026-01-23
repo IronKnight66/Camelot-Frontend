@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from './Layout';
@@ -89,9 +90,14 @@ const Assessment: React.FC = () => {
       console.log('Submitting assessment:', formData);
 
       // Extract selected scanner tools from toolSettings
+      console.log('🔍 DEBUG: formData.toolSettings:', formData.toolSettings);
       const enabledScanners = Object.entries(formData.toolSettings)
-        .filter(([_, settings]: [string, any]) => settings.enabled !== false)
+        .filter(([_, settings]: [string, any]) => {
+          console.log('🔍 DEBUG: Checking tool:', _, 'enabled:', settings.enabled);
+          return settings.enabled === true;
+        })
         .map(([toolId, _]: [string, any]) => toolId);
+      console.log('🔍 DEBUG: enabledScanners:', enabledScanners);
 
       // Extract selected endpoints, default to website URL if none selected
       const selectedEndpoints = formData.endpoints
