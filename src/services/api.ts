@@ -1019,6 +1019,7 @@ class ApiService {
     session_id?: string;
     provider?: string;
     status?: string;
+    assessment_campaign_id?: number;
   }) {
     const response = await this.api.get('/api/v1/chatbot/logs', { params });
     return response.data;

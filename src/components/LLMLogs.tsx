@@ -57,6 +57,8 @@ const LLMLogs: React.FC = () => {
   // Filters
   const [providerFilter, setProviderFilter] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('');
+  const [campaignFilter, setCampaignFilter] = useState<string>('');
+  const [campaigns, setCampaigns] = useState<any[]>([]);
   
   // TanStack Table state
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -64,8 +66,21 @@ const LLMLogs: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
+    loadCampaigns();
+  }, []);
+
+  useEffect(() => {
     loadLogs();
-  }, [currentPage, providerFilter, statusFilter]);
+  }, [currentPage, providerFilter, statusFilter, campaignFilter]);
+
+  const loadCampaigns = async () => {
+    try {
+      const response = await api.getScanParentsWithScans({ page_size: 1000 });
+      setCampaigns(response.scan_parents || []);
+    } catch (err) {
+      console.error('Error loading campaigns:', err);
+    }
+  };
 
   const loadLogs = async () => {
     try {
@@ -85,11 +100,18 @@ const LLMLogs: React.FC = () => {
         params.status = statusFilter;
       }
       
+      if (campaignFilter) {
+        params.assessment_campaign_id = parseInt(campaignFilter);
+      }
+      
+      console.log('Loading LLM logs with params:', params);
+      
       const response: LLMLogsResponse = await api.getLLMLogs(params);
       
       console.log('LLM Logs API Response:', response);
       console.log('Logs count:', response.logs?.length);
       console.log('Total:', response.total);
+      console.log('Campaign filter applied:', campaignFilter);
       
       setLogs(response.logs);
       setTotalPages(response.total_pages);
@@ -303,6 +325,26 @@ const LLMLogs: React.FC = () => {
               <option value="success">Success</option>
               <option value="error">Error</option>
               <option value="timeout">Timeout</option>
+            </select>
+          </div>
+
+          <div className="filter-group">
+            <label htmlFor="campaign-filter">Campaign:</label>
+            <select
+              id="campaign-filter"
+              value={campaignFilter}
+              onChange={(e) => {
+                setCampaignFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="filter-select"
+            >
+              <option value="">All Campaigns</option>
+              {campaigns.map((campaign) => (
+                <option key={campaign.id} value={campaign.id}>
+                  {campaign.campaign_name || `Campaign ${campaign.id}`} (ID: {campaign.id})
+                </option>
+              ))}
             </select>
           </div>
 
