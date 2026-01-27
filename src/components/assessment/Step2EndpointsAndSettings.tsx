@@ -4,6 +4,20 @@ import { AssessmentFormData, Endpoint, ToolSetting, ScannerTool } from '../../ty
 import apiService from '../../services/api';
 import './AssessmentWizard.css';
 
+interface ConnectivityResult {
+  success: boolean;
+  url: string;
+  status_code: number | null;
+  response_time_ms: number | null;
+  error: string | null;
+  details: {
+    ip_address?: string;
+    ssl_valid?: boolean;
+    redirect_url?: string;
+    http_error?: string;
+  };
+}
+
 interface Step2EndpointsAndSettingsProps {
   formData: AssessmentFormData;
   onChange: (data: Partial<AssessmentFormData>) => void;
@@ -28,6 +42,10 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
   const [expandedToolSettings, setExpandedToolSettings] = useState<{ [toolId: string]: boolean }>({});
   const [isDiscoveringEndpoints, setIsDiscoveringEndpoints] = useState<boolean>(false);
   const [discoveryError, setDiscoveryError] = useState<string | null>(null);
+  const [connectivityCheck, setConnectivityCheck] = useState<{
+    status: 'idle' | 'checking' | 'success' | 'failed' | 'error';
+    result: ConnectivityResult | null;
+  }>({ status: 'idle', result: null });
 
   // Transform database scanner tools to match expected format
   const availableTools = scannerTools.map(tool => ({
@@ -143,6 +161,35 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
       ...prev,
       [toolId]: !prev[toolId],
     }));
+  };
+
+  const handleConnectivityCheck = async () => {
+    if (!formData.websiteUrl) {
+      return;
+    }
+    
+    setConnectivityCheck({ status: 'checking', result: null });
+    
+    try {
+      const result = await apiService.checkConnectivity(formData.websiteUrl);
+      setConnectivityCheck({
+        status: result.success ? 'success' : 'failed',
+        result
+      });
+    } catch (error: any) {
+      console.error('Connectivity check error:', error);
+      setConnectivityCheck({
+        status: 'error',
+        result: {
+          success: false,
+          url: formData.websiteUrl,
+          status_code: null,
+          response_time_ms: null,
+          error: error?.response?.data?.detail || error?.message || 'Failed to check connectivity',
+          details: {}
+        }
+      });
+    }
   };
 
   const handleDiscoverEndpoints = async () => {
@@ -353,6 +400,78 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           </div>
         )}
       </div>
+
+      {/* Scanner Connectivity Check Section */}
+      {formData.websiteUrl && (
+        <div className="section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3>Scanner Connectivity</h3>
+            <button
+              type="button"
+              onClick={handleConnectivityCheck}
+              disabled={connectivityCheck.status === 'checking'}
+              className={`btn-connectivity ${connectivityCheck.status}`}
+            >
+              {connectivityCheck.status === 'checking' ? (
+                <>Checking...</>
+              ) : connectivityCheck.status === 'success' ? (
+                <>&#10003; Reachable</>
+              ) : connectivityCheck.status === 'failed' ? (
+                <>&#10007; Not Reachable</>
+              ) : (
+                <>Check Connectivity</>
+              )}
+            </button>
+          </div>
+          
+          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+            Verify the target URL ({formData.websiteUrl}) is reachable from the scanner network before running your assessment.
+          </p>
+          
+          {connectivityCheck.result && (
+            <div className={`connectivity-result ${connectivityCheck.status}`}>
+              {connectivityCheck.result.success ? (
+                <div className="connectivity-success">
+                  <span className="connectivity-icon">&#10003;</span>
+                  <div className="connectivity-details">
+                    <strong>Target is reachable from scanner network</strong>
+                    <ul>
+                      {connectivityCheck.result.status_code && (
+                        <li>HTTP Status: {connectivityCheck.result.status_code}</li>
+                      )}
+                      {connectivityCheck.result.response_time_ms && (
+                        <li>Response Time: {connectivityCheck.result.response_time_ms}ms</li>
+                      )}
+                      {connectivityCheck.result.details.ip_address && (
+                        <li>IP Address: {connectivityCheck.result.details.ip_address}</li>
+                      )}
+                      {connectivityCheck.result.details.ssl_valid !== undefined && (
+                        <li>SSL Valid: {connectivityCheck.result.details.ssl_valid ? 'Yes' : 'No'}</li>
+                      )}
+                      {connectivityCheck.result.details.redirect_url && (
+                        <li>Redirects to: {connectivityCheck.result.details.redirect_url}</li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <div className="connectivity-failure">
+                  <span className="connectivity-icon">&#10007;</span>
+                  <div className="connectivity-details">
+                    <strong>Target is not reachable from scanner network</strong>
+                    {connectivityCheck.result.error && (
+                      <p className="connectivity-error">{connectivityCheck.result.error}</p>
+                    )}
+                    <p className="connectivity-warning">
+                      The scan may fail if the target cannot be reached. Please verify the URL and try again.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Global Tool Settings Section */}
       <div className="section">

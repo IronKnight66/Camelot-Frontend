@@ -146,6 +146,29 @@ class ApiService {
     return response.data;
   }
 
+  /**
+   * Check if a URL is reachable from the Lambda scanner network.
+   * Use this to validate target URLs before starting a scan.
+   */
+  async checkConnectivity(url: string, timeout: number = 10): Promise<{
+    success: boolean;
+    url: string;
+    status_code: number | null;
+    response_time_ms: number | null;
+    error: string | null;
+    details: {
+      ip_address?: string;
+      ssl_valid?: boolean;
+      redirect_url?: string;
+      http_error?: string;
+    };
+  }> {
+    const response = await this.api.post('/api/v1/scans/connectivity-check', null, {
+      params: { url, timeout }
+    });
+    return response.data;
+  }
+
   // Endpoint Discovery (Subfinder scanner trigger)
   async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'dnsx-scanner') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
