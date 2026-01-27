@@ -18,6 +18,25 @@ interface ConnectivityResult {
   };
 }
 
+interface TechFingerprintResult {
+  success: boolean;
+  url: string;
+  technologies: {
+    [category: string]: {
+      name: string;
+      confidence: 'low' | 'medium' | 'high';
+    };
+  };
+  indicators: Array<{
+    type: string;
+    name?: string;
+    value?: string;
+    pattern?: string;
+  }>;
+  error: string | null;
+  response_time_ms: number | null;
+}
+
 interface Step2EndpointsAndSettingsProps {
   formData: AssessmentFormData;
   onChange: (data: Partial<AssessmentFormData>) => void;
@@ -45,6 +64,10 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
   const [connectivityCheck, setConnectivityCheck] = useState<{
     status: 'idle' | 'checking' | 'success' | 'failed' | 'error';
     result: ConnectivityResult | null;
+  }>({ status: 'idle', result: null });
+  const [techFingerprint, setTechFingerprint] = useState<{
+    status: 'idle' | 'detecting' | 'success' | 'failed' | 'error';
+    result: TechFingerprintResult | null;
   }>({ status: 'idle', result: null });
 
   // Transform database scanner tools to match expected format
@@ -187,6 +210,35 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           response_time_ms: null,
           error: error?.response?.data?.detail || error?.message || 'Failed to check connectivity',
           details: {}
+        }
+      });
+    }
+  };
+
+  const handleTechFingerprint = async () => {
+    if (!formData.websiteUrl) {
+      return;
+    }
+    
+    setTechFingerprint({ status: 'detecting', result: null });
+    
+    try {
+      const result = await apiService.techFingerprint(formData.websiteUrl);
+      setTechFingerprint({
+        status: result.success ? 'success' : 'failed',
+        result
+      });
+    } catch (error: any) {
+      console.error('Tech fingerprint error:', error);
+      setTechFingerprint({
+        status: 'error',
+        result: {
+          success: false,
+          url: formData.websiteUrl,
+          technologies: {},
+          indicators: [],
+          error: error?.response?.data?.detail || error?.message || 'Failed to detect technologies',
+          response_time_ms: null
         }
       });
     }
@@ -337,70 +389,6 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
         <p>Select endpoints to test and configure your security tools.</p>
       </div>
 
-      {/* Endpoints Section */}
-      <div className="section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3>Select Endpoints</h3>
-          <button
-            type="button"
-            onClick={handleDiscoverEndpoints}
-            disabled={isDiscoveringEndpoints || !formData.websiteUrl}
-            className="btn-secondary"
-            style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
-          >
-            {isDiscoveringEndpoints ? '🔍 Discovering...' : '🔍 Discover Endpoints'}
-          </button>
-        </div>
-
-        {discoveryError && (
-          <div style={{ padding: '0.75rem', backgroundColor: '#fee', color: '#c00', borderRadius: '4px', marginBottom: '1rem' }}>
-            ⚠️ {discoveryError}
-          </div>
-        )}
-
-        {isDiscoveringEndpoints && (
-          <div style={{ padding: '0.75rem', backgroundColor: '#e3f2fd', color: '#1976d2', borderRadius: '4px', marginBottom: '1rem' }}>
-            🔍 Running subfinder scan... This may take 30-60 seconds.
-          </div>
-        )}
-
-        {endpoints.length > 0 ? (
-          <div className="endpoints-list">
-            {endpoints.map((endpoint) => (
-              <div key={endpoint.url} className="endpoint-item">
-                <div className="endpoint-row">
-                  <label className="endpoint-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={endpoint.selected || false}
-                      onChange={() => handleEndpointToggle(endpoint.url)}
-                    />
-                    <span className="endpoint-url">{endpoint.url}</span>
-                  </label>
-                  <div className="endpoint-attackable-select">
-                    <select
-                      id={`attackable-${endpoint.url}`}
-                      value={endpoint.isAttackable ? 'true' : 'false'}
-                      onChange={(e) =>
-                        handleAttackableChange(endpoint.url, e.target.value === 'true')
-                      }
-                      className="attackable-dropdown"
-                    >
-                      <option value="true">Attackable</option>
-                      <option value="false">Not Attackable</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ padding: '1rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
-            No endpoints discovered yet. Click "Discover Endpoints" to find endpoints automatically, or manually add them below.
-          </div>
-        )}
-      </div>
-
       {/* Scanner Connectivity Check Section */}
       {formData.websiteUrl && (
         <div className="section">
@@ -472,6 +460,144 @@ const Step2EndpointsAndSettings: React.FC<Step2EndpointsAndSettingsProps> = ({
           )}
         </div>
       )}
+
+      {/* Technology Detection Section */}
+      {formData.websiteUrl && (
+        <div className="section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3>Technology Detection</h3>
+            <button
+              type="button"
+              onClick={handleTechFingerprint}
+              disabled={techFingerprint.status === 'detecting'}
+              className={`btn-tech-detect ${techFingerprint.status}`}
+            >
+              {techFingerprint.status === 'detecting' ? (
+                <>Detecting...</>
+              ) : techFingerprint.status === 'success' ? (
+                <>&#10003; Detected</>
+              ) : techFingerprint.status === 'failed' || techFingerprint.status === 'error' ? (
+                <>&#10007; Failed</>
+              ) : (
+                <>Detect Technologies</>
+              )}
+            </button>
+          </div>
+          
+          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+            Identify the technology stack (CMS, frameworks, server) of the target website using passive fingerprinting.
+          </p>
+          
+          {techFingerprint.result && (
+            <div className={`tech-fingerprint-result ${techFingerprint.status}`}>
+              {techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length > 0 ? (
+                <div className="tech-fingerprint-success">
+                  <div className="tech-stack-grid">
+                    {Object.entries(techFingerprint.result.technologies).map(([category, tech]) => (
+                      <div key={category} className="tech-badge-container">
+                        <span className="tech-category">{category}</span>
+                        <span className={`tech-badge confidence-${tech.confidence}`}>
+                          {tech.name}
+                          <span className="confidence-indicator" title={`Confidence: ${tech.confidence}`}>
+                            {tech.confidence === 'high' ? '●●●' : tech.confidence === 'medium' ? '●●○' : '●○○'}
+                          </span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {techFingerprint.result.response_time_ms && (
+                    <p className="tech-response-time">
+                      Detection completed in {techFingerprint.result.response_time_ms}ms
+                    </p>
+                  )}
+                </div>
+              ) : techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length === 0 ? (
+                <div className="tech-fingerprint-empty">
+                  <span className="tech-icon">&#128269;</span>
+                  <div className="tech-details">
+                    <strong>No technologies detected</strong>
+                    <p>The target website may be using uncommon technologies or hiding its stack.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="tech-fingerprint-failure">
+                  <span className="tech-icon">&#10007;</span>
+                  <div className="tech-details">
+                    <strong>Technology detection failed</strong>
+                    {techFingerprint.result.error && (
+                      <p className="tech-error">{techFingerprint.result.error}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Endpoints Section */}
+      <div className="section">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h3>Select Endpoints</h3>
+          <button
+            type="button"
+            onClick={handleDiscoverEndpoints}
+            disabled={isDiscoveringEndpoints || !formData.websiteUrl}
+            className="btn-secondary"
+            style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+          >
+            {isDiscoveringEndpoints ? '🔍 Discovering...' : '🔍 Discover Endpoints'}
+          </button>
+        </div>
+
+        {discoveryError && (
+          <div style={{ padding: '0.75rem', backgroundColor: '#fee', color: '#c00', borderRadius: '4px', marginBottom: '1rem' }}>
+            ⚠️ {discoveryError}
+          </div>
+        )}
+
+        {isDiscoveringEndpoints && (
+          <div style={{ padding: '0.75rem', backgroundColor: '#e3f2fd', color: '#1976d2', borderRadius: '4px', marginBottom: '1rem' }}>
+            🔍 Running subfinder scan... This may take 30-60 seconds.
+          </div>
+        )}
+
+        {endpoints.length > 0 ? (
+          <div className="endpoints-list">
+            {endpoints.map((endpoint) => (
+              <div key={endpoint.url} className="endpoint-item">
+                <div className="endpoint-row">
+                  <label className="endpoint-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={endpoint.selected || false}
+                      onChange={() => handleEndpointToggle(endpoint.url)}
+                    />
+                    <span className="endpoint-url">{endpoint.url}</span>
+                  </label>
+                  <div className="endpoint-attackable-select">
+                    <select
+                      id={`attackable-${endpoint.url}`}
+                      value={endpoint.isAttackable ? 'true' : 'false'}
+                      onChange={(e) =>
+                        handleAttackableChange(endpoint.url, e.target.value === 'true')
+                      }
+                      className="attackable-dropdown"
+                    >
+                      <option value="true">Attackable</option>
+                      <option value="false">Not Attackable</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ padding: '1rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
+            No endpoints discovered yet. Click "Discover Endpoints" to find endpoints automatically, or manually add them below.
+          </div>
+        )}
+      </div>
 
       {/* Global Tool Settings Section */}
       <div className="section">

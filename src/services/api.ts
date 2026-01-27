@@ -169,6 +169,34 @@ class ApiService {
     return response.data;
   }
 
+  /**
+   * Detect the technology stack of a target website using passive fingerprinting.
+   * Identifies CMS, frontend frameworks, server software, languages, and CDN providers.
+   */
+  async techFingerprint(url: string): Promise<{
+    success: boolean;
+    url: string;
+    technologies: {
+      [category: string]: {
+        name: string;
+        confidence: 'low' | 'medium' | 'high';
+      };
+    };
+    indicators: Array<{
+      type: string;
+      name?: string;
+      value?: string;
+      pattern?: string;
+    }>;
+    error: string | null;
+    response_time_ms: number | null;
+  }> {
+    const response = await this.api.post('/api/v1/scans/tech-fingerprint', null, {
+      params: { url }
+    });
+    return response.data;
+  }
+
   // Endpoint Discovery (Subfinder scanner trigger)
   async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'dnsx-scanner') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {

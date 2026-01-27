@@ -1115,3 +1115,187 @@
   color: #fbbf24;
   font-style: italic;
 }
+
+/* Technology Fingerprint Styles */
+.btn-tech-detect {
+  padding: 10px 20px;
+  border: 2px solid rgba(168, 85, 247, 0.4);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.btn-tech-detect:hover:not(:disabled) {
+  background: #334155;
+  border-color: rgba(168, 85, 247, 0.6);
+  color: #e2e8f0;
+}
+
+.btn-tech-detect:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-tech-detect.detecting {
+  background: #1e293b;
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #a855f7;
+}
+
+.btn-tech-detect.success {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #a855f7;
+}
+
+.btn-tech-detect.failed,
+.btn-tech-detect.error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #f87171;
+}
+
+.tech-fingerprint-result {
+  padding: 16px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.tech-fingerprint-result.success {
+  background: rgba(168, 85, 247, 0.05);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.tech-fingerprint-result.failed,
+.tech-fingerprint-result.error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.tech-fingerprint-success {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tech-stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.tech-badge-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tech-category {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+  background: #334155;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.tech-badge.confidence-high {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+
+.tech-badge.confidence-medium {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+}
+
+.tech-badge.confidence-low {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.4);
+  color: #94a3b8;
+}
+
+.confidence-indicator {
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.tech-response-time {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  text-align: right;
+}
+
+.tech-fingerprint-empty,
+.tech-fingerprint-failure {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.tech-icon {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.tech-fingerprint-empty .tech-icon {
+  color: #64748b;
+}
+
+.tech-fingerprint-failure .tech-icon {
+  color: #f87171;
+}
+
+.tech-details {
+  flex: 1;
+}
+
+.tech-details strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #e2e8f0;
+}
+
+.tech-fingerprint-failure .tech-details strong {
+  color: #f87171;
+}
+
+.tech-details p {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.tech-error {
+  margin: 8px 0 !important;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  color: #f87171;
+  font-family: 'Courier New', monospace;
+}
