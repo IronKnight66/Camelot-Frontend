@@ -37,6 +37,50 @@ interface TechFingerprintResult {
   response_time_ms: number | null;
 }
 
+interface CredentialLeakResult {
+  success: boolean;
+  domain: string;
+  total_breaches: number;
+  total_credentials: number;
+  breaches: Array<{
+    source: string;
+    title?: string;
+    date: string | null;
+    service: string;
+    exposed_data?: string[];
+    credentials_count: number;
+    severity: 'critical' | 'high' | 'medium' | 'low';
+    description?: string;
+    is_verified?: boolean;
+    is_sensitive?: boolean;
+  }>;
+  credentials: Array<{
+    email: string;
+    username: string;
+    password: string;
+    source: string;
+    breach_date: string;
+    fields: string[];
+  }>;
+  service_results: {
+    hibp: {
+      success: boolean;
+      breach_count?: number;
+      total_breaches_in_db?: number;
+      error?: string;
+    };
+    leakcheck?: {
+      success: boolean;
+      credentials_found?: number;
+      source_count?: number;
+      quota?: number;
+      error?: string;
+    };
+  };
+  error: string | null;
+  response_time_ms: number | null;
+}
+
 interface Step2ReconProps {
   formData: AssessmentFormData;
   onChange: (data: Partial<AssessmentFormData>) => void;
@@ -66,6 +110,11 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
     status: 'idle' | 'detecting' | 'success' | 'failed' | 'error';
     result: TechFingerprintResult | null;
   }>({ status: 'idle', result: null });
+  const [credentialLeak, setCredentialLeak] = useState<{
+    status: 'idle' | 'checking' | 'success' | 'failed' | 'error';
+    result: CredentialLeakResult | null;
+  }>({ status: 'idle', result: null });
+  const [showCredentials, setShowCredentials] = useState(false);
 
   const handleEndpointToggle = (url: string) => {
     const updatedEndpoints = endpoints.map(ep =>
@@ -135,6 +184,46 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
           technologies: {},
           indicators: [],
           error: error?.response?.data?.detail || error?.message || 'Failed to detect technologies',
+          response_time_ms: null
+        }
+      });
+    }
+  };
+
+  const handleCredentialLeak = async () => {
+    if (!formData.websiteUrl) {
+      return;
+    }
+    
+    // Extract domain from URL
+    const domain = formData.websiteUrl
+      .replace(/^https?:\/\//, '')
+      .replace(/\/.*$/, '')
+      .split(':')[0];
+    
+    setCredentialLeak({ status: 'checking', result: null });
+    
+    try {
+      const result = await apiService.credentialLeak(domain);
+      setCredentialLeak({
+        status: result.success ? 'success' : 'failed',
+        result
+      });
+    } catch (error: any) {
+      console.error('Credential leak check error:', error);
+      setCredentialLeak({
+        status: 'error',
+        result: {
+          success: false,
+          domain,
+          total_breaches: 0,
+          total_credentials: 0,
+          breaches: [],
+          credentials: [],
+          service_results: {
+            hibp: { success: false, error: 'Request failed' }
+          },
+          error: error?.response?.data?.detail || error?.message || 'Failed to check credential leaks',
           response_time_ms: null
         }
       });
@@ -406,6 +495,150 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
                     <strong>Technology detection failed</strong>
                     {techFingerprint.result.error && (
                       <p className="tech-error">{techFingerprint.result.error}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Credential Leak Section */}
+      {formData.websiteUrl && (
+        <div className="section">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3>Credential Leak Detection</h3>
+            <button
+              type="button"
+              onClick={handleCredentialLeak}
+              disabled={credentialLeak.status === 'checking'}
+              className={`btn-credential-check ${credentialLeak.status}`}
+            >
+              {credentialLeak.status === 'checking' ? (
+                <>Checking...</>
+              ) : credentialLeak.status === 'success' ? (
+                <>&#10003; Checked</>
+              ) : credentialLeak.status === 'failed' || credentialLeak.status === 'error' ? (
+                <>&#10007; Failed</>
+              ) : (
+                <>Check Credential Leaks</>
+              )}
+            </button>
+          </div>
+          
+          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+            Search for leaked credentials specifically associated with this domain in breach databases.
+          </p>
+          
+          {credentialLeak.result && (
+            <div className={`credential-leak-result ${credentialLeak.status}`}>
+              {credentialLeak.result.success && credentialLeak.result.total_credentials > 0 ? (
+                <div className="credential-leak-found">
+                  <div className="leak-summary">
+                    <div className="leak-stat critical">
+                      <span className="leak-icon">&#9888;</span>
+                      <div>
+                        <strong>{credentialLeak.result.total_breaches}</strong>
+                        <span>Breach Sources</span>
+                      </div>
+                    </div>
+                    <div 
+                      className="leak-stat clickable"
+                      onClick={() => setShowCredentials(!showCredentials)}
+                      style={{ cursor: 'pointer' }}
+                      title="Click to view leaked credentials"
+                    >
+                      <span className="leak-icon">&#128273;</span>
+                      <div>
+                        <strong>{credentialLeak.result.total_credentials}</strong>
+                        <span>Credentials Exposed {showCredentials ? '▼' : '▶'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Leaked Credentials Table */}
+                  {showCredentials && credentialLeak.result.credentials && credentialLeak.result.credentials.length > 0 && (
+                    <div className="credentials-table-container">
+                      <h4 style={{ color: '#f87171', marginBottom: '12px' }}>Leaked Credentials</h4>
+                      <div className="credentials-table">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Email</th>
+                              <th>Username</th>
+                              <th>Password</th>
+                              <th>Source</th>
+                              <th>Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {credentialLeak.result.credentials.slice(0, 20).map((cred, idx) => (
+                              <tr key={idx}>
+                                <td className="cred-email">{cred.email || '-'}</td>
+                                <td className="cred-username">{cred.username || '-'}</td>
+                                <td className="cred-password">{cred.password || '-'}</td>
+                                <td className="cred-source">{cred.source}</td>
+                                <td className="cred-date">{cred.breach_date || '-'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {credentialLeak.result.credentials.length > 20 && (
+                          <p className="credentials-more">
+                            Showing 20 of {credentialLeak.result.credentials.length} credentials
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Breach Sources */}
+                  <div className="breach-list">
+                    <h4 style={{ color: '#94a3b8', marginBottom: '12px', marginTop: '16px' }}>Breach Sources</h4>
+                    {credentialLeak.result.breaches.slice(0, 5).map((breach, idx) => (
+                      <div key={idx} className={`breach-item severity-${breach.severity}`}>
+                        <div className="breach-header">
+                          <strong>{breach.title || breach.source}</strong>
+                          <span className={`severity-badge ${breach.severity}`}>
+                            {breach.credentials_count} credentials
+                          </span>
+                        </div>
+                        {breach.date && (
+                          <div className="breach-details">
+                            <span className="breach-date">Breach date: {breach.date}</span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    {credentialLeak.result.breaches.length > 5 && (
+                      <div className="breach-more">
+                        +{credentialLeak.result.breaches.length - 5} more sources
+                      </div>
+                    )}
+                  </div>
+                  
+                  {credentialLeak.result.response_time_ms && (
+                    <p className="leak-response-time">
+                      Checked in {credentialLeak.result.response_time_ms}ms
+                    </p>
+                  )}
+                </div>
+              ) : credentialLeak.result.success && credentialLeak.result.total_credentials === 0 ? (
+                <div className="credential-leak-clean">
+                  <span className="leak-icon">&#10003;</span>
+                  <div className="leak-details">
+                    <strong>No credential leaks found</strong>
+                    <p>This domain was not found in any breach databases.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="credential-leak-error">
+                  <span className="leak-icon">&#10007;</span>
+                  <div className="leak-details">
+                    <strong>Credential leak check failed</strong>
+                    {credentialLeak.result.error && (
+                      <p className="leak-error">{credentialLeak.result.error}</p>
                     )}
                   </div>
                 </div>

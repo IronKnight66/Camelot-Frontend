@@ -1299,3 +1299,340 @@
   color: #f87171;
   font-family: 'Courier New', monospace;
 }
+
+/* Credential Leak Detection Styles */
+.btn-credential-check {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  color: white;
+}
+
+.btn-credential-check:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.btn-credential-check:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-credential-check.checking {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.btn-credential-check.success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.btn-credential-check.failed,
+.btn-credential-check.error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.credential-leak-result {
+  margin-top: 16px;
+  padding: 20px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.leak-summary {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.leak-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 8px;
+  flex: 1;
+}
+
+.leak-stat.critical {
+  border: 2px solid #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.leak-icon {
+  font-size: 32px;
+}
+
+.leak-stat strong {
+  display: block;
+  font-size: 28px;
+  color: #e2e8f0;
+  line-height: 1;
+}
+
+.leak-stat span {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.breach-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.breach-item {
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.4);
+  border-left: 4px solid #64748b;
+  border-radius: 6px;
+}
+
+.breach-item.severity-critical {
+  border-left-color: #dc2626;
+}
+
+.breach-item.severity-high {
+  border-left-color: #f59e0b;
+}
+
+.breach-item.severity-medium {
+  border-left-color: #eab308;
+}
+
+.breach-item.severity-low {
+  border-left-color: #10b981;
+}
+
+.breach-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.breach-header strong {
+  color: #e2e8f0;
+  font-size: 16px;
+}
+
+.severity-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.severity-badge.critical {
+  background: #dc2626;
+  color: white;
+}
+
+.severity-badge.high {
+  background: #f59e0b;
+  color: white;
+}
+
+.severity-badge.medium {
+  background: #eab308;
+  color: #1e293b;
+}
+
+.severity-badge.low {
+  background: #10b981;
+  color: white;
+}
+
+.breach-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.exposed-data {
+  font-size: 13px;
+  color: #cbd5e1;
+  margin-top: 8px;
+}
+
+.credentials-count {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #f87171;
+  font-weight: 600;
+}
+
+.breach-more {
+  padding: 12px;
+  text-align: center;
+  color: #64748b;
+  font-size: 13px;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 6px;
+}
+
+.credential-leak-clean {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+}
+
+.credential-leak-clean .leak-icon {
+  font-size: 48px;
+  color: #10b981;
+}
+
+.credential-leak-clean .leak-details strong {
+  color: #10b981;
+  font-size: 16px;
+}
+
+.credential-leak-clean .leak-details p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.credential-leak-error {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+}
+
+.credential-leak-error .leak-icon {
+  font-size: 48px;
+  color: #ef4444;
+}
+
+.credential-leak-error .leak-details strong {
+  color: #f87171;
+  font-size: 16px;
+}
+
+.credential-leak-error .leak-details p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.leak-error {
+  margin: 8px 0 0 0 !important;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 4px;
+  font-size: 13px;
+  color: #f87171;
+  font-family: 'Courier New', monospace;
+}
+
+.leak-response-time {
+  margin-top: 16px;
+  text-align: right;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Credentials Table Styles */
+.leak-stat.clickable:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+.credentials-table-container {
+  margin: 16px 0;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.credentials-table {
+  overflow-x: auto;
+}
+
+.credentials-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.credentials-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.8);
+  color: #94a3b8;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid rgba(248, 113, 113, 0.3);
+}
+
+.credentials-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  color: #e2e8f0;
+}
+
+.credentials-table tr:hover td {
+  background: rgba(51, 65, 85, 0.3);
+}
+
+.cred-email {
+  color: #38bdf8;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.cred-username {
+  color: #a78bfa;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.cred-password {
+  color: #f87171;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cred-source {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.cred-date {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.credentials-more {
+  margin-top: 12px;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+  font-style: italic;
+}

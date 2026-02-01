@@ -197,6 +197,59 @@ class ApiService {
     return response.data;
   }
 
+  /**
+   * Check for leaked credentials associated with a domain across breach databases.
+   * Queries Have I Been Pwned (free) and LeakCheck (if API key available).
+   */
+  async credentialLeak(domain: string): Promise<{
+    success: boolean;
+    domain: string;
+    total_breaches: number;
+    total_credentials: number;
+    breaches: Array<{
+      source: string;
+      title?: string;
+      date: string | null;
+      service: string;
+      exposed_data?: string[];
+      credentials_count: number;
+      severity: 'critical' | 'high' | 'medium' | 'low';
+      description?: string;
+      is_verified?: boolean;
+      is_sensitive?: boolean;
+    }>;
+    credentials: Array<{
+      email: string;
+      username: string;
+      password: string;
+      source: string;
+      breach_date: string;
+      fields: string[];
+    }>;
+    service_results: {
+      hibp: {
+        success: boolean;
+        breach_count?: number;
+        total_breaches_in_db?: number;
+        error?: string;
+      };
+      leakcheck?: {
+        success: boolean;
+        credentials_found?: number;
+        source_count?: number;
+        quota?: number;
+        error?: string;
+      };
+    };
+    error: string | null;
+    response_time_ms: number | null;
+  }> {
+    const response = await this.api.post('/api/v1/scans/credential-leak', null, {
+      params: { domain }
+    });
+    return response.data;
+  }
+
   // Endpoint Discovery (Subfinder scanner trigger)
   async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'subfinder') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
