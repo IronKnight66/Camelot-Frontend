@@ -18,7 +18,6 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
   onBack,
   scannerTools,
 }) => {
-  const [expandedToolSettings, setExpandedToolSettings] = useState<{ [toolId: string]: boolean }>({});
 
   // Transform database scanner tools to match expected format
   const availableTools = scannerTools.map(tool => ({
@@ -62,15 +61,6 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
     onChange({ toolSettings: updatedSettings });
   };
 
-  const handleToolSettingChange = (toolId: string, setting: Partial<ToolSetting>) => {
-    const currentSettings = formData.toolSettings[toolId] || {};
-    const updatedSettings = {
-      ...formData.toolSettings,
-      [toolId]: { ...currentSettings, ...setting },
-    };
-    onChange({ toolSettings: updatedSettings });
-  };
-
   const handleGlobalSettingChange = (setting: Partial<typeof formData.globalToolSettings>) => {
     onChange({
       globalToolSettings: { ...formData.globalToolSettings, ...setting },
@@ -84,23 +74,6 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
     });
   };
 
-  const handleBlockedUrlAdd = (toolId: string, url: string) => {
-    if (!url.trim()) return;
-    const currentSettings = formData.toolSettings[toolId] || {};
-    const blockedUrls = currentSettings.blockedUrls || [];
-    if (!blockedUrls.includes(url)) {
-      handleToolSettingChange(toolId, {
-        blockedUrls: [...blockedUrls, url],
-      });
-    }
-  };
-
-  const handleBlockedUrlRemove = (toolId: string, url: string) => {
-    const currentSettings = formData.toolSettings[toolId] || {};
-    const blockedUrls = (currentSettings.blockedUrls || []).filter(u => u !== url);
-    handleToolSettingChange(toolId, { blockedUrls });
-  };
-
   const handleGlobalHeaderAdd = (key: string, value: string) => {
     if (!key.trim() || !value.trim()) return;
     const customHeaders = { ...(formData.globalToolSettings.customHeaders || {}), [key]: value };
@@ -111,13 +84,6 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
     const customHeaders = { ...(formData.globalToolSettings.customHeaders || {}) };
     delete customHeaders[key];
     handleGlobalSettingChange({ customHeaders });
-  };
-
-  const toggleToolSettings = (toolId: string) => {
-    setExpandedToolSettings(prev => ({
-      ...prev,
-      [toolId]: !prev[toolId],
-    }));
   };
 
   const handleToggleAllTools = () => {
@@ -249,11 +215,11 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
         </div>
       </div>
 
-      {/* Tool-Specific Settings Section */}
+      {/* Select Tools Section */}
       {availableTools.length > 0 && (
         <div className="section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3>Tool-Specific Settings</h3>
+            <h3>Select Tools</h3>
             <button
               type="button"
               onClick={handleToggleAllTools}
@@ -269,7 +235,6 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
           {availableTools.map((tool) => {
             const settings = formData.toolSettings[tool.id] || {};
             const isEnabled = settings.enabled !== false; // Default to true
-            const isExpanded = expandedToolSettings[tool.id];
 
             return (
               <div key={tool.id} className="tool-settings-card">
@@ -286,65 +251,7 @@ const Step3Scanner: React.FC<Step3ScannerProps> = ({
                     </label>
                     <span className="tool-description-small">{tool.description}</span>
                   </div>
-                  <span
-                    className="tool-settings-toggle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleToolSettings(tool.id);
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {isExpanded ? '▼' : '▶'}
-                  </span>
                 </div>
-
-                {isExpanded && (
-                  <div className="tool-settings-content">
-                    {/* Blocked URLs */}
-                    <div className="setting-group">
-                      <label>Blocked URLs</label>
-                      <div className="blocked-urls-input">
-                        <input
-                          type="text"
-                          placeholder="Enter URL to block"
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter') {
-                              handleBlockedUrlAdd(tool.id, e.currentTarget.value);
-                              e.currentTarget.value = '';
-                            }
-                          }}
-                        />
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            const input = e.currentTarget.previousElementSibling as HTMLInputElement;
-                            if (input) {
-                              handleBlockedUrlAdd(tool.id, input.value);
-                              input.value = '';
-                            }
-                          }}
-                          className="btn-add"
-                        >
-                          Add
-                        </button>
-                      </div>
-                      <div className="blocked-urls-list">
-                        {(settings.blockedUrls || []).map((url) => (
-                          <div key={url} className="blocked-url-item">
-                            <span>{url}</span>
-                            <button
-                              type="button"
-                              onClick={() => handleBlockedUrlRemove(tool.id, url)}
-                              className="btn-remove"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             );
           })}

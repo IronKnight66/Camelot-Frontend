@@ -115,6 +115,26 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
     result: CredentialLeakResult | null;
   }>({ status: 'idle', result: null });
   const [showCredentials, setShowCredentials] = useState(false);
+  
+  // Collapsible section states
+  const [collapsedSections, setCollapsedSections] = useState<{
+    connectivity: boolean;
+    technology: boolean;
+    credentials: boolean;
+    endpoints: boolean;
+  }>({
+    connectivity: false,
+    technology: false,
+    credentials: false,
+    endpoints: false
+  });
+
+  const toggleSection = (section: keyof typeof collapsedSections) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   const handleEndpointToggle = (url: string) => {
     const updatedEndpoints = endpoints.map(ep =>
@@ -360,12 +380,24 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
 
       {/* Scanner Connectivity Check Section */}
       {formData.websiteUrl && (
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3>Scanner Connectivity</h3>
+        <div className={`section collapsible ${collapsedSections.connectivity ? 'collapsed' : ''}`}>
+          <div 
+            className="section-header"
+            onClick={() => toggleSection('connectivity')}
+          >
+            <div className="section-title">
+              <span className="collapse-icon">{collapsedSections.connectivity ? '▶' : '▼'}</span>
+              <h3>Scanner Connectivity</h3>
+              {connectivityCheck.status === 'success' && (
+                <span className="section-status success">&#10003;</span>
+              )}
+              {connectivityCheck.status === 'failed' && (
+                <span className="section-status failed">&#10007;</span>
+              )}
+            </div>
             <button
               type="button"
-              onClick={handleConnectivityCheck}
+              onClick={(e) => { e.stopPropagation(); handleConnectivityCheck(); }}
               disabled={connectivityCheck.status === 'checking'}
               className={`btn-connectivity ${connectivityCheck.status}`}
             >
@@ -381,48 +413,52 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
             </button>
           </div>
           
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
-            Verify the target URL ({formData.websiteUrl}) is reachable from the scanner network before running your assessment.
-          </p>
-          
-          {connectivityCheck.result && (
-            <div className={`connectivity-result ${connectivityCheck.status}`}>
-              {connectivityCheck.result.success ? (
-                <div className="connectivity-success">
-                  <span className="connectivity-icon">&#10003;</span>
-                  <div className="connectivity-details">
-                    <strong>Target is reachable from scanner network</strong>
-                    <ul>
-                      {connectivityCheck.result.status_code && (
-                        <li>HTTP Status: {connectivityCheck.result.status_code}</li>
-                      )}
-                      {connectivityCheck.result.response_time_ms && (
-                        <li>Response Time: {connectivityCheck.result.response_time_ms}ms</li>
-                      )}
-                      {connectivityCheck.result.details.ip_address && (
-                        <li>IP Address: {connectivityCheck.result.details.ip_address}</li>
-                      )}
-                      {connectivityCheck.result.details.ssl_valid !== undefined && (
-                        <li>SSL Valid: {connectivityCheck.result.details.ssl_valid ? 'Yes' : 'No'}</li>
-                      )}
-                      {connectivityCheck.result.details.redirect_url && (
-                        <li>Redirects to: {connectivityCheck.result.details.redirect_url}</li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <div className="connectivity-failure">
-                  <span className="connectivity-icon">&#10007;</span>
-                  <div className="connectivity-details">
-                    <strong>Target is not reachable from scanner network</strong>
-                    {connectivityCheck.result.error && (
-                      <p className="connectivity-error">{connectivityCheck.result.error}</p>
-                    )}
-                    <p className="connectivity-warning">
-                      The scan may fail if the target cannot be reached. Please verify the URL and try again.
-                    </p>
-                  </div>
+          {!collapsedSections.connectivity && (
+            <div className="section-content">
+              <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+                Verify the target URL ({formData.websiteUrl}) is reachable from the scanner network before running your assessment.
+              </p>
+              
+              {connectivityCheck.result && (
+                <div className={`connectivity-result ${connectivityCheck.status}`}>
+                  {connectivityCheck.result.success ? (
+                    <div className="connectivity-success">
+                      <span className="connectivity-icon">&#10003;</span>
+                      <div className="connectivity-details">
+                        <strong>Target is reachable from scanner network</strong>
+                        <ul>
+                          {connectivityCheck.result.status_code && (
+                            <li>HTTP Status: {connectivityCheck.result.status_code}</li>
+                          )}
+                          {connectivityCheck.result.response_time_ms && (
+                            <li>Response Time: {connectivityCheck.result.response_time_ms}ms</li>
+                          )}
+                          {connectivityCheck.result.details.ip_address && (
+                            <li>IP Address: {connectivityCheck.result.details.ip_address}</li>
+                          )}
+                          {connectivityCheck.result.details.ssl_valid !== undefined && (
+                            <li>SSL Valid: {connectivityCheck.result.details.ssl_valid ? 'Yes' : 'No'}</li>
+                          )}
+                          {connectivityCheck.result.details.redirect_url && (
+                            <li>Redirects to: {connectivityCheck.result.details.redirect_url}</li>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="connectivity-failure">
+                      <span className="connectivity-icon">&#10007;</span>
+                      <div className="connectivity-details">
+                        <strong>Target is not reachable from scanner network</strong>
+                        {connectivityCheck.result.error && (
+                          <p className="connectivity-error">{connectivityCheck.result.error}</p>
+                        )}
+                        <p className="connectivity-warning">
+                          The scan may fail if the target cannot be reached. Please verify the URL and try again.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -432,12 +468,26 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
 
       {/* Technology Detection Section */}
       {formData.websiteUrl && (
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3>Technology Detection</h3>
+        <div className={`section collapsible ${collapsedSections.technology ? 'collapsed' : ''}`}>
+          <div 
+            className="section-header"
+            onClick={() => toggleSection('technology')}
+          >
+            <div className="section-title">
+              <span className="collapse-icon">{collapsedSections.technology ? '▶' : '▼'}</span>
+              <h3>Technology Detection</h3>
+              {techFingerprint.status === 'success' && techFingerprint.result && Object.keys(techFingerprint.result.technologies).length > 0 && (
+                <span className="section-status success">
+                  {Object.keys(techFingerprint.result.technologies).length} found
+                </span>
+              )}
+              {(techFingerprint.status === 'failed' || techFingerprint.status === 'error') && (
+                <span className="section-status failed">&#10007;</span>
+              )}
+            </div>
             <button
               type="button"
-              onClick={handleTechFingerprint}
+              onClick={(e) => { e.stopPropagation(); handleTechFingerprint(); }}
               disabled={techFingerprint.status === 'detecting'}
               className={`btn-tech-detect ${techFingerprint.status}`}
             >
@@ -453,50 +503,54 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
             </button>
           </div>
           
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
-            Identify the technology stack (CMS, frameworks, server) of the target website using passive fingerprinting.
-          </p>
-          
-          {techFingerprint.result && (
-            <div className={`tech-fingerprint-result ${techFingerprint.status}`}>
-              {techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length > 0 ? (
-                <div className="tech-fingerprint-success">
-                  <div className="tech-stack-grid">
-                    {Object.entries(techFingerprint.result.technologies).map(([category, tech]) => (
-                      <div key={category} className="tech-badge-container">
-                        <span className="tech-category">{category}</span>
-                        <span className={`tech-badge confidence-${tech.confidence}`}>
-                          {tech.name}
-                          <span className="confidence-indicator" title={`Confidence: ${tech.confidence}`}>
-                            {tech.confidence === 'high' ? '●●●' : tech.confidence === 'medium' ? '●●○' : '●○○'}
-                          </span>
-                        </span>
+          {!collapsedSections.technology && (
+            <div className="section-content">
+              <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+                Identify the technology stack (CMS, frameworks, server) of the target website using passive fingerprinting.
+              </p>
+              
+              {techFingerprint.result && (
+                <div className={`tech-fingerprint-result ${techFingerprint.status}`}>
+                  {techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length > 0 ? (
+                    <div className="tech-fingerprint-success">
+                      <div className="tech-stack-grid">
+                        {Object.entries(techFingerprint.result.technologies).map(([category, tech]) => (
+                          <div key={category} className="tech-badge-container">
+                            <span className="tech-category">{category}</span>
+                            <span className={`tech-badge confidence-${tech.confidence}`}>
+                              {tech.name}
+                              <span className="confidence-indicator" title={`Confidence: ${tech.confidence}`}>
+                                {tech.confidence === 'high' ? '●●●' : tech.confidence === 'medium' ? '●●○' : '●○○'}
+                              </span>
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  {techFingerprint.result.response_time_ms && (
-                    <p className="tech-response-time">
-                      Detection completed in {techFingerprint.result.response_time_ms}ms
-                    </p>
+                      {techFingerprint.result.response_time_ms && (
+                        <p className="tech-response-time">
+                          Detection completed in {techFingerprint.result.response_time_ms}ms
+                        </p>
+                      )}
+                    </div>
+                  ) : techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length === 0 ? (
+                    <div className="tech-fingerprint-empty">
+                      <span className="tech-icon">&#128269;</span>
+                      <div className="tech-details">
+                        <strong>No technologies detected</strong>
+                        <p>The target website may be using uncommon technologies or hiding its stack.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="tech-fingerprint-failure">
+                      <span className="tech-icon">&#10007;</span>
+                      <div className="tech-details">
+                        <strong>Technology detection failed</strong>
+                        {techFingerprint.result.error && (
+                          <p className="tech-error">{techFingerprint.result.error}</p>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </div>
-              ) : techFingerprint.result.success && Object.keys(techFingerprint.result.technologies).length === 0 ? (
-                <div className="tech-fingerprint-empty">
-                  <span className="tech-icon">&#128269;</span>
-                  <div className="tech-details">
-                    <strong>No technologies detected</strong>
-                    <p>The target website may be using uncommon technologies or hiding its stack.</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="tech-fingerprint-failure">
-                  <span className="tech-icon">&#10007;</span>
-                  <div className="tech-details">
-                    <strong>Technology detection failed</strong>
-                    {techFingerprint.result.error && (
-                      <p className="tech-error">{techFingerprint.result.error}</p>
-                    )}
-                  </div>
                 </div>
               )}
             </div>
@@ -506,12 +560,29 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
 
       {/* Credential Leak Section */}
       {formData.websiteUrl && (
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3>Credential Leak Detection</h3>
+        <div className={`section collapsible ${collapsedSections.credentials ? 'collapsed' : ''}`}>
+          <div 
+            className="section-header"
+            onClick={() => toggleSection('credentials')}
+          >
+            <div className="section-title">
+              <span className="collapse-icon">{collapsedSections.credentials ? '▶' : '▼'}</span>
+              <h3>Credential Leak Detection</h3>
+              {credentialLeak.status === 'success' && credentialLeak.result && credentialLeak.result.total_credentials > 0 && (
+                <span className="section-status critical">
+                  {credentialLeak.result.total_credentials} leaked
+                </span>
+              )}
+              {credentialLeak.status === 'success' && credentialLeak.result && credentialLeak.result.total_credentials === 0 && (
+                <span className="section-status success">Clean</span>
+              )}
+              {(credentialLeak.status === 'failed' || credentialLeak.status === 'error') && (
+                <span className="section-status failed">&#10007;</span>
+              )}
+            </div>
             <button
               type="button"
-              onClick={handleCredentialLeak}
+              onClick={(e) => { e.stopPropagation(); handleCredentialLeak(); }}
               disabled={credentialLeak.status === 'checking'}
               className={`btn-credential-check ${credentialLeak.status}`}
             >
@@ -527,12 +598,14 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
             </button>
           </div>
           
-          <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
-            Search for leaked credentials specifically associated with this domain in breach databases.
-          </p>
-          
-          {credentialLeak.result && (
-            <div className={`credential-leak-result ${credentialLeak.status}`}>
+          {!collapsedSections.credentials && (
+            <div className="section-content">
+              <p style={{ color: '#94a3b8', fontSize: '14px', margin: '0 0 16px 0' }}>
+                Search for leaked credentials specifically associated with this domain in breach databases.
+              </p>
+              
+              {credentialLeak.result && (
+                <div className={`credential-leak-result ${credentialLeak.status}`}>
               {credentialLeak.result.success && credentialLeak.result.total_credentials > 0 ? (
                 <div className="credential-leak-found">
                   <div className="leak-summary">
@@ -643,71 +716,86 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
                   </div>
                 </div>
               )}
+                </div>
+              )}
             </div>
           )}
         </div>
       )}
 
       {/* Endpoints Section */}
-      <div className="section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3>Select Endpoints</h3>
+      <div className={`section collapsible ${collapsedSections.endpoints ? 'collapsed' : ''}`}>
+        <div 
+          className="section-header"
+          onClick={() => toggleSection('endpoints')}
+        >
+          <div className="section-title">
+            <span className="collapse-icon">{collapsedSections.endpoints ? '▶' : '▼'}</span>
+            <h3>Select Endpoints</h3>
+            {endpoints.length > 0 && (
+              <span className="section-status info">{endpoints.length} discovered</span>
+            )}
+          </div>
           <button
             type="button"
-            onClick={handleDiscoverEndpoints}
+            onClick={(e) => { e.stopPropagation(); handleDiscoverEndpoints(); }}
             disabled={isDiscoveringEndpoints || !formData.websiteUrl}
             className="btn-secondary"
             style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
           >
-            {isDiscoveringEndpoints ? '🔍 Discovering...' : '🔍 Discover Endpoints'}
+            {isDiscoveringEndpoints ? 'Discovering...' : 'Discover Endpoints'}
           </button>
         </div>
 
-        {discoveryError && (
-          <div style={{ padding: '0.75rem', backgroundColor: '#fee', color: '#c00', borderRadius: '4px', marginBottom: '1rem' }}>
-            ⚠️ {discoveryError}
-          </div>
-        )}
-
-        {isDiscoveringEndpoints && (
-          <div style={{ padding: '0.75rem', backgroundColor: '#e3f2fd', color: '#1976d2', borderRadius: '4px', marginBottom: '1rem' }}>
-            🔍 Running subfinder scan... This may take 30-60 seconds.
-          </div>
-        )}
-
-        {endpoints.length > 0 ? (
-          <div className="endpoints-list">
-            {endpoints.map((endpoint) => (
-              <div key={endpoint.url} className="endpoint-item">
-                <div className="endpoint-row">
-                  <label className="endpoint-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={endpoint.selected || false}
-                      onChange={() => handleEndpointToggle(endpoint.url)}
-                    />
-                    <span className="endpoint-url">{endpoint.url}</span>
-                  </label>
-                  <div className="endpoint-attackable-select">
-                    <select
-                      id={`attackable-${endpoint.url}`}
-                      value={endpoint.isAttackable ? 'true' : 'false'}
-                      onChange={(e) =>
-                        handleAttackableChange(endpoint.url, e.target.value === 'true')
-                      }
-                      className="attackable-dropdown"
-                    >
-                      <option value="true">Attackable</option>
-                      <option value="false">Not Attackable</option>
-                    </select>
-                  </div>
-                </div>
+        {!collapsedSections.endpoints && (
+          <div className="section-content">
+            {discoveryError && (
+              <div style={{ padding: '0.75rem', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#f87171', borderRadius: '4px', marginBottom: '1rem', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                {discoveryError}
               </div>
-            ))}
-          </div>
-        ) : (
-          <div style={{ padding: '1rem', textAlign: 'center', color: '#666', fontStyle: 'italic' }}>
-            No endpoints discovered yet. Click "Discover Endpoints" to find endpoints automatically, or continue to configure scanner settings.
+            )}
+
+            {isDiscoveringEndpoints && (
+              <div style={{ padding: '0.75rem', backgroundColor: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', borderRadius: '4px', marginBottom: '1rem', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                Running subfinder scan... This may take 30-60 seconds.
+              </div>
+            )}
+
+            {endpoints.length > 0 ? (
+              <div className="endpoints-list">
+                {endpoints.map((endpoint) => (
+                  <div key={endpoint.url} className="endpoint-item">
+                    <div className="endpoint-row">
+                      <label className="endpoint-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={endpoint.selected || false}
+                          onChange={() => handleEndpointToggle(endpoint.url)}
+                        />
+                        <span className="endpoint-url">{endpoint.url}</span>
+                      </label>
+                      <div className="endpoint-attackable-select">
+                        <select
+                          id={`attackable-${endpoint.url}`}
+                          value={endpoint.isAttackable ? 'true' : 'false'}
+                          onChange={(e) =>
+                            handleAttackableChange(endpoint.url, e.target.value === 'true')
+                          }
+                          className="attackable-dropdown"
+                        >
+                          <option value="true">Attackable</option>
+                          <option value="false">Not Attackable</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ padding: '1rem', textAlign: 'center', color: '#64748b', fontStyle: 'italic' }}>
+                No endpoints discovered yet. Click "Discover Endpoints" to find endpoints automatically, or continue to configure scanner settings.
+              </div>
+            )}
           </div>
         )}
       </div>
