@@ -355,9 +355,21 @@ class ApiService {
     return response.data;
   }
 
-  async getFindingsSummary(scanId?: number) {
-    const params = scanId ? `?scan_id=${scanId}` : '';
-    const response = await this.api.get(`/api/v1/findings/stats/summary${params}`);
+  async getFindingsSummary(filters?: { scanId?: number; target?: string; title?: string }) {
+    const params = new URLSearchParams();
+    
+    if (filters?.scanId) {
+      params.append('scan_id', filters.scanId.toString());
+    }
+    if (filters?.target) {
+      params.append('target', filters.target);
+    }
+    if (filters?.title) {
+      params.append('title', filters.title);
+    }
+    
+    const queryString = params.toString();
+    const response = await this.api.get(`/api/v1/findings/stats/summary${queryString ? `?${queryString}` : ''}`);
     return response.data;
   }
 

@@ -146,6 +146,14 @@ const Findings: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   
   const [activeTab, setActiveTab] = useState<'list' | 'summary'>('list');
+  
+  // Summary filters
+  const [summaryTargetFilter, setSummaryTargetFilter] = useState('');
+  const [summaryTitleFilter, setSummaryTitleFilter] = useState('');
+  
+  // Filter options (unique values from findings)
+  const [targetOptions, setTargetOptions] = useState<string[]>([]);
+  const [titleOptions, setTitleOptions] = useState<string[]>([]);
 
   useEffect(() => {
     loadLevels();
@@ -155,9 +163,10 @@ const Findings: React.FC = () => {
 
   useEffect(() => {
     if (activeTab === 'summary') {
+      loadFilterOptions();
       loadSummary();
     }
-  }, [activeTab]);
+  }, [activeTab, summaryTargetFilter, summaryTitleFilter]);
 
   const loadLevels = async () => {
     try {
@@ -222,13 +231,59 @@ const Findings: React.FC = () => {
     }
   };
 
+  const loadFilterOptions = async () => {
+    try {
+      // Fetch all findings to get unique targets and titles
+      const response: FindingsResponse = await api.getFindings({ page: 1, page_size: 1000 });
+      const allFindings = response.findings || [];
+      
+      // Extract unique targets (target_url)
+      const uniqueTargets = Array.from(
+        new Set(
+          allFindings
+            .map(f => f.target_url)
+            .filter(t => t && t.trim() !== '')
+        )
+      ).sort();
+      
+      // Extract unique titles
+      const uniqueTitles = Array.from(
+        new Set(
+          allFindings
+            .map(f => f.title)
+            .filter(t => t && t.trim() !== '')
+        )
+      ).sort();
+      
+      setTargetOptions(uniqueTargets as string[]);
+      setTitleOptions(uniqueTitles);
+    } catch (err: any) {
+      console.error('Error loading filter options:', err);
+    }
+  };
+
   const loadSummary = async () => {
     try {
-      const summaryData = await api.getFindingsSummary();
+      const params: any = {};
+      
+      // Add filters if they exist
+      if (summaryTargetFilter) {
+        params.target = summaryTargetFilter;
+      }
+      if (summaryTitleFilter) {
+        params.title = summaryTitleFilter;
+      }
+      
+      const summaryData = await api.getFindingsSummary(params);
       setSummary(summaryData);
     } catch (err: any) {
       console.error('Error loading summary:', err);
     }
+  };
+  
+  const clearSummaryFilters = () => {
+    setSummaryTargetFilter('');
+    setSummaryTitleFilter('');
   };
 
   const clearFilters = () => {
@@ -836,12 +891,61 @@ const Findings: React.FC = () => {
         )}
 
         {/* Summary Tab */}
-        {activeTab === 'summary' && summary && (
-          <div className="findings-summary">
-            <div className="summary-card">
-              <h3>Total Findings</h3>
-              <div className="summary-total">{summary.total}</div>
+        {activeTab === 'summary' && (
+          <>
+            {/* Summary Filters */}
+            <div className="filters-section">
+              <div className="filters-row">
+                <div className="filter-group">
+                  <label htmlFor="summary-target-filter">Target</label>
+                  <select
+                    id="summary-target-filter"
+                    value={summaryTargetFilter}
+                    onChange={(e) => setSummaryTargetFilter(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">All Targets</option>
+                    {targetOptions.map((target) => (
+                      <option key={target} value={target}>
+                        {target}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="filter-group">
+                  <label htmlFor="summary-title-filter">Title</label>
+                  <select
+                    id="summary-title-filter"
+                    value={summaryTitleFilter}
+                    onChange={(e) => setSummaryTitleFilter(e.target.value)}
+                    className="filter-select"
+                  >
+                    <option value="">All Titles</option>
+                    {titleOptions.map((title) => (
+                      <option key={title} value={title}>
+                        {title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="filter-actions">
+                  <button
+                    onClick={clearSummaryFilters}
+                    className="btn-clear-filters"
+                    disabled={!summaryTargetFilter && !summaryTitleFilter}
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
             </div>
+
+            {summary && (
+              <div className="findings-summary">
+                <div className="summary-card">
+                  <h3>Total Findings</h3>
+                  <div className="summary-total">{summary.total}</div>
+                </div>
 
             <div className="summary-section">
               <h3>By Severity</h3>
@@ -927,6 +1031,8 @@ const Findings: React.FC = () => {
               </div>
             </div>
           </div>
+            )}
+          </>
         )}
 
         {/* Details Modal */}

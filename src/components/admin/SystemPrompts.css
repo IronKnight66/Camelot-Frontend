@@ -191,8 +191,8 @@
 }
 
 .system-prompts-table thead {
-  background: #0f172a;
-  border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: white;
 }
 
 .system-prompts-table th {
@@ -200,10 +200,11 @@
   text-align: left;
   font-weight: 600;
   font-family: inherit;
-  color: #94a3b8;
+  color: white;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 12px;
+  border-bottom: none;
 }
 
 .system-prompts-table td {

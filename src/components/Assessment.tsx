@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import Step1Configuration from './assessment/Step1Configuration';
-import Step2EndpointsAndSettings from './assessment/Step2EndpointsAndSettings';
-import Step3Review from './assessment/Step3Review';
+import Step2Recon from './assessment/Step2Recon';
+import Step3Scanner from './assessment/Step3Scanner';
+import Step4Review from './assessment/Step4Review';
 import { AssessmentFormData, ScannerTool } from '../types/assessment';
 import apiService from '../services/api';
 import './Assessment.css';
@@ -72,7 +73,7 @@ const Assessment: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (currentStep < 3) {
+    if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -179,7 +180,16 @@ const Assessment: React.FC = () => {
         );
       case 2:
         return (
-          <Step2EndpointsAndSettings
+          <Step2Recon
+            formData={formData}
+            onChange={handleFormDataChange}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        );
+      case 3:
+        return (
+          <Step3Scanner
             formData={formData}
             onChange={handleFormDataChange}
             onNext={handleNext}
@@ -187,9 +197,9 @@ const Assessment: React.FC = () => {
             scannerTools={scannerTools}
           />
         );
-      case 3:
+      case 4:
         return (
-          <Step3Review
+          <Step4Review
             formData={formData}
             onChange={handleFormDataChange}
             onBack={handleBack}
@@ -221,11 +231,16 @@ const Assessment: React.FC = () => {
             <div className={`step-connector ${currentStep > 1 ? 'completed' : ''}`}></div>
             <div className={`step-item ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}>
               <div className="step-number">2</div>
-              <div className="step-label">Endpoints & Tools</div>
+              <div className="step-label">Recon</div>
             </div>
             <div className={`step-connector ${currentStep > 2 ? 'completed' : ''}`}></div>
-            <div className={`step-item ${currentStep >= 3 ? 'active' : ''}`}>
+            <div className={`step-item ${currentStep >= 3 ? 'active' : ''} ${currentStep > 3 ? 'completed' : ''}`}>
               <div className="step-number">3</div>
+              <div className="step-label">Scanner</div>
+            </div>
+            <div className={`step-connector ${currentStep > 3 ? 'completed' : ''}`}></div>
+            <div className={`step-item ${currentStep >= 4 ? 'active' : ''}`}>
+              <div className="step-number">4</div>
               <div className="step-label">Review</div>
             </div>
           </div>

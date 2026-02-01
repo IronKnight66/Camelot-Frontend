@@ -180,8 +180,8 @@ body .layout-container .layout-main .scans-container {
 }
 
 .scans-table thead {
-  background: #1f293b;
-  border-bottom: 2px solid #4e271d;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: white;
 }
 
 .scans-table th {
@@ -193,8 +193,7 @@ body .layout-container .layout-main .scans-container {
   border-bottom: none;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: transparent !important;
-  color: #e2e8f0 !important;
+  color: white;
 }
 
 .scans-table th.sortable-header {

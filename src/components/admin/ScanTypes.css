@@ -34,21 +34,22 @@
 .table-wrapper {
   overflow-x: auto;
   margin-top: 2rem;
-  background: var(--camelot-aged-parchment);
-  border: 2px solid var(--camelot-dark-gold);
+  background: #1e293b !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
   border-radius: var(--camelot-radius-lg);
-  box-shadow: var(--camelot-shadow-md);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 .scan-types-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
+  background: #1e293b !important;
 }
 
 .scan-types-table thead {
-  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
-  border-bottom: 3px solid var(--camelot-dark-gold);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: white;
 }
 
 .scan-types-table th {
@@ -60,20 +61,20 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-size: 13px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  border-bottom: none;
 }
 
 .scan-types-table td {
   padding: 16px;
-  border-bottom: 1px solid var(--camelot-dark-gold);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
   vertical-align: middle;
   font-family: var(--camelot-font-body);
-  color: var(--camelot-black-knight);
-  background: var(--camelot-parchment);
+  color: #e2e8f0;
+  background: #1e293b !important;
 }
 
 .scan-types-table tbody tr:hover td {
-  background: var(--camelot-pale-gold);
+  background: #334155 !important;
 }
 
 .scan-types-table tbody tr.inactive td {

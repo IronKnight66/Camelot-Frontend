@@ -1,9 +1,9 @@
-// src/components/assessment/Step3Review.tsx
+// src/components/assessment/Step4Review.tsx
 import React, { useState, useEffect } from 'react';
 import { AssessmentFormData, ScannerTool } from '../../types/assessment';
 import './AssessmentWizard.css';
 
-interface Step3ReviewProps {
+interface Step4ReviewProps {
   formData: AssessmentFormData;
   onBack: () => void;
   onSubmit: () => void;
@@ -11,7 +11,7 @@ interface Step3ReviewProps {
   scannerTools: ScannerTool[];
 }
 
-const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit, onChange, scannerTools }) => {
+const Step4Review: React.FC<Step4ReviewProps> = ({ formData, onBack, onSubmit, onChange, scannerTools }) => {
   const [expandedSections, setExpandedSections] = useState<{ [key: string]: boolean }>({
     globalSettings: false,
     toolSettings: false,
@@ -260,5 +260,5 @@ const Step3Review: React.FC<Step3ReviewProps> = ({ formData, onBack, onSubmit, o
   );
 };
 
-export default Step3Review;
+export default Step4Review;
 

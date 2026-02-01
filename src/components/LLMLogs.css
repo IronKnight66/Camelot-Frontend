@@ -165,10 +165,11 @@
 /* Table */
 .table-container {
   margin-bottom: 2rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(0, 255, 255, 0.2);
+  background: #1e293b !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
 .llm-logs-table {
@@ -176,10 +177,12 @@
   border-collapse: collapse;
   font-size: 0.875rem;
   table-layout: fixed;
+  background: #1e293b !important;
 }
 
 .llm-logs-table thead {
-  background: rgba(0, 255, 255, 0.1);
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: white;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -189,10 +192,10 @@
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: var(--primary-color, #00ffff);
+  color: white;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+  border-bottom: none;
 }
 
 .llm-logs-table th.sortable {
@@ -201,16 +204,17 @@
 }
 
 .llm-logs-table th.sortable:hover {
-  background: rgba(0, 255, 255, 0.2);
+  background: rgba(249, 115, 22, 0.1);
 }
 
 .llm-logs-table tbody tr {
-  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  transition: background-color 0.2s ease;
+  background: #1e293b !important;
 }
 
 .llm-logs-table tbody tr:hover {
-  background: rgba(0, 255, 255, 0.05);
+  background: #334155 !important;
 }
 
 .llm-logs-table td {

@@ -51,9 +51,8 @@
 }
 
 .plans-table thead {
-  background: #0f172a !important;
-  border-bottom: 2px solid rgba(56, 189, 248, 0.2) !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  color: white;
 }
 
 .plans-table th {
@@ -61,21 +60,24 @@
   text-align: left;
   font-weight: 600;
   font-family: inherit;
-  color: #94a3b8;
+  color: white;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: #0f172a !important;
+  border-bottom: none;
 }
 
 .plans-table td {
   padding: 16px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.1) !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
   vertical-align: middle;
   font-family: inherit;
   color: #e2e8f0;
-  background: #1e293b;
+  background: #1e293b !important;
+}
+
+.plans-table tbody tr:hover td {
+  background: #334155 !important;
 }
 
 .plans-table tbody tr:hover td {
