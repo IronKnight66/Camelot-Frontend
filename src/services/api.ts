@@ -198,7 +198,7 @@ class ApiService {
   }
 
   // Endpoint Discovery (Subfinder scanner trigger)
-  async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'dnsx-scanner') {
+  async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'subfinder') {
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
       target,
       scan_type: scanType,
