@@ -301,6 +301,7 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleNavigation = (action: ChatAction) => {
+    console.log('🧭 Handling navigation action:', action);
     switch (action.type) {
       case 'navigate_assessment':
         navigate('/assessment');
@@ -311,8 +312,23 @@ const ChatInterface: React.FC = () => {
       case 'navigate_scanner_config':
         navigate('/settings');
         break;
+      case 'navigate_metrics':
+        navigate('/metrics');
+        break;
+      case 'navigate_results':
+        // Navigate to scan results page - URL may include scan_parent_id
+        const url = action.url || '/scans';
+        console.log('🎯 Navigating to scan results:', url);
+        navigate(url);
+        break;
       default:
-        console.warn('Unknown action type:', action.type);
+        // Try navigating to the URL if provided
+        if (action.url) {
+          console.log('🔗 Navigating to URL:', action.url);
+          navigate(action.url);
+        } else {
+          console.warn('Unknown action type:', action.type);
+        }
     }
   };
 
