@@ -272,7 +272,6 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
       const scanParentId = result.scan_parent_id;
 
       // Retry fetching child scans until subfinder scan is created
-      let actualJobId: string | null = null;
       let scanFetchRetries = 0;
       const maxScanFetchRetries = 10; // Try for up to ~30 seconds
 
@@ -318,7 +317,7 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
         });
       };
 
-      actualJobId = await fetchScanWithRetry();
+      const actualJobId: string = await fetchScanWithRetry();
 
       let pollCount = 0;
       const maxPolls = 90; // 3 minutes max (poll every 2 seconds)
