@@ -269,8 +269,24 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
       const result = await apiService.discoverEndpoints(domain, 'network');
       console.log('Discovery scan started:', result);
 
-      const scanId = result.job_id;
       const scanParentId = result.scan_parent_id;
+
+      // Fetch child scans to get actual mcp_job_id
+      console.log('Fetching child scans for parent:', scanParentId);
+      const parentData = await apiService.getScanParentWithScans(scanParentId);
+
+      // Find the subfinder child scan
+      const subfinderScan = parentData.scans?.find(
+        (scan: any) => scan.selected_tool === 'subfinder'
+      );
+
+      if (!subfinderScan) {
+        throw new Error('Subfinder scan not created yet. Please try again.');
+      }
+
+      const actualJobId = subfinderScan.mcp_job_id;
+      console.log('✅ Found subfinder scan with job_id:', actualJobId);
+
       let pollCount = 0;
       const maxPolls = 90; // 3 minutes max (poll every 2 seconds)
 
@@ -280,7 +296,7 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
           pollCount++;
           console.log(`Polling scan status (${pollCount}/${maxPolls})...`);
 
-          const status = await apiService.getScanStatus(scanId);
+          const status = await apiService.getScanStatus(actualJobId);
           console.log('Scan status:', status);
 
           if (status.status === 'completed') {
