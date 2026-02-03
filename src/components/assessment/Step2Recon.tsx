@@ -334,64 +334,38 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
           if (status.status === 'completed') {
             clearInterval(pollInterval);
 
-            // Wait for aggregation to complete, then fetch discovered endpoints
-            console.log('📊 Scan completed. Waiting for aggregation to finish...');
+            // Fetch subfinder scan results directly (no aggregation needed for Discovery)
+            console.log('📊 Scan completed. Fetching subfinder results...');
 
-            // Retry fetching aggregated findings with exponential backoff
-            let aggregationRetries = 0;
-            const maxAggregationRetries = 10;
+            try {
+              const scanResults = await apiService.getScanResults(actualJobId);
+              console.log('Subfinder results:', scanResults);
 
-            const fetchWithRetry = async () => {
-              try {
-                console.log(`Fetching discovered endpoints (attempt ${aggregationRetries + 1}/${maxAggregationRetries})...`);
-                const endpointUrls = await apiService.getDiscoveredEndpoints(scanParentId);
-                console.log('Discovered endpoint URLs:', endpointUrls);
+              // Extract endpoints from subfinder results
+              // Expected format: { endpoints: ["subdomain1.com", "subdomain2.com", ...] }
+              const subdomains = scanResults.endpoints || [];
 
-                // Transform URLs into Endpoint format
-                const discoveredEndpoints = endpointUrls.map((url: string) => ({
-                  url: url,
+              if (subdomains.length > 0) {
+                // Transform subdomains into Endpoint format
+                const discoveredEndpoints = subdomains.map((subdomain: string) => ({
+                  url: `https://${subdomain}`,
                   selected: true,
                   isAttackable: true
                 }));
 
-                if (discoveredEndpoints.length > 0) {
-                  setEndpoints(discoveredEndpoints);
-                  onChange({ endpoints: discoveredEndpoints });
-                  alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
-                } else {
-                  setDiscoveryError('No endpoints discovered. Try manual entry.');
-                }
-                setIsDiscoveringEndpoints(false);
-              } catch (endpointError: any) {
-                aggregationRetries++;
-                console.error(`Failed to fetch discovered endpoints (attempt ${aggregationRetries}):`, endpointError);
-                
-                const errorStatus = endpointError?.response?.status;
-                const errorDetail = endpointError?.response?.data?.detail || endpointError?.message || 'Unknown error';
-
-                // If 404 and still have retries, wait and try again
-                if (errorStatus === 404 && aggregationRetries < maxAggregationRetries) {
-                  const waitTime = 2000 + (aggregationRetries * 1000); // 2s, 3s, 4s, 5s...
-                  console.log(`Aggregation not ready yet. Retrying in ${waitTime}ms...`);
-                  setTimeout(fetchWithRetry, waitTime);
-                } else {
-                  // Max retries reached or other error
-                  if (errorStatus === 404) {
-                    setDiscoveryError('Aggregation timeout. Findings may not be ready yet. Check Scans page later.');
-                  } else if (errorStatus === 400) {
-                    // Handle 400 errors (e.g., invalid campaign ID)
-                    setDiscoveryError(`Configuration error: ${errorDetail}. Please try again or use manual entry.`);
-                  } else {
-                    // Show the actual error message from backend
-                    setDiscoveryError(`Failed to retrieve discovered endpoints: ${errorDetail}. Try manual entry.`);
-                  }
-                  setIsDiscoveringEndpoints(false);
-                }
+                setEndpoints(discoveredEndpoints);
+                onChange({ endpoints: discoveredEndpoints });
+                alert(`✅ Discovered ${discoveredEndpoints.length} endpoints!`);
+              } else {
+                setDiscoveryError('No endpoints discovered. Try manual entry.');
               }
-            };
-
-            // Start fetching with initial delay to give aggregation time to start
-            setTimeout(fetchWithRetry, 3000); // Wait 3 seconds before first attempt
+              setIsDiscoveringEndpoints(false);
+            } catch (resultsError: any) {
+              console.error('Failed to fetch subfinder results:', resultsError);
+              const errorDetail = resultsError?.response?.data?.detail || resultsError?.message || 'Unknown error';
+              setDiscoveryError(`Failed to retrieve discovered endpoints: ${errorDetail}. Try manual entry.`);
+              setIsDiscoveringEndpoints(false);
+            }
           } else if (status.status === 'failed') {
             clearInterval(pollInterval);
             setDiscoveryError('Endpoint discovery failed. Please try again.');
