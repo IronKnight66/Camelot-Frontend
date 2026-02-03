@@ -271,21 +271,54 @@ const Step2Recon: React.FC<Step2ReconProps> = ({
 
       const scanParentId = result.scan_parent_id;
 
-      // Fetch child scans to get actual mcp_job_id
-      console.log('Fetching child scans for parent:', scanParentId);
-      const parentData = await apiService.getScanParentWithScans(scanParentId);
+      // Retry fetching child scans until subfinder scan is created
+      let actualJobId: string | null = null;
+      let scanFetchRetries = 0;
+      const maxScanFetchRetries = 10; // Try for up to ~30 seconds
 
-      // Find the subfinder child scan
-      const subfinderScan = parentData.scans?.find(
-        (scan: any) => scan.selected_tool === 'subfinder'
-      );
+      const fetchScanWithRetry = async (): Promise<string> => {
+        return new Promise(async (resolve, reject) => {
+          const attemptFetch = async () => {
+            try {
+              scanFetchRetries++;
+              console.log(`Fetching child scans (attempt ${scanFetchRetries}/${maxScanFetchRetries})...`);
 
-      if (!subfinderScan) {
-        throw new Error('Subfinder scan not created yet. Please try again.');
-      }
+              const parentData = await apiService.getScanParentWithScans(scanParentId);
 
-      const actualJobId = subfinderScan.mcp_job_id;
-      console.log('✅ Found subfinder scan with job_id:', actualJobId);
+              // Find the subfinder child scan
+              const subfinderScan = parentData.scans?.find(
+                (scan: any) => scan.selected_tool === 'subfinder'
+              );
+
+              if (subfinderScan) {
+                console.log('✅ Found subfinder scan with job_id:', subfinderScan.mcp_job_id);
+                resolve(subfinderScan.mcp_job_id);
+              } else if (scanFetchRetries < maxScanFetchRetries) {
+                // Scan not created yet, wait and retry
+                const waitTime = 2000 + (scanFetchRetries * 1000); // 2s, 3s, 4s, 5s...
+                console.log(`Scan not created yet. Retrying in ${waitTime}ms...`);
+                setTimeout(attemptFetch, waitTime);
+              } else {
+                // Max retries reached
+                reject(new Error('Subfinder scan not created after multiple retries. Please try again.'));
+              }
+            } catch (error: any) {
+              if (scanFetchRetries < maxScanFetchRetries) {
+                const waitTime = 2000 + (scanFetchRetries * 1000);
+                console.log(`Error fetching scans. Retrying in ${waitTime}ms...`);
+                setTimeout(attemptFetch, waitTime);
+              } else {
+                reject(error);
+              }
+            }
+          };
+
+          // Start first attempt immediately
+          attemptFetch();
+        });
+      };
+
+      actualJobId = await fetchScanWithRetry();
 
       let pollCount = 0;
       const maxPolls = 90; // 3 minutes max (poll every 2 seconds)
