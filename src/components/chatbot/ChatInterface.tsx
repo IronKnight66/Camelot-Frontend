@@ -215,7 +215,14 @@ const ChatInterface: React.FC = () => {
   const loadAvailableModels = async () => {
     try {
       const response = await ApiService.getAvailableModels();
-      setAvailableModels(response.models || []);
+      const models = response.models || [];
+      setAvailableModels(models);
+      
+      // Automatically select the first model if no model is selected
+      if (models.length > 0 && !selectedModelId) {
+        setSelectedModelId(models[0].id);
+        console.log('🤖 Auto-selected first model:', models[0].name);
+      }
     } catch (err: any) {
       console.error('Failed to load available models:', err);
     }

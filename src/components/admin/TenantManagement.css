@@ -12,20 +12,18 @@
 
 .tenant-management-header h1 {
   margin: 0 0 8px 0;
-  color: var(--camelot-crimson-dark);
-  font-family: var(--camelot-font-heading);
-  font-weight: 700;
-  font-size: 40px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  color: #e2e8f0;
+  font-family: var(--camelot-font-ui, inherit);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: 0.02em;
 }
 
 .tenant-management-header p {
-  color: var(--camelot-charcoal);
+  color: #94a3b8;
   margin: 0;
-  font-family: var(--camelot-font-body);
-  font-size: 18px;
+  font-family: var(--camelot-font-ui, inherit);
+  font-size: 15px;
 }
 
 .tenant-management-footer {
@@ -34,48 +32,17 @@
   justify-content: flex-end;
 }
 
+/* tenants-table base in unified-tables.css */
 .tenants-table {
-  background: #1e293b !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-radius: var(--camelot-radius-lg);
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-}
-
-.tenants-table table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #1e293b !important;
-}
-
-.tenants-table thead {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: white;
-}
-
-.tenants-table th {
-  padding: 16px;
-  text-align: left;
-  font-weight: 700;
-  font-family: var(--camelot-font-heading);
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 13px;
-  border-bottom: none;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .tenants-table td {
-  padding: 16px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
   vertical-align: top;
-  font-family: var(--camelot-font-body);
-  color: #e2e8f0;
-  background: #1e293b !important;
-}
-
-.tenants-table tbody tr:hover td {
-  background: #334155 !important;
 }
 
 .tenant-description {

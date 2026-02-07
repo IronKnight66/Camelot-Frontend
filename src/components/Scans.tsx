@@ -699,8 +699,8 @@ const Scans: React.FC = () => {
   return (
     <Layout>
       <div className="scans-container">
-        <div className="scans-header">
-          <h1>Scan History</h1>
+        <div className="scans-header page-header">
+          <h1 style={{ color: '#ffffff' }}>Scan History</h1>
           <p>View and manage all security scans and their results</p>
         </div>
 

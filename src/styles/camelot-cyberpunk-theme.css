@@ -88,24 +88,8 @@
 
 .camelot-cyber-app {
   min-height: 100vh;
-  /* Deep night sky with strong teal city glow and fiery orange ground, matching the reference art */
-  background:
-    radial-gradient(
-      circle at 10% 0%,
-      rgba(56, 189, 248, 0.38),
-      transparent 52%
-    ),
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(94, 234, 212, 0.22),
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 50% 120%,
-      rgba(248, 113, 113, 0.6),
-      transparent 55%
-    ),
-    linear-gradient(180deg, #00010a 0%, #020617 35%, #020617 100%);
+  background: #020617;
+  background-image: linear-gradient(180deg, #0f172a 0%, #020617 100%);
   color: var(--camelot-cyber-text);
   font-family: var(--camelot-cyber-font-ui);
 }
@@ -126,11 +110,11 @@
 }
 
 .camelot-cyber-app-title {
-  font-family: var(--camelot-cyber-font-display);
+  font-family: var(--camelot-cyber-font-ui);
   font-size: var(--camelot-cyber-text-2xl);
+  font-weight: 600;
   color: var(--camelot-cyber-heading);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .camelot-cyber-app-nav a {
@@ -140,8 +124,7 @@
   margin-left: var(--camelot-cyber-space-lg);
   position: relative;
   padding-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.02em;
 }
 
 .camelot-cyber-app-nav a:hover {
@@ -155,12 +138,7 @@
   bottom: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--camelot-cyber-primary),
-    var(--camelot-cyber-accent)
-  );
-  box-shadow: var(--camelot-cyber-glow-teal);
+  background: #2563eb;
 }
 
 /* ============================================================
@@ -168,30 +146,16 @@
    ============================================================ */
 
 .camelot-cyber-panel {
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 211, 238, 0.08),
-      transparent 55%
-    ),
-    var(--camelot-cyber-surface);
+  background: var(--camelot-cyber-surface);
   border-radius: var(--camelot-cyber-radius-md);
-  border: 1px solid rgba(148, 163, 184, 0.35);
+  border: 1px solid var(--camelot-cyber-border);
   padding: var(--camelot-cyber-space-lg);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 
-.camelot-cyber-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  border: 1px solid rgba(15, 23, 42, 0.6);
-  pointer-events: none;
-}
-
 .camelot-cyber-panel--glow:hover {
-  box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6), var(--camelot-cyber-glow-soft);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .camelot-cyber-panel-header {
@@ -202,11 +166,11 @@
 }
 
 .camelot-cyber-panel-title {
-  font-family: var(--camelot-cyber-font-display);
+  font-family: var(--camelot-cyber-font-ui);
   font-size: var(--camelot-cyber-text-xl);
+  font-weight: 600;
   color: var(--camelot-cyber-heading);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 /* ============================================================
@@ -224,58 +188,43 @@
   font-family: var(--camelot-cyber-font-ui);
   font-size: var(--camelot-cyber-text-sm);
   font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: background var(--camelot-cyber-transition-base),
     color var(--camelot-cyber-transition-base),
-    box-shadow var(--camelot-cyber-transition-base),
-    transform var(--camelot-cyber-transition-fast);
+    border-color var(--camelot-cyber-transition-base);
 }
 
 .camelot-cyber-btn-primary {
   composes: camelot-cyber-btn;
-  background: linear-gradient(
-    135deg,
-    var(--camelot-cyber-primary),
-    var(--camelot-cyber-accent)
-  );
+  background: #2563eb;
   color: var(--camelot-cyber-heading);
-  box-shadow: var(--camelot-cyber-glow-orange);
 }
 
 .camelot-cyber-btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
-    var(--camelot-cyber-glow-orange);
+  background: #1d4ed8;
 }
 
 .camelot-cyber-btn-secondary {
   composes: camelot-cyber-btn;
   background: transparent;
-  color: var(--camelot-cyber-primary);
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: none;
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.5);
 }
 
 .camelot-cyber-btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.8);
-  box-shadow: var(--camelot-cyber-glow-teal);
+  background: rgba(30, 58, 138, 0.3);
+  border-color: #60a5fa;
 }
 
 .camelot-cyber-btn-danger {
   composes: camelot-cyber-btn;
-  background: linear-gradient(
-    135deg,
-    var(--camelot-cyber-danger),
-    #be123c
-  );
+  background: #dc2626;
   color: var(--camelot-cyber-heading);
 }
 
 .camelot-cyber-btn-danger:hover {
-  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
-    0 0 18px rgba(248, 113, 113, 0.45);
+  background: #b91c1c;
 }
 
 /* ============================================================
@@ -285,22 +234,15 @@
 .camelot-cyber-input,
 .camelot-cyber-select {
   width: 100%;
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 211, 238, 0.15),
-      transparent 55%
-    ),
-    var(--camelot-cyber-surface-alt);
+  background: var(--camelot-cyber-surface-alt);
   border-radius: var(--camelot-cyber-radius-sm);
-  border: 1px solid rgba(148, 163, 184, 0.5);
+  border: 1px solid var(--camelot-cyber-border);
   padding: 10px 12px;
   color: var(--camelot-cyber-text);
   font-family: var(--camelot-cyber-font-ui);
   font-size: var(--camelot-cyber-text-sm);
   outline: none;
-  transition: border-color var(--camelot-cyber-transition-fast),
-    box-shadow var(--camelot-cyber-transition-fast),
-    background var(--camelot-cyber-transition-slow);
+  transition: border-color var(--camelot-cyber-transition-fast);
 }
 
 .camelot-cyber-input::placeholder,
@@ -310,8 +252,8 @@
 
 .camelot-cyber-input:focus,
 .camelot-cyber-select:focus {
-  border-color: var(--camelot-cyber-primary-soft);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), var(--camelot-cyber-glow-teal);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
 }
 
 /* ============================================================
@@ -332,11 +274,11 @@
 }
 
 .camelot-cyber-title-large {
-  font-family: var(--camelot-cyber-font-display);
+  font-family: var(--camelot-cyber-font-ui);
   font-size: var(--camelot-cyber-text-4xl);
+  font-weight: 600;
   color: var(--camelot-cyber-heading);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .camelot-cyber-subtitle {
@@ -380,7 +322,7 @@
   border: none;
 }
 
-/* Use the neon underline on active links */
+/* Active link underline */
 .camelot-cyber-app-nav .nav-link.active::after {
   content: "";
   position: absolute;
@@ -388,12 +330,7 @@
   bottom: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--camelot-cyber-primary),
-    var(--camelot-cyber-accent)
-  );
-  box-shadow: var(--camelot-cyber-glow-teal);
+  background: #2563eb;
 }
 
 /* Assessment container + panel */
@@ -404,33 +341,17 @@
   color: var(--camelot-cyber-text);
 }
 
-.camelot-cyber-app .assessment-header h1 {
-  font-family: var(--camelot-cyber-font-display);
-  font-size: var(--camelot-cyber-text-3xl);
-  color: var(--camelot-cyber-heading);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.camelot-cyber-app .assessment-header p {
-  color: var(--camelot-cyber-text-soft);
-  font-family: var(--camelot-cyber-font-ui);
-}
+/* Assessment header uses shared .page-header from index.css - no overrides */
 
 .camelot-cyber-app .assessment-content {
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 211, 238, 0.16),
-      transparent 55%
-    ),
-    var(--camelot-cyber-surface);
+  background: var(--camelot-cyber-surface);
   border-radius: var(--camelot-cyber-radius-lg);
-  border: 1px solid rgba(148, 163, 184, 0.45);
+  border: 1px solid var(--camelot-cyber-border);
   padding: var(--camelot-cyber-space-lg);
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* Step indicator – glowing runes */
+/* Step indicator – simple stepper */
 .camelot-cyber-app .step-indicator {
   background: transparent;
   border: none;
@@ -439,47 +360,36 @@
 }
 
 .camelot-cyber-app .step-number {
-  width: 46px;
-  height: 46px;
-  background: radial-gradient(
-    circle at top,
-    rgba(34, 211, 238, 0.22),
-    rgba(15, 23, 42, 1)
-  );
+  width: 40px;
+  height: 40px;
+  background: var(--camelot-cyber-surface-alt);
   color: var(--camelot-cyber-text-soft);
-  border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.7);
-  box-shadow: var(--camelot-cyber-glow-soft);
+  border-radius: 8px;
+  border: 1px solid var(--camelot-cyber-border);
   font-family: var(--camelot-cyber-font-ui);
+  font-weight: 600;
 }
 
 .camelot-cyber-app .step-item.active .step-number {
-  background: radial-gradient(
-    circle at top,
-    rgba(34, 211, 238, 0.8),
-    rgba(15, 23, 42, 1)
-  );
+  background: #2563eb;
   color: var(--camelot-cyber-heading);
-  border-color: var(--camelot-cyber-primary-soft);
+  border-color: #2563eb;
 }
 
 .camelot-cyber-app .step-item.completed .step-number {
-  background: radial-gradient(
-    circle at top,
-    rgba(56, 189, 248, 0.4),
-    rgba(15, 23, 42, 1)
-  );
-  color: var(--camelot-cyber-heading);
-  border-color: rgba(56, 189, 248, 0.9);
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--camelot-cyber-success);
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
 .camelot-cyber-app .step-label {
   color: var(--camelot-cyber-text-soft);
   font-family: var(--camelot-cyber-font-ui);
+  text-transform: none;
 }
 
 .camelot-cyber-app .step-item.active .step-label {
-  color: var(--camelot-cyber-primary-soft);
+  color: #60a5fa;
 }
 
 .camelot-cyber-app .step-item.completed .step-label {
@@ -487,42 +397,27 @@
 }
 
 .camelot-cyber-app .step-connector {
-  background: linear-gradient(
-    90deg,
-    rgba(148, 163, 184, 0.35),
-    rgba(30, 64, 175, 0.6)
-  );
+  background: var(--camelot-cyber-border);
 }
 
 .camelot-cyber-app .step-connector.completed {
-  background: linear-gradient(
-    90deg,
-    var(--camelot-cyber-primary),
-    var(--camelot-cyber-accent)
-  );
-  box-shadow: 0 0 18px rgba(34, 211, 238, 0.6);
+  background: rgba(34, 197, 94, 0.5);
 }
 
 /* Form fields & buttons inside wizard */
 .camelot-cyber-app .form-group input,
 .camelot-cyber-app .form-group select {
-  background: radial-gradient(
-      circle at top left,
-      rgba(34, 211, 238, 0.18),
-      transparent 55%
-    ),
-    var(--camelot-cyber-surface-alt);
+  background: var(--camelot-cyber-surface-alt);
   border-radius: var(--camelot-cyber-radius-sm);
-  border: 1px solid rgba(148, 163, 184, 0.6);
+  border: 1px solid var(--camelot-cyber-border);
   color: var(--camelot-cyber-text);
   font-family: var(--camelot-cyber-font-ui);
-  box-shadow: none;
 }
 
 .camelot-cyber-app .form-group input:focus,
 .camelot-cyber-app .form-group select:focus {
-  border-color: var(--camelot-cyber-primary-soft);
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 1), var(--camelot-cyber-glow-teal);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
   background: var(--camelot-cyber-surface-alt);
 }
 
@@ -530,36 +425,30 @@
 .camelot-cyber-app .btn-secondary {
   border-radius: var(--camelot-cyber-radius-sm);
   font-family: var(--camelot-cyber-font-ui);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.02em;
   box-shadow: none;
 }
 
 .camelot-cyber-app .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--camelot-cyber-primary),
-    var(--camelot-cyber-accent)
-  );
+  background: #2563eb;
   color: var(--camelot-cyber-heading);
-  border-color: transparent;
-  box-shadow: var(--camelot-cyber-glow-orange);
+  border-color: #2563eb;
 }
 
 .camelot-cyber-app .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 0 1px rgba(248, 250, 252, 0.08),
-    var(--camelot-cyber-glow-orange);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 .camelot-cyber-app .btn-secondary {
   background: transparent;
-  color: var(--camelot-cyber-primary);
-  border-color: rgba(34, 211, 238, 0.55);
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.5);
 }
 
 .camelot-cyber-app .btn-secondary:hover {
-  background: rgba(15, 23, 42, 0.85);
-  box-shadow: var(--camelot-cyber-glow-teal);
+  background: rgba(30, 58, 138, 0.2);
+  border-color: #60a5fa;
 }
 
 

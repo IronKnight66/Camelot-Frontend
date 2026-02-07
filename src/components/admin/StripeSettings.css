@@ -158,15 +158,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
+  background: #2563eb;
   color: white;
-  border-color: var(--camelot-navy);
+  border-color: #2563eb;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--camelot-navy) 0%, #000060 100%);
-  transform: translateY(-2px);
-  box-shadow: var(--camelot-shadow-md);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 .btn-primary:disabled {

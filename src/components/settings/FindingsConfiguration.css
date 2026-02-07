@@ -109,45 +109,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.levels-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--camelot-font-body);
-}
-
-.levels-table thead {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: white;
-}
-
-.levels-table th {
-  font-family: var(--camelot-font-heading);
-  padding: 14px 12px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-  border-bottom: none;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.levels-table tbody tr {
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-  transition: background-color 0.2s ease;
-}
-
-.levels-table tbody tr:hover {
-  background: #334155;
-}
-
+/* levels-table base in unified-tables.css */
 .levels-table tbody tr.inactive-row {
   opacity: 0.5;
-}
-
-.levels-table td {
-  padding: 12px;
-  color: #e2e8f0;
-  font-size: 14px;
 }
 
 .value-cell {

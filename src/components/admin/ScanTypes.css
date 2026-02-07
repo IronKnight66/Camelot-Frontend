@@ -35,55 +35,14 @@
   overflow-x: auto;
   margin-top: 2rem;
   background: #1e293b !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-radius: var(--camelot-radius-lg);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* scan-types-table base in unified-tables.css */
 .scan-types-table {
-  width: 100%;
-  border-collapse: collapse;
   min-width: 800px;
-  background: #1e293b !important;
-}
-
-.scan-types-table thead {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: white;
-}
-
-.scan-types-table th {
-  padding: 16px;
-  text-align: left;
-  font-weight: 700;
-  font-family: var(--camelot-font-heading);
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 13px;
-  border-bottom: none;
-}
-
-.scan-types-table td {
-  padding: 16px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-  vertical-align: middle;
-  font-family: var(--camelot-font-body);
-  color: #e2e8f0;
-  background: #1e293b !important;
-}
-
-.scan-types-table tbody tr:hover td {
-  background: #334155 !important;
-}
-
-.scan-types-table tbody tr.inactive td {
-  opacity: 0.6;
-  background: var(--camelot-aged-parchment);
-}
-
-.scan-types-table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 .scan-types-table code.internal-name {

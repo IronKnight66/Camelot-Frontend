@@ -346,11 +346,14 @@ const Assets: React.FC = () => {
   return (
     <Layout>
       <div className="assets-container">
-        <div className="assets-header">
-          <h1>⚔️ Asset Management</h1>
-          <button className="btn-create-asset" onClick={() => setShowCreateModal(true)}>
-            + Create Asset
-          </button>
+        <div className="assets-header page-header">
+          <h1 style={{ color: '#ffffff' }}>Asset Management</h1>
+          <p>Register and manage assets for security assessments</p>
+          <div className="assets-header-actions">
+            <button className="btn-create-asset" onClick={() => setShowCreateModal(true)}>
+              Create Asset
+            </button>
+          </div>
         </div>
 
         {/* Filters */}

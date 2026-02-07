@@ -215,8 +215,8 @@ const Assessment: React.FC = () => {
   return (
     <Layout>
       <div className="assessment-container">
-        <div className="assessment-header">
-          <h1>New Assessment</h1>
+        <div className="assessment-header page-header">
+          <h1 style={{ color: '#ffffff' }}>New Assessment</h1>
           <p>Configure and launch a comprehensive security assessment</p>
         </div>
 

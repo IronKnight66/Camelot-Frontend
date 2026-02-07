@@ -283,8 +283,8 @@ const LLMLogs: React.FC = () => {
   return (
     <Layout>
       <div className="llm-logs-container">
-        <div className="llm-logs-header">
-          <h1>LLM Message History</h1>
+        <div className="llm-logs-header page-header">
+          <h1 style={{ color: '#ffffff' }}>LLM Message History</h1>
           <p className="subtitle">
             View all AI interactions from AWS Bedrock, Agent Core, and other providers
           </p>

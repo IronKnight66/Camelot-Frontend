@@ -1,17 +1,14 @@
 /* Assessment Wizard - Dark Theme */
 
-/* Round Table Step Indicator */
+/* Step Indicator */
 .step-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px 0 50px;
-  padding: 30px 0;
-  background: #1e293b !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 32px 0 40px;
+  padding: 24px 0;
+  background: transparent;
+  border: none;
 }
 
 .step-item {
@@ -22,68 +19,62 @@
 }
 
 .step-number {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #0f172a;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #334155;
   color: #94a3b8;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 15px;
   font-family: inherit;
   transition: all 0.2s ease;
-  border: 3px solid rgba(56, 189, 248, 0.3);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #475569;
 }
 
 .step-item.active .step-number {
-  background: #38bdf8;
-  color: #0f172a;
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2), 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform: scale(1.1);
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
 .step-item.completed .step-number {
-  background: rgba(34, 197, 94, 0.3);
-  color: #4ade80;
-  border-color: rgba(34, 197, 94, 0.5) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.5);
 }
 
 .step-label {
-  margin-top: 12px;
-  font-size: 13px;
+  margin-top: 10px;
+  font-size: 12px;
   color: #94a3b8;
-  font-weight: 600;
+  font-weight: 500;
   font-family: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.02em;
 }
 
 .step-item.active .step-label {
-  color: #38bdf8;
-  font-weight: 700;
+  color: #60a5fa;
+  font-weight: 600;
 }
 
 .step-item.completed .step-label {
-  color: #4ade80;
+  color: #22c55e;
 }
 
 .step-connector {
-  width: 100px;
-  height: 3px;
-  background: rgba(56, 189, 248, 0.3);
-  margin: 0 20px;
+  width: 80px;
+  height: 2px;
+  background: #334155;
+  margin: 0 16px;
   transition: all 0.2s ease;
   position: relative;
 }
 
 .step-connector.completed {
-  background: linear-gradient(90deg, rgba(34, 197, 94, 0.5) 0%, rgba(34, 197, 94, 0.7) 100%);
-  box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.5);
 }
 
 /* Quest Content */
@@ -97,19 +88,18 @@
 }
 
 .step-header {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2) !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #334155 !important;
 }
 
 .step-header h2 {
   color: #e2e8f0;
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 600;
   font-family: inherit;
-  margin: 0 0 10px 0;
-  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.02em;
 }
 
 .step-header p {
@@ -128,11 +118,10 @@
   display: block;
   margin-bottom: 8px;
   color: #94a3b8;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 13px;
   font-family: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.02em;
 }
 
 .required {
@@ -142,11 +131,10 @@
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  padding: 10px 14px;
+  border: 1px solid #334155 !important;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 15px;
   font-family: inherit;
   background-color: #0f172a;
   color: #e2e8f0;
@@ -157,8 +145,8 @@
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
   background-color: #1e293b;
 }
 
@@ -180,127 +168,114 @@
 .step-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 40px;
-  padding-top: 30px;
-  border-top: 1px solid rgba(56, 189, 248, 0.2) !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #334155 !important;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 12px 24px;
+  padding: 10px 20px;
   border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: var(--camelot-font-heading);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--camelot-font-ui, inherit);
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: #f9fafb;
-  border-color: #b91c1c;
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
-  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 .btn-secondary {
   background: #334155;
   color: #e2e8f0;
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-color: #475569;
 }
 
 .btn-secondary:hover {
   background: #475569;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: #64748b;
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: #f9fafb;
-  border-color: #b91c1c;
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }
 
 .btn-submit:hover {
-  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
-  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 .btn-add {
   padding: 8px 16px;
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: #f9fafb;
-  border: 1px solid #b91c1c;
-  border-radius: 999px;
-  font-size: 14px;
-  font-family: var(--camelot-font-heading);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  background: #2563eb;
+  color: white;
+  border: 1px solid #2563eb;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--camelot-font-ui, inherit);
+  font-weight: 500;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
 }
 
 .btn-add:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
+  background: #1d4ed8;
+  border-color: #1d4ed8;
 }
 
 .btn-remove {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  background: #475569;
   color: white;
-  border: 1px solid #b91c1c;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  border: 1px solid #64748b;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 1;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(248, 113, 113, 0.5);
 }
 
 .btn-remove:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.8);
+  background: #64748b;
+  border-color: #94a3b8;
 }
 
 /* Sections - Quest Configuration Areas */
 .section {
-  margin-bottom: 40px;
-  padding: 24px;
-  background: #0f172a !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  margin-bottom: 32px;
+  padding: 20px 24px;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .section h3 {
   color: #e2e8f0;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   font-family: inherit;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 0 20px 0;
+  letter-spacing: 0.02em;
+  margin: 0 0 16px 0;
 }
 
 /* Endpoints List - Quest Targets */
@@ -312,18 +287,15 @@
 
 .endpoint-item {
   background: #0f172a !important;
-  padding: 16px;
+  padding: 14px 16px;
   border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .endpoint-item:hover {
-  border-color: var(--camelot-royal-blue);
-  box-shadow: 0 2px 8px rgba(65, 105, 225, 0.15), var(--camelot-shadow-sm);
-  transform: translateY(-1px);
+  border-color: #475569;
+  background: #1e293b !important;
 }
 
 .endpoint-row {
@@ -374,8 +346,7 @@
 
 .attackable-dropdown {
   padding: 8px 12px;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
@@ -388,8 +359,8 @@
 
 .attackable-dropdown:focus {
   outline: none;
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
   background: #1e293b;
 }
 
@@ -426,18 +397,15 @@
 
 .tool-item {
   background: #0f172a !important;
-  padding: 16px;
+  padding: 14px 16px;
   border-radius: 6px;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tool-item:hover {
-  border-color: var(--camelot-royal-blue);
-  box-shadow: 0 2px 8px rgba(65, 105, 225, 0.15), var(--camelot-shadow-sm);
-  transform: translateY(-1px);
+  border-color: #475569;
+  background: #1e293b !important;
 }
 
 .tool-checkbox {
@@ -477,13 +445,11 @@
 
 /* Tool Settings - Weapon Configuration */
 .tool-settings-card {
-  background: #0f172a !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
   border-radius: 6px;
   margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .tool-settings-header {
@@ -1568,36 +1534,12 @@
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
+/* credentials-table base in unified-tables.css */
 .credentials-table {
   overflow-x: auto;
-}
-
-.credentials-table table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.credentials-table th {
-  text-align: left;
-  padding: 10px 12px;
-  background: rgba(30, 41, 59, 0.8);
-  color: #94a3b8;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 11px;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid rgba(248, 113, 113, 0.3);
-}
-
-.credentials-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
-  color: #e2e8f0;
-}
-
-.credentials-table tr:hover td {
-  background: rgba(51, 65, 85, 0.3);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background: #1e293b;
 }
 
 .cred-email {

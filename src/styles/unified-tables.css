@@ -1,0 +1,233 @@
+/**
+ * Unified table styles – all data tables share the same look.
+ * Dark theme: #334155 header, #1e293b body, #e2e8f0 text.
+ */
+
+/* ========== Table wrappers ========== */
+.findings-table-wrapper,
+.scans-table-wrapper,
+.tanstack-table-wrapper,
+.logs-table-container,
+.levels-table-wrapper,
+.table-wrapper {
+  overflow-x: auto;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.findings-table-wrapper,
+.scans-table-wrapper {
+  margin-bottom: 24px;
+}
+
+.tanstack-table-wrapper {
+  position: relative;
+}
+
+/* ========== Base table ========== */
+.findings-table,
+.scans-table,
+.assets-table,
+.llm-logs-table,
+.plans-table,
+.scan-types-table,
+.system-prompts-table,
+.tenant-scanners-table,
+.scanner-tools-table,
+.logs-table,
+.breakdown-table,
+.levels-table,
+.invoices-table table,
+.settings-users-table table,
+.settings-tenants-table table,
+.users-table table,
+.tenants-table table,
+.credentials-table table,
+.super-admin-content .tenant-scanners-table,
+.super-admin-content .scanner-tools-table,
+.super-admin-content .scan-types-table,
+.super-admin-content .system-prompts-table,
+.super-admin-content .plans-table,
+.super-admin-content .tenants-table,
+.super-admin-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  font-size: 14px;
+  background: #1e293b;
+}
+
+/* ========== Header ========== */
+.findings-table thead,
+.scans-table thead,
+.assets-table thead,
+.llm-logs-table thead,
+.plans-table thead,
+.scan-types-table thead,
+.system-prompts-table thead,
+.tenant-scanners-table thead,
+.scanner-tools-table thead,
+.logs-table thead,
+.breakdown-table thead,
+.levels-table thead,
+.invoices-table table thead,
+.settings-users-table table thead,
+.settings-tenants-table table thead,
+.users-table table thead,
+.tenants-table table thead,
+.credentials-table table thead,
+.super-admin-content table thead {
+  background: #334155;
+}
+
+.findings-table th,
+.scans-table th,
+.assets-table th,
+.llm-logs-table th,
+.plans-table th,
+.scan-types-table th,
+.system-prompts-table th,
+.tenant-scanners-table th,
+.scanner-tools-table th,
+.logs-table th,
+.breakdown-table th,
+.levels-table th,
+.invoices-table table th,
+.settings-users-table table th,
+.settings-tenants-table table th,
+.users-table table th,
+.tenants-table table th,
+.credentials-table table th,
+.super-admin-content table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid #475569;
+}
+
+/* Sortable header (cursor only – keep component sort indicators) */
+.findings-table th.sortable-header,
+.scans-table th.sortable-header,
+.llm-logs-table th.sortable,
+.logs-table th.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.findings-table th.sortable-header:hover,
+.scans-table th.sortable-header:hover,
+.llm-logs-table th.sortable:hover,
+.logs-table th.sortable-header:hover,
+.assets-table .sortable-header:hover {
+  background: #475569;
+}
+
+/* ========== Body ========== */
+.findings-table tbody tr,
+.scans-table tbody tr,
+.assets-table tbody tr,
+.llm-logs-table tbody tr,
+.plans-table tbody tr,
+.scan-types-table tbody tr,
+.system-prompts-table tbody tr,
+.tenant-scanners-table tbody tr,
+.scanner-tools-table tbody tr,
+.logs-table tbody tr,
+.breakdown-table tbody tr,
+.levels-table tbody tr,
+.invoices-table table tbody tr,
+.settings-users-table table tbody tr,
+.settings-tenants-table table tbody tr,
+.users-table table tbody tr,
+.tenants-table table tbody tr,
+.credentials-table table tbody tr,
+.super-admin-content table tbody tr {
+  border-bottom: 1px solid #1e293b;
+  transition: background-color 0.2s ease;
+  background: #1e293b;
+}
+
+.findings-table tbody tr:hover,
+.scans-table tbody tr:hover,
+.assets-table tbody tr:hover,
+.llm-logs-table tbody tr:hover,
+.plans-table tbody tr:hover,
+.plans-table tbody tr:hover td,
+.scan-types-table tbody tr:hover,
+.scan-types-table tbody tr:hover td,
+.system-prompts-table tbody tr:hover td,
+.tenant-scanners-table tbody tr:hover td,
+.scanner-tools-table tbody tr:hover td,
+.logs-table tbody tr:hover,
+.breakdown-table tbody tr:hover,
+.levels-table tbody tr:hover,
+.invoices-table table tbody tr:hover td,
+.settings-users-table table tr:hover td,
+.settings-tenants-table table tr:hover td,
+.users-table table tbody tr:hover td,
+.users-table tr:hover td,
+.tenants-table table tbody tr:hover td,
+.tenants-table tbody tr:hover td,
+.credentials-table table tbody tr:hover td,
+.super-admin-content table tbody tr:hover td {
+  background: #334155;
+}
+
+.findings-table tbody tr:last-child,
+.scans-table tbody tr:last-child,
+.system-prompts-table tbody tr:last-child td,
+.tenant-scanners-table tbody tr:last-child td,
+.scanner-tools-table tbody tr:last-child td,
+.settings-tenants-table table tr:last-child td {
+  border-bottom: none;
+}
+
+.findings-table td,
+.scans-table td,
+.assets-table td,
+.llm-logs-table td,
+.plans-table td,
+.scan-types-table td,
+.system-prompts-table td,
+.tenant-scanners-table td,
+.scanner-tools-table td,
+.logs-table td,
+.breakdown-table td,
+.levels-table td,
+.invoices-table table td,
+.settings-users-table table td,
+.settings-tenants-table table td,
+.users-table table td,
+.tenants-table table td,
+.credentials-table table td,
+.super-admin-content table td {
+  padding: 12px 14px;
+  color: #e2e8f0;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+/* Sticky header for long lists (e.g. LLM Logs) */
+.llm-logs-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Inactive / muted rows */
+.plans-table tbody tr.inactive-row,
+.scan-types-table tbody tr.inactive td,
+.levels-table tbody tr.inactive-row {
+  opacity: 0.6;
+}
+
+.plans-table tbody tr.inactive-row td,
+.scan-types-table tbody tr.inactive td {
+  background: #0f172a;
+}

@@ -1,6 +1,7 @@
 /* Import Camelot themes */
 @import './styles/camelot-theme.css';
 @import './styles/camelot-cyberpunk-theme.css';
+@import './styles/unified-tables.css';
 
 body {
   margin: 0;
@@ -11,4 +12,27 @@ body {
 
 code {
   font-family: var(--camelot-font-mono);
+}
+
+/* Unified page headers - same alignment and typography across all main pages */
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.page-header h1 {
+  font-family: var(--camelot-font-ui, inherit);
+  font-weight: 600;
+  color: #ffffff !important;
+  font-size: 28px;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.02em;
+}
+
+.page-header p,
+.page-header .subtitle {
+  font-family: var(--camelot-font-ui, inherit);
+  font-size: 15px;
+  color: #94a3b8;
+  margin: 0;
 }

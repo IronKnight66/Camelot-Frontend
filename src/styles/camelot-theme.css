@@ -81,6 +81,7 @@
   --camelot-font-display: 'MedievalSharp', 'Cinzel', serif;
   --camelot-font-heading: 'Cinzel', serif;
   --camelot-font-body: 'Crimson Text', Georgia, serif;
+  --camelot-font-ui: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --camelot-font-mono: 'Courier New', monospace;
 
   --camelot-text-xs: 11px;
@@ -103,7 +104,7 @@
    ===================================================== */
 
 body {
-  font-family: var(--camelot-font-body);
+  font-family: var(--camelot-font-ui);
   font-size: var(--camelot-text-base);
   line-height: 1.6;
   color: var(--camelot-black-knight);
@@ -111,7 +112,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--camelot-font-heading);
+  font-family: var(--camelot-font-ui);
   font-weight: 600;
   line-height: 1.3;
   color: var(--camelot-black-knight);

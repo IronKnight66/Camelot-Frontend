@@ -1,163 +1,107 @@
-/* src/components/Login.css - Camelot Castle Gate Theme */
+/* src/components/Login.css - Dark theme aligned with app */
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  /* Castle stone wall texture with dramatic gradient */
-  background:
-    radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(139, 69, 19, 0.1) 0%, transparent 50%),
-    linear-gradient(180deg, var(--camelot-charcoal) 0%, var(--camelot-stone-gray) 50%, var(--camelot-charcoal) 100%);
-  /* Uncomment below when you download the castle gate background image (see public/assets/ASSETS_README.md) */
-  /* background-image: url('/assets/illustrations/castle-gate-bg.jpg'); */
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-blend-mode: multiply; */
+  background: #020617;
+  background-image: linear-gradient(180deg, #0f172a 0%, #020617 100%);
   padding: 20px;
   position: relative;
-  overflow: hidden;
-}
-
-/* Castle gate archway effect */
-.login-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    /* Torch light effects from sides */
-    radial-gradient(ellipse at 10% 50%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
-    radial-gradient(ellipse at 90% 50%, rgba(255, 140, 0, 0.15) 0%, transparent 30%),
-    /* Dark vignette */
-    radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
-  z-index: 0;
-}
-
-/* Castle stones pattern */
-.login-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 100px,
-      rgba(139, 69, 19, 0.05) 100px,
-      rgba(139, 69, 19, 0.05) 102px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 150px,
-      rgba(139, 69, 19, 0.05) 150px,
-      rgba(139, 69, 19, 0.05) 152px
-    );
-  z-index: 0;
-  pointer-events: none;
 }
 
 .login-card {
-  background: var(--camelot-aged-parchment);
-  border: 3px solid var(--camelot-dark-gold);
-  border-radius: var(--camelot-radius-xl);
-  box-shadow: var(--camelot-shadow-xl);
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
   padding: 40px;
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
   position: relative;
   z-index: 1;
 }
 
 .login-card h2 {
   text-align: center;
-  margin-bottom: 30px;
-  color: var(--camelot-crimson-dark);
-  font-size: 36px;
-  font-weight: 700;
-  font-family: var(--camelot-font-display);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-  letter-spacing: 1px;
+  margin-bottom: 24px;
+  color: #f9fafb;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  letter-spacing: 0.02em;
 }
 
 .login-card p {
   text-align: center;
-  color: var(--camelot-charcoal);
+  color: #94a3b8;
   margin-bottom: 20px;
   line-height: 1.6;
-  font-family: var(--camelot-font-body);
+  font-size: 14px;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 8px;
-  color: var(--camelot-black-knight);
-  font-weight: 600;
-  font-size: 14px;
-  font-family: var(--camelot-font-heading);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 13px;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  letter-spacing: 0.02em;
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--camelot-dark-gold);
-  border-radius: var(--camelot-radius-md);
-  font-size: 16px;
-  font-family: var(--camelot-font-body);
-  background-color: var(--camelot-parchment);
-  color: var(--camelot-black-knight);
-  transition: all var(--camelot-transition-base);
+  padding: 12px 14px;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  background: #1e293b;
+  color: #f9fafb;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
-  box-shadow: var(--camelot-shadow-engrave);
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: var(--camelot-royal-blue);
-  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15), var(--camelot-shadow-engrave);
-  background-color: white;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.form-group input::placeholder {
+  color: #64748b;
 }
 
 button[type="submit"] {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--camelot-crimson) 0%, var(--camelot-crimson-dark) 100%);
-  color: white;
-  border: 2px solid var(--camelot-crimson-dark);
-  border-radius: var(--camelot-radius-md);
-  font-size: 16px;
-  font-weight: 700;
-  font-family: var(--camelot-font-heading);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 12px 16px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all var(--camelot-transition-base);
-  margin-bottom: 20px;
-  box-shadow: var(--camelot-shadow-md);
+  transition: background 0.2s ease;
+  margin-bottom: 16px;
 }
 
 button[type="submit"]:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: var(--camelot-shadow-lg);
-  background: linear-gradient(135deg, var(--camelot-crimson-dark) 0%, #660000 100%);
+  background: #1d4ed8;
 }
 
 button[type="submit"]:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
 .form-links {
@@ -167,19 +111,19 @@ button[type="submit"]:disabled {
 .link-button {
   background: none;
   border: none;
-  color: var(--camelot-royal-blue);
+  color: #60a5fa;
   cursor: pointer;
   font-size: 14px;
-  font-family: var(--camelot-font-body);
-  text-decoration: underline;
-  margin: 5px 0;
-  padding: 5px;
-  transition: color var(--camelot-transition-base);
-  font-weight: 600;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  text-decoration: none;
+  margin: 4px 0;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+  font-weight: 500;
 }
 
 .link-button:hover {
-  color: var(--camelot-navy);
+  color: #93c5fd;
 }
 
 .link-button:disabled {
@@ -188,28 +132,26 @@ button[type="submit"]:disabled {
 }
 
 .error {
-  background: var(--camelot-danger-bg);
-  color: var(--camelot-crimson-dark);
-  padding: 12px;
-  border-radius: var(--camelot-radius-md);
-  margin-bottom: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin-bottom: 18px;
   font-size: 14px;
-  font-family: var(--camelot-font-body);
-  border: 2px solid var(--camelot-danger-border);
-  font-weight: 600;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Responsive design */
 @media (max-width: 480px) {
   .login-container {
-    padding: 10px;
+    padding: 16px;
   }
-  
+
   .login-card {
-    padding: 30px 20px;
+    padding: 28px 20px;
   }
-  
+
   .login-card h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
 }

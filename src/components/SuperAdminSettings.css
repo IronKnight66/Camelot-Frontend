@@ -17,7 +17,7 @@
   width: 280px;
   min-width: 280px;
   background: #0f172a;
-  border-right: 1px solid rgba(56, 189, 248, 0.2);
+  border-right: 1px solid #334155;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -25,15 +25,16 @@
 
 .super-admin-sidebar-header {
   padding: 24px 20px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  border-bottom: 1px solid #334155;
 }
 
 .super-admin-sidebar-header h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   color: #e2e8f0;
-  font-family: var(--camelot-font-heading, inherit);
+  font-family: var(--camelot-font-ui, inherit);
+  letter-spacing: 0.02em;
 }
 
 .super-admin-menu {
@@ -61,14 +62,14 @@
 }
 
 .super-admin-menu-item:hover {
-  background: rgba(56, 189, 248, 0.05);
+  background: rgba(51, 65, 85, 0.5);
   color: #e2e8f0;
 }
 
 .super-admin-menu-item.active {
-  background: rgba(56, 189, 248, 0.1);
-  color: #38bdf8;
-  border-left-color: #38bdf8;
+  background: rgba(37, 99, 235, 0.12);
+  color: #60a5fa;
+  border-left-color: #2563eb;
   font-weight: 600;
 }
 
@@ -223,7 +224,7 @@
   width: 100%;
   -webkit-overflow-scrolling: touch;
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
 }
 
 .super-admin-content .table-wrapper table,
@@ -233,65 +234,19 @@
   background: #1e293b !important;
 }
 
-.super-admin-content .tenant-scanners-table thead {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .tenant-scanners-table th {
-  color: #94a3b8 !important;
-  background: #0f172a !important;
-}
-
-.super-admin-content .tenant-scanners-table td {
-  color: #e2e8f0 !important;
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
-}
-
-.super-admin-content .tenant-scanners-table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05) !important;
-}
-
 .super-admin-content .tenant-scanners-table code.docker-image,
 .super-admin-content .scanner-tools-table code.docker-image {
   background: #0f172a !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-/* Global Scanner Registry table dark theme */
-.super-admin-content .scanner-tools-table {
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-.super-admin-content .scanner-tools-table thead {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .scanner-tools-table th {
-  color: #94a3b8 !important;
-  background: #0f172a !important;
-}
-
-.super-admin-content .scanner-tools-table td {
-  color: #e2e8f0 !important;
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
-}
-
-.super-admin-content .scanner-tools-table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05) !important;
+  color: #60a5fa !important;
+  border: 1px solid #334155 !important;
 }
 
 /* Badge styles for dark theme */
 .super-admin-content .category-badge,
 .super-admin-content .status-badge {
-  background: rgba(56, 189, 248, 0.2) !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: #334155 !important;
+  color: #60a5fa !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .status-badge.active {
@@ -309,38 +264,18 @@
 /* Scan Types table dark theme */
 .super-admin-content .scan-types-table {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-.super-admin-content .scan-types-table thead {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .scan-types-table th {
-  color: #94a3b8 !important;
-  background: #0f172a !important;
-}
-
-.super-admin-content .scan-types-table td {
-  color: #e2e8f0 !important;
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
-}
-
-.super-admin-content .scan-types-table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .scan-types-table tbody tr.inactive td {
   opacity: 0.6;
-  background: #1e293b !important;
+  background: #0f172a !important;
 }
 
 .super-admin-content .scan-types-table code.internal-name {
   background: #0f172a !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #60a5fa !important;
+  border: 1px solid #334155 !important;
 }
 
 /* System Prompts - Complete dark theme override */
@@ -357,7 +292,7 @@
 
 .super-admin-content .system-prompts-container .tabs {
   background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .system-prompts-container .tab {
@@ -366,14 +301,14 @@
 }
 
 .super-admin-content .system-prompts-container .tab:hover {
-  background: rgba(56, 189, 248, 0.1) !important;
+  background: rgba(51, 65, 85, 0.5) !important;
   color: #e2e8f0 !important;
 }
 
 .super-admin-content .system-prompts-container .tab.active {
-  background: rgba(56, 189, 248, 0.2) !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+  color: #60a5fa !important;
+  border-color: #2563eb !important;
 }
 
 .super-admin-content .system-prompts-container .tenant-selector label,
@@ -385,12 +320,12 @@
 .super-admin-content .system-prompts-container .prompt-type-filter-select {
   background: #0f172a !important;
   color: #e2e8f0 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .system-prompts-container .prompts-section {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .system-prompts-container .section-header h2 {
@@ -398,19 +333,20 @@
 }
 
 .super-admin-content .system-prompts-container .btn-primary {
-  background: #38bdf8 !important;
-  color: #0f172a !important;
-  border-color: #38bdf8 !important;
+  background: #2563eb !important;
+  color: white !important;
+  border-color: #2563eb !important;
 }
 
 .super-admin-content .system-prompts-container .btn-primary:hover {
-  background: #0ea5e9 !important;
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
 }
 
 .super-admin-content .system-prompts-container .btn-secondary {
   background: #334155 !important;
   color: #e2e8f0 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #475569 !important;
 }
 
 .super-admin-content .system-prompts-container .btn-secondary:hover {
@@ -420,33 +356,12 @@
 /* System Prompts table dark theme */
 .super-admin-content .table-wrapper {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .system-prompts-table {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-.super-admin-content .system-prompts-table thead {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .system-prompts-table th {
-  color: #94a3b8 !important;
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .system-prompts-table td {
-  color: #e2e8f0 !important;
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
-}
-
-.super-admin-content .system-prompts-table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .system-prompts-table .prompt-text-preview {
@@ -457,8 +372,8 @@
 
 .super-admin-content .system-prompts-table .prompt-type-badge {
   color: white !important;
-  border: 1px solid rgba(56, 189, 248, 0.5) !important;
-  background: rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #2563eb !important;
+  background: #334155 !important;
 }
 
 .super-admin-content .system-prompts-table .status-badge.active {
@@ -537,84 +452,44 @@
 .super-admin-content .plans-table-container *,
 .super-admin-content .plan-form-container,
 .super-admin-content .plan-form-container * {
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .plans-table-container {
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   background: #1e293b !important;
 }
 
-.super-admin-content .plans-table thead {
-  border-bottom-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .plans-table td {
-  border-bottom-color: rgba(56, 189, 248, 0.1) !important;
-}
-
 .super-admin-content .plan-form-container {
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   background: #1e293b !important;
 }
 
 .super-admin-content .plan-form-container h3 {
-  border-bottom-color: rgba(56, 189, 248, 0.2) !important;
+  border-bottom-color: #334155 !important;
 }
 
 .super-admin-content .form-section {
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   background: #0f172a !important;
 }
 
 .super-admin-content .form-input,
 .super-admin-content .form-select,
 .super-admin-content .form-textarea {
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: 1px solid #334155 !important;
   background: #0f172a !important;
   color: #e2e8f0 !important;
 }
 
 .super-admin-content .form-actions {
-  border-top-color: rgba(56, 189, 248, 0.2) !important;
+  border-top-color: #334155 !important;
 }
 
 .super-admin-content .stripe-price-id {
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
   background: #0f172a !important;
   color: #94a3b8 !important;
-}
-
-/* Tables - Dark theme */
-.super-admin-content .tenants-table,
-.super-admin-content table {
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-}
-
-.super-admin-content .tenants-table thead,
-.super-admin-content table thead {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .tenants-table th,
-.super-admin-content table th {
-  color: #94a3b8 !important;
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
-}
-
-.super-admin-content .tenants-table td,
-.super-admin-content table td {
-  color: #e2e8f0 !important;
-  background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.1) !important;
-}
-
-.super-admin-content .tenants-table tbody tr:hover td,
-.super-admin-content table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05) !important;
 }
 
 /* Cards and containers - Dark theme */
@@ -626,7 +501,7 @@
 .super-admin-content .plan-card,
 .super-admin-content .prompt-card {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
   color: #e2e8f0 !important;
 }
 
@@ -649,9 +524,9 @@
 
 .super-admin-content .status-badge,
 .super-admin-content .badge {
-  background: rgba(56, 189, 248, 0.2) !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: #334155 !important;
+  color: #60a5fa !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .status-badge.active {
@@ -671,15 +546,15 @@
 .super-admin-content textarea,
 .super-admin-content select {
   background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  border-color: #334155 !important;
   color: #e2e8f0 !important;
 }
 
 .super-admin-content input:focus,
 .super-admin-content textarea:focus,
 .super-admin-content select:focus {
-  border-color: #38bdf8 !important;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1) !important;
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 3px rgba(51, 65, 85, 0.5) !important;
 }
 
 .super-admin-content input::placeholder,
@@ -690,26 +565,26 @@
 /* Buttons - Dark theme */
 .super-admin-content .btn,
 .super-admin-content button:not(.super-admin-menu-item) {
-  background: rgba(56, 189, 248, 0.2) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-  color: #38bdf8 !important;
+  background: #334155 !important;
+  border-color: #334155 !important;
+  color: #60a5fa !important;
 }
 
 .super-admin-content .btn:hover,
 .super-admin-content button:not(.super-admin-menu-item):hover {
-  background: rgba(56, 189, 248, 0.3) !important;
-  border-color: rgba(56, 189, 248, 0.5) !important;
+  background: #475569 !important;
+  border-color: #64748b !important;
 }
 
 .super-admin-content .btn-primary {
-  background: #38bdf8 !important;
-  border-color: #38bdf8 !important;
-  color: #0f172a !important;
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: white !important;
 }
 
 .super-admin-content .btn-primary:hover {
-  background: #0ea5e9 !important;
-  border-color: #0ea5e9 !important;
+  background: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
 }
 
 .super-admin-content .btn-danger {
@@ -736,11 +611,11 @@
 
 /* Links - Dark theme */
 .super-admin-content a {
-  color: #38bdf8 !important;
+  color: #60a5fa !important;
 }
 
 .super-admin-content a:hover {
-  color: #0ea5e9 !important;
+  color: #93c5fd !important;
 }
 
 /* Error and success messages - Dark theme */
@@ -760,17 +635,17 @@
 }
 
 .super-admin-content .alert-info {
-  background: rgba(56, 189, 248, 0.2) !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
-  color: #38bdf8 !important;
+  background: #334155 !important;
+  border-color: #334155 !important;
+  color: #60a5fa !important;
 }
 
 /* Code and pre elements - Dark theme */
 .super-admin-content code,
 .super-admin-content pre {
   background: #0f172a !important;
-  color: #38bdf8 !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: #334155 !important;
 }
 
 /* Empty states - Dark theme */
@@ -789,32 +664,32 @@
 }
 
 .super-admin-content .modal-content {
-  background: #0f172a !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  background: #1e293b !important;
+  border-color: #334155 !important;
   color: #e2e8f0 !important;
 }
 
 /* Tabs - Dark theme */
 .super-admin-content .tabs,
 .super-admin-content .tab-list {
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .tab {
   color: #94a3b8 !important;
-  border-color: rgba(56, 189, 248, 0.2) !important;
+  border-color: #334155 !important;
 }
 
 .super-admin-content .tab.active {
-  background: rgba(56, 189, 248, 0.1) !important;
-  color: #38bdf8 !important;
-  border-color: #38bdf8 !important;
+  background: rgba(51, 65, 85, 0.5) !important;
+  color: #60a5fa !important;
+  border-color: #60a5fa !important;
 }
 
 /* Tooltips - Dark theme */
 .super-admin-content .tooltip {
   background: #1e293b !important;
-  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-color: #334155 !important;
   color: #e2e8f0 !important;
 }
 
@@ -823,9 +698,9 @@
   margin: 60px auto;
   padding: 40px;
   text-align: center;
-  background: #0f172a;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 12px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
 }
 
 .super-admin-access-denied h1 {
@@ -849,7 +724,7 @@
     width: 100%;
     min-width: 100%;
     border-right: none;
-    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    border-bottom: 1px solid #334155;
   }
 
   .super-admin-menu {
@@ -868,7 +743,7 @@
 
   .super-admin-menu-item.active {
     border-left: none;
-    border-bottom-color: #38bdf8;
+    border-bottom-color: #2563eb;
   }
 
   .super-admin-menu-label {

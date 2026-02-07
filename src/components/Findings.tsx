@@ -748,8 +748,8 @@ const Findings: React.FC = () => {
   return (
     <Layout>
       <div className="findings-container">
-        <div className="findings-header">
-          <h1>Security Findings</h1>
+        <div className="findings-header page-header">
+          <h1 style={{ color: '#ffffff' }}>Security Findings</h1>
           <p>Manage and track security vulnerabilities discovered during scans</p>
         </div>
 

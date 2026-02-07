@@ -2,9 +2,7 @@
 .layout-container {
   min-height: 100vh;
   background-color: #020617;
-  background-image:
-    radial-gradient(circle at top left, #0f172a 0%, #020617 55%),
-    radial-gradient(circle at bottom right, #020617 0%, #020617 60%);
+  background-image: linear-gradient(180deg, #0f172a 0%, #020617 100%);
   color: #e5e7eb;
 }
 
@@ -17,31 +15,12 @@
 }
 
 .layout-header {
-  background: radial-gradient(circle at top, #0b1120 0%, #020617 65%);
-  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.9);
+  background: #0f172a;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
   padding: 0 20px;
   position: relative;
   z-index: 1000; /* Ensure header is above chatbot sidebar */
-  border-bottom: 1px solid #22d3ee;
-}
-
-/* Castle battlement pattern at bottom of header */
-.layout-header::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  right: 0;
-  height: 10px;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(34, 211, 238, 0.7),
-      rgba(129, 140, 248, 0.7),
-      rgba(248, 113, 113, 0.7)
-    );
-  opacity: 0.6;
-  z-index: 1;
+  border-bottom: 1px solid #334155;
 }
 
 /* Slimmer header for hero/minimal mode */
@@ -68,18 +47,17 @@
 }
 
 .logo-link h1 {
-  color: #e5e7eb;
+  color: #ffffff;
   margin: 0;
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 600;
-  font-family: var(--camelot-font-display);
-  text-shadow: 0 8px 30px rgba(15, 23, 42, 0.9);
-  letter-spacing: 1px;
-  transition: color var(--camelot-transition-base);
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
 }
 
 .logo-link h1:hover {
-  color: #38bdf8;
+  color: #60a5fa;
 }
 
 .main-nav {
@@ -91,31 +69,28 @@
 }
 
 .nav-link {
-  color: #e5e7eb;
+  color: #94a3b8;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: var(--camelot-font-heading);
-  padding: 10px 18px;
-  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  padding: 8px 14px;
+  border-radius: 6px;
   transition: all var(--camelot-transition-base);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.02em;
   border: 1px solid transparent;
   position: relative;
 }
 
 .nav-link:hover {
-  background: rgba(30, 64, 175, 0.6);
+  background: rgba(51, 65, 85, 0.5);
   color: #e5e7eb;
-  border-color: rgba(56, 189, 248, 0.6);
 }
 
 .nav-link.active {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: #f9fafb;
-  border-color: #fb923c;
-  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
+  color: #e5e7eb;
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
 .user-info {
@@ -154,25 +129,23 @@
 }
 
 .sign-out-btn {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: #f9fafb;
-  border: 1px solid #b91c1c;
-  padding: 10px 18px;
-  border-radius: 999px;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
-  font-family: var(--camelot-font-heading);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: 13px;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  font-weight: 500;
+  letter-spacing: 0.02em;
   transition: all var(--camelot-transition-base);
-  box-shadow: 0 10px 30px rgba(248, 113, 113, 0.5);
 }
 
 .sign-out-btn:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #b91c1c 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 14px 40px rgba(248, 113, 113, 0.8);
+  background: rgba(71, 85, 105, 0.3);
+  color: #e5e7eb;
+  border-color: #64748b;
 }
 
 .layout-main {
@@ -206,11 +179,10 @@
 
 /* Footer */
 .layout-footer {
-  background: radial-gradient(circle at top, #020617 0%, #020617 60%);
-  border-top: 1px solid rgba(148, 163, 184, 0.4);
-  margin-top: 60px;
-  padding: 20px 0;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  background: #020617;
+  border-top: 1px solid #1e293b;
+  margin-top: 48px;
+  padding: 16px 0;
 }
 
 .footer-content {
@@ -222,22 +194,20 @@
 
 .attribution-text {
   margin: 0;
-  color: #9ca3af;
-  font-size: 13px;
-  font-family: var(--camelot-font-body);
-  font-weight: 600;
+  color: #64748b;
+  font-size: 12px;
+  font-family: var(--camelot-font-ui, "Inter", system-ui, sans-serif);
+  font-weight: 400;
 }
 
 .attribution-text a {
-  color: #38bdf8;
+  color: #64748b;
   text-decoration: none;
-  font-weight: 700;
-  transition: color var(--camelot-transition-base);
+  transition: color 0.2s ease;
 }
 
 .attribution-text a:hover {
-  color: #7dd3fc;
-  text-decoration: underline;
+  color: #94a3b8;
 }
 
 /* Responsive design */

@@ -12,59 +12,54 @@
 
 .system-prompts-header h1 {
   margin: 0 0 8px 0;
-  color: var(--camelot-crimson-dark);
-  font-family: var(--camelot-font-heading);
-  font-weight: 700;
-  font-size: 40px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  color: #e2e8f0;
+  font-family: var(--camelot-font-ui, inherit);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: 0.02em;
 }
 
 .system-prompts-header p {
-  color: var(--camelot-charcoal);
+  color: #94a3b8;
   margin: 0;
-  font-family: var(--camelot-font-body);
-  font-size: 18px;
+  font-family: var(--camelot-font-ui, inherit);
+  font-size: 15px;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 30px;
-  background: var(--camelot-aged-parchment);
-  border: 2px solid var(--camelot-dark-gold);
-  border-radius: var(--camelot-radius-lg);
+  gap: 4px;
+  margin-bottom: 24px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
   padding: 6px;
-  box-shadow: var(--camelot-shadow-md);
 }
 
 .tab {
   flex: 1;
-  padding: 12px 20px;
-  border: 2px solid transparent;
+  padding: 10px 18px;
+  border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
   font-size: 14px;
-  font-family: var(--camelot-font-heading);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--camelot-stone-gray);
-  border-radius: var(--camelot-radius-md);
-  transition: all var(--camelot-transition-base);
+  font-family: var(--camelot-font-ui, inherit);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #94a3b8;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .tab:hover {
-  background: var(--camelot-pale-gold);
-  color: var(--camelot-black-knight);
+  background: rgba(51, 65, 85, 0.5);
+  color: #e2e8f0;
 }
 
 .tab.active {
-  background: linear-gradient(135deg, var(--camelot-royal-blue) 0%, var(--camelot-navy) 100%);
-  color: white;
-  border-color: var(--camelot-navy);
-  box-shadow: var(--camelot-shadow-sm);
+  background: rgba(37, 99, 235, 0.12);
+  color: #60a5fa;
+  border-color: rgba(37, 99, 235, 0.3);
 }
 
 .tenant-selector {
@@ -177,52 +172,15 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* system-prompts-table base in unified-tables.css */
 .system-prompts-table {
-  width: 100%;
-  border-collapse: collapse;
   min-width: 1000px;
-  background: #1e293b;
 }
 
 .system-prompts-table th:nth-child(3),
 .system-prompts-table td:nth-child(3) {
   max-width: 200px;
   width: 200px;
-}
-
-.system-prompts-table thead {
-  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-  color: white;
-}
-
-.system-prompts-table th {
-  padding: 12px 16px;
-  text-align: left;
-  font-weight: 600;
-  font-family: inherit;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 12px;
-  border-bottom: none;
-}
-
-.system-prompts-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-  vertical-align: middle;
-  font-family: inherit;
-  color: #e2e8f0;
-  background: #1e293b;
-  font-size: 14px;
-}
-
-.system-prompts-table tbody tr:hover td {
-  background: rgba(56, 189, 248, 0.05);
-}
-
-.system-prompts-table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 .system-prompts-table .prompt-text-preview {
