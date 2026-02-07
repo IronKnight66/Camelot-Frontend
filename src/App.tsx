@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ChatbotProvider } from './contexts/ChatbotContext';
+import { ToastProvider } from './contexts/ToastContext';
+import Toast from './components/Toast';
 import ProtectedRoute from './components/ProtectedRoute';
 import RoleBasedRoute from './components/RoleBasedRoute';
 import Login from './components/Login';
@@ -38,9 +40,11 @@ function App() {
   return (
     <AuthProvider>
       <ChatbotProvider>
-        <Router>
-          <div className="App camelot-cyber-app">
-          <Routes>
+        <ToastProvider>
+          <Router>
+            <div className="App camelot-cyber-app">
+              <Toast />
+              <Routes>
             <Route path="/login" element={<Login />} />
             
             {/* Dashboard */}
@@ -356,9 +360,10 @@ function App() {
             />
 
             <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
-      </Router>
+              </Routes>
+            </div>
+          </Router>
+        </ToastProvider>
       </ChatbotProvider>
     </AuthProvider>
   );

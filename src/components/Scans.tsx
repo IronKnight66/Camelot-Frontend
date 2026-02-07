@@ -724,8 +724,8 @@ const Scans: React.FC = () => {
             <div className="scans-section">
               <h2>Scan Groups</h2>
               {scanParents.length === 0 ? (
-                <div className="empty-state">
-                  <div className="empty-icon">📋</div>
+                <div className="empty-state app-empty-state">
+                  <div className="empty-icon app-empty-state__icon" aria-hidden>📋</div>
                   <h3>No Scan Groups Found</h3>
                   <p>No grouped scans available.</p>
                 </div>

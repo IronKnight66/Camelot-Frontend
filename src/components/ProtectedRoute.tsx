@@ -12,13 +12,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
-        <div>Loading...</div>
+      <div className="app-loading">
+        <div className="app-loading-spinner" aria-hidden />
+        <span className="app-loading-text">Loading...</span>
       </div>
     );
   }

@@ -12,14 +12,9 @@ html, body, #root {
   background-image: none !important;
 }
 
-/* Force dark theme on all tables */
+/* Force dark theme on all tables – no gradients */
 table, thead, tbody, tr, th, td {
   background-image: none !important;
-}
-
-/* Ensure table headers don't have light backgrounds */
-thead, th {
-  background-color: transparent !important;
 }
 
 /* Optional: Add actual castle background image when available */
@@ -59,30 +54,29 @@ code {
 
 /* Global link styles */
 a {
-  color: var(--camelot-royal-blue);
-  transition: color var(--camelot-transition-base);
+  color: #60a5fa;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--camelot-navy);
+  color: #93c5fd;
 }
 
-/* Scrollbar styling for medieval theme */
+/* Scrollbar – dark theme */
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--camelot-parchment);
+  background: #0f172a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--camelot-stone-gray);
-  border-radius: var(--camelot-radius-sm);
-  border: 2px solid var(--camelot-parchment);
+  background: #334155;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--camelot-dark-gold);
+  background: #475569;
 }

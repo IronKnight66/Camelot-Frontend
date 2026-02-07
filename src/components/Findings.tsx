@@ -786,14 +786,14 @@ const Findings: React.FC = () => {
                 <p>Loading findings...</p>
               </div>
             ) : findings.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">🔍</div>
+              <div className="empty-state app-empty-state">
+                <div className="empty-icon app-empty-state__icon" aria-hidden>📋</div>
                 <h3>No Findings Found</h3>
                 <p>No security findings available.</p>
               </div>
             ) : table.getRowModel().rows.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">🔍</div>
+              <div className="empty-state app-empty-state">
+                <div className="empty-icon app-empty-state__icon" aria-hidden>📋</div>
                 <h3>No Findings Found</h3>
                 <p>No security findings match your current search or filters.</p>
                 {(globalFilter || columnFilters.length > 0) && (

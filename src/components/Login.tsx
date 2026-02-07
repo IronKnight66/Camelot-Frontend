@@ -282,17 +282,19 @@ const Login: React.FC = () => {
           </button>
         </form>
         <div className="form-links">
-          <button 
-            type="button" 
-            className="link-button" 
-            onClick={() => setIsSignUp(!isSignUp)}
-          >
-            {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-          </button>
+          {isSignUp && (
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => setIsSignUp(false)}
+            >
+              Already have an account? Sign In
+            </button>
+          )}
           {!isSignUp && (
-            <button 
-              type="button" 
-              className="link-button" 
+            <button
+              type="button"
+              className="link-button"
               onClick={() => setIsForgotPassword(true)}
             >
               Forgot Password?
