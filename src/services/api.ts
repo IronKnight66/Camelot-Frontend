@@ -110,7 +110,17 @@ class ApiService {
   }
 
   async createScan(scanData: any) {
-    const response = await this.api.post('/api/v1/scans/assessment', scanData);
+    const { generateTraceId } = await import('../utils/traceIdGenerator');
+    const traceId = generateTraceId();
+
+    console.log(`[Assessment] Generated trace_id: ${traceId} for scan: ${scanData.name}`);
+
+    const enrichedScanData = {
+      ...scanData,
+      trace_id: traceId
+    };
+
+    const response = await this.api.post('/api/v1/scans/assessment', enrichedScanData);
     return response.data;
   }
 
@@ -252,10 +262,16 @@ class ApiService {
 
   // Endpoint Discovery (Subfinder scanner trigger)
   async discoverEndpoints(target: string, scanType: string = 'network', toolName: string = 'subfinder') {
+    const { generateTraceId } = await import('../utils/traceIdGenerator');
+    const traceId = generateTraceId();
+
+    console.log(`[Discovery] Generated trace_id: ${traceId} for target: ${target}`);
+
     const response = await this.api.post('/api/v1/scans/discover-endpoints', {
       target,
       scan_type: scanType,
-      tool_name: toolName
+      tool_name: toolName,
+      trace_id: traceId
     }, {
       timeout: 300000 // 5 minutes - AgentCore Runtime can take longer than 60s
     });
