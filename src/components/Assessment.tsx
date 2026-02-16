@@ -153,16 +153,32 @@ const Assessment: React.FC = () => {
       navigate(`/campaigns/${assessmentResponse.scan_parent_id}`);
 
     } catch (error: any) {
+      const data = error?.response?.data;
+      const httpStatus = error?.response?.status;
+
+      // Backend wraps errors as { error: { code, message, path } }
+      // FastAPI default is { detail: "..." } or { detail: [{msg: "..."}] }
+      const wrappedMessage = data?.error?.message;
+      const detail = data?.detail;
+      const detailMessage = typeof detail === 'string'
+        ? detail
+        : Array.isArray(detail)
+          ? detail.map((e: any) => e?.msg ?? e?.message ?? JSON.stringify(e)).join('; ')
+          : detail
+            ? JSON.stringify(detail)
+            : null;
+      const errorMessage = wrappedMessage || detailMessage || data?.message || error?.message || 'Failed to submit assessment';
+
       console.error('Error submitting assessment:', error);
       console.error('Error details:', {
+        status: httpStatus,
         message: error?.message,
-        response: error?.response?.data,
-        status: error?.response?.status
+        wrappedError: data?.error,
+        detail: data?.detail,
+        fullResponse: data
       });
 
-      // Show error message to user
-      const errorMessage = error?.response?.data?.detail || error?.message || 'Failed to submit assessment';
-      alert(`Error: ${errorMessage}\n\nPlease check the console for more details.`);
+      alert(`Error (${httpStatus ?? 'network'}): ${errorMessage}\n\nCheck the browser console (F12) for full details.`);
     } finally {
       setIsSubmitting(false);
     }

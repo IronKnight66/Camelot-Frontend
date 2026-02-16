@@ -320,6 +320,11 @@ class ApiService {
     return response.data;
   }
 
+  async getTrafficAnalysis(parentId: number) {
+    const response = await this.api.get(`/api/v1/scan-parents/${parentId}/traffic-analysis`);
+    return response.data;
+  }
+
   // Orphaned Scans API
   async getOrphanedScans(params?: {
     page?: number;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import api from '../services/api';
+import type { TrafficAnalysisResponse } from '../types/trafficAnalysis';
 import './CampaignDetails.css';
 
 interface CampaignStatistics {
@@ -81,9 +82,13 @@ const CampaignDetails: React.FC = () => {
   const [showChatHistory, setShowChatHistory] = useState(true);
   const [confirmStopScan, setConfirmStopScan] = useState<number | null>(null);
   const [stoppingScans, setStoppingScans] = useState<Set<number>>(new Set());
+  const [trafficAnalysis, setTrafficAnalysis] = useState<TrafficAnalysisResponse | null>(null);
+  const [trafficLoading, setTrafficLoading] = useState(false);
+  const [trafficError, setTrafficError] = useState<string | null>(null);
 
   useEffect(() => {
     loadCampaignDetails();
+    fetchTrafficAnalysis();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -155,6 +160,27 @@ const CampaignDetails: React.FC = () => {
     } finally {
       setChatLoading(false);
     }
+  };
+
+  const fetchTrafficAnalysis = async () => {
+    if (!id) return;
+
+    setTrafficLoading(true);
+    setTrafficError(null);
+
+    try {
+      const data = await api.getTrafficAnalysis(parseInt(id));
+      setTrafficAnalysis(data);
+    } catch (err: any) {
+      console.error('Error fetching traffic analysis:', err);
+      setTrafficError(err?.response?.data?.detail || 'Failed to load traffic analysis');
+    } finally {
+      setTrafficLoading(false);
+    }
+  };
+
+  const calculatePercentage = (value: number, total: number): number => {
+    return total > 0 ? (value / total) * 100 : 0;
   };
 
   const renderStatusBadge = (status: string) => {
@@ -370,9 +396,124 @@ const CampaignDetails: React.FC = () => {
                   </div>
                 )}
               </div>
-            )}
-          </div>
         )}
+      </div>
+        )}
+
+        {/* Network Traffic Analysis Section */}
+        <div className="traffic-analysis-section">
+          <div className="section-header">
+            <h2>Network Traffic Analysis</h2>
+            <span className="data-source">Powered by Watchtower</span>
+          </div>
+
+          {trafficLoading && <div className="loading">Loading traffic analysis...</div>}
+
+          {trafficError && (
+            <div className="error-message">
+              <strong>Error:</strong> {trafficError}
+            </div>
+          )}
+
+          {trafficAnalysis && !trafficLoading && (
+            <>
+              <div className="traffic-summary-cards">
+                <div className="summary-card">
+                  <div className="card-value">{trafficAnalysis.total_tests}</div>
+                  <div className="card-label">Total Security Tests</div>
+                </div>
+                <div className="summary-card">
+                  <div className="card-value">{trafficAnalysis.unique_attack_types}</div>
+                  <div className="card-label">Unique Attack Types</div>
+                </div>
+                <div className="summary-card">
+                  <div className="card-value">{trafficAnalysis.attack_vectors.xss_attempts}</div>
+                  <div className="card-label">XSS Attempts</div>
+                </div>
+                <div className="summary-card">
+                  <div className="card-value">{trafficAnalysis.attack_vectors.sql_injection_attempts}</div>
+                  <div className="card-label">SQL Injection Attempts</div>
+                </div>
+              </div>
+
+              <div className="risk-distribution">
+                <h3>Risk Distribution</h3>
+                <div className="risk-bars">
+                  <div className="risk-bar high" style={{ width: `${calculatePercentage(trafficAnalysis.risk_distribution.high, trafficAnalysis.total_tests)}%` }}>
+                    High: {trafficAnalysis.risk_distribution.high}
+                  </div>
+                  <div className="risk-bar medium" style={{ width: `${calculatePercentage(trafficAnalysis.risk_distribution.medium, trafficAnalysis.total_tests)}%` }}>
+                    Medium: {trafficAnalysis.risk_distribution.medium}
+                  </div>
+                  <div className="risk-bar low" style={{ width: `${calculatePercentage(trafficAnalysis.risk_distribution.low, trafficAnalysis.total_tests)}%` }}>
+                    Low: {trafficAnalysis.risk_distribution.low}
+                  </div>
+                </div>
+              </div>
+
+              <div className="scanner-breakdown">
+                <h3>Scanner Breakdown</h3>
+                <div className="scanner-cards">
+                  {trafficAnalysis.scanner_summary.map((scanner) => (
+                    <div key={scanner.scanner} className="scanner-card">
+                      <div className="scanner-name">{scanner.scanner.toUpperCase()}</div>
+                      <div className="scanner-stats">
+                        <span>Tests: {scanner.total_tests}</span>
+                        <span>High: {scanner.high_risk}</span>
+                        <span>Medium: {scanner.medium_risk}</span>
+                        <span>Low: {scanner.low_risk}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="top-findings">
+                <h3>Top Security Findings</h3>
+                <table className="findings-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Finding</th>
+                      <th>Count</th>
+                      <th>Risk Level</th>
+                      <th>Scanner</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {trafficAnalysis.top_findings.map((finding, idx) => (
+                      <tr key={idx}>
+                        <td>{idx + 1}</td>
+                        <td>{finding.attack_name}</td>
+                        <td>{finding.count}</td>
+                        <td>
+                          <span className={`risk-badge ${finding.risk_level.split(/\s+/)[0].toLowerCase()}`}>
+                            {finding.risk_level}
+                          </span>
+                        </td>
+                        <td>{finding.scanner}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {trafficAnalysis.most_tested_endpoints.length > 0 && (
+                <div className="tested-endpoints">
+                  <h3>Most Tested Endpoints</h3>
+                  <ul>
+                    {trafficAnalysis.most_tested_endpoints.map((endpoint, idx) => (
+                      <li key={idx}>
+                        <span className="test-count">{endpoint.test_count}x</span>
+                        <span className="endpoint-url">{endpoint.url}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </>
+          )}
+        </div>
 
         {/* Scan Execution Log Section */}
         <div className="scan-execution-section">

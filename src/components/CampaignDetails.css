@@ -284,6 +284,237 @@
   word-wrap: break-word;
 }
 
+/* Traffic Analysis Section */
+.traffic-analysis-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.traffic-analysis-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.traffic-analysis-section h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.traffic-analysis-section .data-source {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.traffic-analysis-section .loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.traffic-summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.traffic-analysis-section .summary-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.traffic-analysis-section .card-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.traffic-analysis-section .card-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.traffic-analysis-section .risk-distribution {
+  margin: 2rem 0;
+}
+
+.traffic-analysis-section .risk-distribution h3,
+.traffic-analysis-section .scanner-breakdown h3,
+.traffic-analysis-section .top-findings h3,
+.traffic-analysis-section .tested-endpoints h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  color: #111827;
+}
+
+.traffic-analysis-section .risk-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.traffic-analysis-section .risk-bar {
+  padding: 0.75rem;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  transition: width 0.3s ease;
+  min-width: fit-content;
+}
+
+.traffic-analysis-section .risk-bar.high {
+  background: #dc3545;
+}
+
+.traffic-analysis-section .risk-bar.medium {
+  background: #fd7e14;
+}
+
+.traffic-analysis-section .risk-bar.low {
+  background: #ffc107;
+  color: #333;
+}
+
+.traffic-analysis-section .scanner-breakdown {
+  margin: 2rem 0;
+}
+
+.traffic-analysis-section .scanner-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.traffic-analysis-section .scanner-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.traffic-analysis-section .scanner-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
+  color: #667eea;
+}
+
+.traffic-analysis-section .scanner-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.traffic-analysis-section .top-findings {
+  margin: 2rem 0;
+}
+
+.traffic-analysis-section .findings-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+
+.traffic-analysis-section .findings-table th {
+  text-align: left;
+  padding: 0.75rem;
+  background: #374151;
+  font-weight: 600;
+  color: white;
+  border-bottom: 1px solid #4b5563;
+}
+
+.traffic-analysis-section .findings-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #4b5563;
+  color: white;
+  background: #1f2937;
+}
+
+.traffic-analysis-section .risk-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.traffic-analysis-section .risk-badge.high {
+  background: #dc3545;
+  color: white;
+}
+
+.traffic-analysis-section .risk-badge.medium {
+  background: #fd7e14;
+  color: white;
+}
+
+.traffic-analysis-section .risk-badge.low {
+  background: #ffc107;
+  color: #333;
+}
+
+.traffic-analysis-section .risk-badge.informational {
+  background: #6b7280;
+  color: white;
+}
+
+.traffic-analysis-section .tested-endpoints {
+  margin: 2rem 0;
+}
+
+.traffic-analysis-section .tested-endpoints ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.traffic-analysis-section .tested-endpoints li {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.traffic-analysis-section .test-count {
+  font-weight: bold;
+  color: #667eea;
+  margin-right: 1rem;
+  min-width: 50px;
+}
+
+.traffic-analysis-section .endpoint-url {
+  color: #4b5563;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.traffic-analysis-section .error-message {
+  color: #991b1b;
+  background: #fee2e2;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border-left: 4px solid #dc2626;
+}
+
 /* Scan Execution Section */
 .scan-execution-section {
   background: white;
