@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import api from '../services/api';
@@ -85,6 +85,7 @@ const CampaignDetails: React.FC = () => {
   const [trafficAnalysis, setTrafficAnalysis] = useState<TrafficAnalysisResponse | null>(null);
   const [trafficLoading, setTrafficLoading] = useState(false);
   const [trafficError, setTrafficError] = useState<string | null>(null);
+  const prevCompletedScans = useRef<number>(-1);
 
   useEffect(() => {
     loadCampaignDetails();
@@ -97,7 +98,8 @@ const CampaignDetails: React.FC = () => {
     if (!campaign) return;
 
     const hasActiveScans = campaign.scans.some(
-      scan => scan.status === 'running' || scan.status === 'pending'
+      scan => scan.status === 'RUNNING' || scan.status === 'PENDING' ||
+              scan.status === 'running' || scan.status === 'pending'
     );
 
     if (hasActiveScans) {
@@ -107,9 +109,12 @@ const CampaignDetails: React.FC = () => {
       }, 3000);
 
       return () => clearInterval(intervalId);
+    } else if (campaign.scans.length > 0) {
+      // All scans done — do one final traffic analysis refresh
+      fetchTrafficAnalysis();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [campaign, id]);
+  }, [campaign?.statistics.completed_scans, campaign?.statistics.failed_scans, id]);
 
   const loadCampaignDetails = async () => {
     if (!id) return;
@@ -120,6 +125,8 @@ const CampaignDetails: React.FC = () => {
     try {
       const data = await api.getCampaignDetails(parseInt(id));
       setCampaign(data);
+      // Seed the baseline so the first poll doesn't trigger a spurious refresh
+      prevCompletedScans.current = data.statistics.completed_scans + data.statistics.failed_scans;
       
       // Load chat history if session_id exists
       if (data.session_id) {
@@ -140,7 +147,14 @@ const CampaignDetails: React.FC = () => {
       // Silent refresh - don't show loading state
       const data = await api.getCampaignDetails(parseInt(id));
       setCampaign(data);
-      // Don't reload chat history on refresh to avoid flickering
+
+      const newCompleted = data.statistics.completed_scans + data.statistics.failed_scans;
+      if (prevCompletedScans.current !== -1 && newCompleted > prevCompletedScans.current) {
+        // A scan just finished — refresh traffic analysis after a short delay
+        // to allow Loki time to ingest the new data
+        setTimeout(() => fetchTrafficAnalysis(), 3000);
+      }
+      prevCompletedScans.current = newCompleted;
     } catch (err: any) {
       console.error('Error refreshing campaign status:', err);
       // Don't show error on silent refresh
@@ -404,10 +418,15 @@ const CampaignDetails: React.FC = () => {
         <div className="traffic-analysis-section">
           <div className="section-header">
             <h2>Network Traffic Analysis</h2>
-            <span className="data-source">Powered by Watchtower</span>
+            <div className="section-header-right">
+              {trafficLoading && trafficAnalysis && (
+                <span className="traffic-refreshing">Refreshing...</span>
+              )}
+              <span className="data-source">Powered by Watchtower</span>
+            </div>
           </div>
 
-          {trafficLoading && <div className="loading">Loading traffic analysis...</div>}
+          {trafficLoading && !trafficAnalysis && <div className="loading">Loading traffic analysis...</div>}
 
           {trafficError && (
             <div className="error-message">
@@ -415,7 +434,17 @@ const CampaignDetails: React.FC = () => {
             </div>
           )}
 
-          {trafficAnalysis && !trafficLoading && (
+          {trafficAnalysis && trafficAnalysis.loki_available === false && !trafficLoading && (
+            <div className="watchtower-unavailable">
+              <div className="unavailable-icon">📡</div>
+              <div className="unavailable-text">
+                <strong>Watchtower Offline</strong>
+                <p>Traffic analysis data is not available. The Watchtower service could not be reached.</p>
+              </div>
+            </div>
+          )}
+
+          {trafficAnalysis && trafficAnalysis.loki_available !== false && !trafficLoading && (
             <>
               <div className="traffic-summary-cards">
                 <div className="summary-card">

@@ -51,4 +51,5 @@ export interface TrafficAnalysisResponse {
   open_ports: PortSummary[];
   data_source: string;
   generated_at: string;
+  loki_available?: boolean;
 }

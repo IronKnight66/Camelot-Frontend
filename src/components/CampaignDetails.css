@@ -309,10 +309,27 @@
   color: #111827;
 }
 
+.traffic-analysis-section .section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .traffic-analysis-section .data-source {
   font-size: 0.85rem;
   color: #6b7280;
   font-style: italic;
+}
+
+.traffic-analysis-section .traffic-refreshing {
+  font-size: 0.8rem;
+  color: #6366f1;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .traffic-analysis-section .loading {
@@ -504,6 +521,35 @@
   color: #4b5563;
   font-family: monospace;
   font-size: 0.9rem;
+}
+
+.traffic-analysis-section .watchtower-unavailable {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.traffic-analysis-section .watchtower-unavailable .unavailable-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.traffic-analysis-section .watchtower-unavailable .unavailable-text strong {
+  display: block;
+  color: #374151;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.traffic-analysis-section .watchtower-unavailable .unavailable-text p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 .traffic-analysis-section .error-message {
